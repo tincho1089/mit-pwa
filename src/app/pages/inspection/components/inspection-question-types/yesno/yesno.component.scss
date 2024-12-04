@@ -1,0 +1,7 @@
+mat-radio-group mat-radio-button:nth-child(2) {
+  margin-left: 15px;
+}
+
+::ng-deep .mdc-form-field > label {
+  padding: 0 !important;
+}

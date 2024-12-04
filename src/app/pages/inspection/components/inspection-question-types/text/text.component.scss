@@ -1,0 +1,106 @@
+text .controls {
+  // font
+  ::ng-deep
+    .mdc-text-field--no-label:not(.mdc-text-field--textarea)
+    .mat-mdc-form-field-input-control.mdc-text-field__input,
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+    color: black;
+    font-weight: bolder;
+  }
+
+  // .error {
+  .mat-mdc-form-field:has(.mat-form-field-invalid) {
+    border: 2px solid red !important;
+    border-bottom: none;
+  }
+  
+  // border - left side
+  ::ng-deep
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+    .mdc-notched-outline__leading {
+    border-color: #dbdcdd !important;
+    border-radius: 0px;
+    border-width: 2px;
+  }
+
+  // border - right side
+  ::ng-deep
+    .mdc-text-field--outlined
+    .mdc-notched-outline
+    .mdc-notched-outline__trailing {
+    border-color: #dbdcdd !important;
+    border-radius: 0px;
+    border-width: 2px;
+  }
+
+  // border - focused - left
+  ::ng-deep
+    .mdc-text-field--outlined:not(
+      .mdc-text-field--disabled
+    ).mdc-text-field--focused
+    .mdc-notched-outline__leading {
+    border-color: #0056b3 !important;
+  }
+
+  // border - focused - rigth
+  ::ng-deep
+    .mdc-text-field--outlined:not(
+      .mdc-text-field--disabled
+    ).mdc-text-field--focused
+    .mdc-notched-outline__trailing {
+    border-color: #0056b3 !important;
+  }
+
+  ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: #ffffff !important;
+    border-radius: 0px;
+  }
+
+  // required input - error - red
+  ::ng-deep
+    .mdc-text-field--invalid:not(.mdc-text-field--disabled)
+    .mdc-notched-outline__leading,
+  .mdc-text-field--invalid:not(.mdc-text-field--disabled)
+    .mdc-notched-outline__notch,
+  .mdc-text-field--invalid:not(.mdc-text-field--disabled)
+    .mdc-notched-outline__trailing {
+    border: 8px solid red !important;
+    border-bottom: none;
+  }
+
+  // required input - error - right side
+  ::ng-deep
+    .mdc-text-field--invalid:not(.mdc-text-field--disabled)
+    .mdc-notched-outline__trailing {
+    border-color: red !important;
+    border-radius: 0px;
+    border-width: 2px;
+  }
+
+  // required input - error - left side
+  ::ng-deep
+    .mdc-text-field--invalid:not(.mdc-text-field--disabled)
+    .mdc-notched-outline__leading {
+    border-color: red !important;
+    border-radius: 0px;
+    border-width: 2px;
+  }
+
+
+}
+
+// Fix for Android - Edge, input makes screen move up 
+::ng-deep
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-text-field__input {
+  display: inline;
+}
+
+.remember-Row{
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+
+  mat-label{
+    padding-right: 12px;
+  }
+}

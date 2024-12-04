@@ -1,0 +1,65 @@
+<mat-stepper class="detail" orientation="vertical" labelPosition="end" #stepper
+    (animationDone)="stepperChanged(stepper)" *ngIf="detailForm">
+    <!-- No questions -->
+    <mat-step *ngIf="sections && sections.length === 0">
+        <ng-template matStepLabel>
+            <h2 class="text-medium-blue stepper-title">
+                {{ 'details.noQuestion' | translate | lowercase }}
+            </h2>
+        </ng-template>
+    </mat-step>
+    <mat-step errorMessage="Required questions need to be completed before submitting."
+        *ngFor="let indexSection of sectionsToDisplay; let i = index; let h = count"
+        [stepControl]="detailForm.get([indexSection.title])">
+        <!-- Section Title -->
+        <ng-template matStepLabel>
+            <div class="stepper-header-overlay" (click)="toggleHideSection(stepper.selectedIndex, i)"></div>
+            <div [id]="'section-anchor-'+i" class="scroll-anchor"></div>
+            <h4  class="text-medium-blue stepper-title">{{indexSection.title | lowercase}} 
+                <i *ngIf="indexSection.status" class="material-icons app-toolbar-menu text-light-green">check_circle</i>
+                <i *ngIf="!indexSection.status" class="material-icons app-toolbar-menu align-right text-light-red">unpublished</i>
+            </h4>
+        </ng-template>
+        
+        <div *ngIf="displaySectionContents()">
+            <div *ngFor="let subSection of indexSection.subSections; let j = index; let k = count">
+                <div *ngIf="displaySubSection(subSection)">
+                    <!-- Subsection Title -->
+                    <div class="row pt-2 subsection-header-row">
+                        <div class="col-md-3"></div>
+                        <div class="col-12 col-md-6"> 
+                            <div class="row">
+                                <div class="col-3"></div>
+                                <div class="col-6 vertical">
+                                    <h3 class="subsection-title">{{ subSection.title }}</h3>
+                                </div>
+                                <div class="col-3 button-flex">
+                                    <button mat-icon-button class="copy-icon" (click)="copySubsectionPrompts(i, j)" *ngIf="subSection.title !='' && subSection.title != 'null' && subSection.title != null && subSection.responses">
+                                        <mat-icon>file_copy</mat-icon>
+                                    </button>
+                                    <button mat-icon-button class="copy-icon" (click)="removeSubsectionPrompts(i, j)" *ngIf="subSection.title !='' && subSection.title != 'null' && subSection.title != null && subSection.responses && subSection.responses[0].subCopy == true">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <!-- Question Loop -->
+                    <div *ngIf="indexSection == sectionsToDisplay[stepper.selectedIndex]">
+                        <div class="question" *ngFor="let response of subSection.responses">
+                            <helper 
+                                [form]="detailForm" 
+                                *ngIf="response.isShow"
+                                [response]="response" 
+                                [section]="response.inspectionSection"
+                                [equipDetails]="equipDetails">
+                            </helper>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </mat-step>
+</mat-stepper>

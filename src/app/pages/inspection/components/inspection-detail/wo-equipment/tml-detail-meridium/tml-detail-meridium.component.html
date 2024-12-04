@@ -1,0 +1,160 @@
+<div class="row wo-equipment">
+    <div class="col-12">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title-group>
+                    <mat-card-title>
+                        <h4 class="tml-details">{{ 'tml.tmlDetails' | translate }}</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle></mat-card-subtitle>
+                </mat-card-title-group>                
+            </mat-card-header>
+            <mat-card-content>      
+                <form [formGroup]="tmlDetailsForm" *ngIf="tmlDetailsForm">
+                    <ng-container formArrayName="tmlReadings">
+                            <div class="d-flex align-items-stretch flex-no-wrap tml-card" *ngFor="let read of readings; let i = index" [formGroupName]="i">
+        
+                            <div class="tml-status" [ngClass]="read.MeasureTML || read['Measure TML'] ? read.isValid ? 'green' : 'red' : null">
+                            </div>
+                            
+                            <div class="wrap-content">
+                                <div class="d-flex">
+                                    <div class="content">
+                                        <div class="row">
+                                            <ng-container *ngFor="let item of items; let j = index;">
+                                                <div class="col-12 tmlContentColumn"
+                                                *ngIf="read.showTML || item.property === 'Data Point ID' || item.property === 'Group Name' || item.property === 'ISO Drawing Number'">
+        
+                                                    <mat-label>
+                                                        <b>{{item.displayName}}:</b>                                                
+                                                    </mat-label>
+                    
+                                                    <ng-container [ngSwitch]="item.property">
+                    
+                                                        <ng-container *ngSwitchCase="'Data Point ID'">
+                                                            <mat-label class="tmlIdLabel" (click)="seeDetail(read)">
+                                                                {{read[item.property]}}
+                                                            </mat-label>
+                                                        </ng-container>
+                                                        
+                                                        <ng-container *ngSwitchDefault>
+                                                        <span
+                                                            *ngIf="read[item.property] && read[item.property] !== 'null'"
+                                                        >
+                                                            {{read[item.property]}}
+                                                        </span>
+                                                        </ng-container>
+                    
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <ng-container *ngIf="read.showTML  && (read['Measure TML'] || read['MeasureTML'])">
+                                            <div class="col-12" formArrayName="ListReadings">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="row" style="flex-wrap: nowrap;">
+                                                            <mat-label>
+                                                                <b>{{'tml.newReadings' | translate}}:</b>
+                                                            </mat-label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-4 col-md-3" *ngFor="let reading of tmlDetailsForm?.get('tmlReadings.' + i + '.ListReadings')['controls'];let c = index">
+                                                        <div class="row">
+                                                            <mat-form-field appearance="outline">
+                                                                <input matInput 
+                                                                [id]="'input-'+ read['Data Point ID'] + '-' + (c+1)"
+                                                                type="number"
+                                                                inputmode="decimal"
+                                                                [formControlName]="c"
+                                                                (keypress)="numberOnlyValidation($event)"                 
+                                                                placeholder="{{c + 1}}">
+                                                            </mat-form-field>
+                                                        </div>
+                                                        
+                                                    </div>
+        
+                                                    <div class="col-4" *ngIf="read['Last Measurement Date'] !== 'null' && read['Last Measurement Value'] !== 'null' && read.isValid">
+                                                        <div class="row" style="flex-wrap: nowrap;">
+                                                            <mat-label>
+                                                                <b>{{'tml.shortTermCorrosionRate' | translate}}:</b>
+                                                            </mat-label>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="corrosion">
+                                                                <span                                               
+                                                                    class="banner danger"
+                                                                    [attr.data-is-valid]="tmlDetailsForm.get('tmlReadings.' + i +
+                                                                    '.corrosionRate').value < 0.03"
+                                                                    >
+                                                                    {{tmlDetailsForm.get('tmlReadings.' + i +
+                                                                    '.corrosionRate').value}} /yr
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+        
+                                                <div class="row justify-content-center banner danger" 
+                                                    *ngIf="tmlDetailsForm?.get('tmlReadings.' + i + '.ListReadings') && tmlDetailsForm.get('tmlReadings.' + i + '.ListReadings').status === 'INVALID' && read['Last Measurement Date'] !== 'null' && 
+                                                    read['Last Measurement Value'] !== 'null' && read.isValid">
+                                                    <div class="col-12">
+                                                        <span [innerHTML]="'tml.thicknessAlert' | translate:{value: .03}"></span>
+                                                    </div>
+                                                </div>
+        
+                                                <div class="row justify-content-center banner danger" 
+                                                    *ngIf="read['Last Measurement Value'] !== 'null' && read['Last Measurement Value'] !== 'null' && read.isValid && read.minValue  <= read['Last Measurement Value']">
+                                                    <div class="col-12">
+                                                        <span [innerHTML]="'tml.previousReadingAlert' | translate:{value: .03}"></span>
+                                                    </div>
+                                                </div>
+        
+                                                <div class="row justify-content-center banner danger" 
+                                                *ngIf="read['Remaining Life Calculator'] !== 'null' && read['Remaining Life Calculator'] !== 'null' && read.isValid && read.minValue  <= read['Remaining Life Calculator']">
+                                                    <div class="col-12">
+                                                        <span [innerHTML]="'tml.remLifeCalcAlert' | translate"></span>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+        
+                                            
+                                            
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <mat-label>
+                                                        <b>{{'helper.comments' | translate}}:</b>
+                                                    </mat-label>                                            
+                                                </div>
+                                                <div class="col-12">
+                                                    <mat-form-field appearance="outline">
+                                                        <textarea  
+                                                            matInput                   
+                                                            formControlName="comments"
+                                                            rows="3"
+                                                            [id]="'tml-comments-' + i">
+                                                        </textarea>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                            
+                                        </ng-container>                                 
+                                    </div>
+        
+                                    <div class="accordion-toggle">
+                                        <i *ngIf="!read.showTML" class="material-icons app-toolbar-menu align-right" (click)="showTML(read)">add_circle</i>
+                                        <i *ngIf="read.showTML" class="material-icons app-toolbar-menu align-right" (click)="showTML(read)">do_not_disturb_on</i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+        
+                            </div>
+                    </ng-container>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

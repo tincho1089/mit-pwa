@@ -1,0 +1,14 @@
+<div class="controls">
+    <div *ngIf="showControl" [formGroup]="form">
+        <div [formGroupName]="section">
+            <mat-radio-group *ngIf="editable" [formControlName]="response.questionId">
+                <mat-radio-button value="yes">{{ 'commons.yes' | translate }}</mat-radio-button>
+                <mat-radio-button value="no">{{ 'commons.no' | translate }}</mat-radio-button>
+            </mat-radio-group>
+
+            <div *ngIf="!editable" class="label-control-form">
+                <label>{{response.answer}}</label>
+            </div>
+        </div>
+    </div>
+</div>

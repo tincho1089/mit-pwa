@@ -1,0 +1,13 @@
+<div class="controls">
+    <div *ngIf="showControl" [formGroup]="form">
+        <div [formGroupName]="section">
+
+            <app-dropdown-search *ngIf="editable" [appearance]="'outline'" [response]="response" [idSelect]="'input-' + response.questionId"
+            [options]="options" [sectionArray]="sectionArray"></app-dropdown-search>
+
+            <div *ngIf="!editable">
+                <label  [id]="'label-' + response.questionId"> {{response.answer}}</label>
+            </div>
+        </div>
+    </div>
+</div>

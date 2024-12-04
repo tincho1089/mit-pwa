@@ -1,0 +1,21 @@
+#result {
+  border: 0 !important;
+  background-color: transparent !important;
+
+  input {
+    font-weight: bold;
+    opacity: 1 !important;
+  }
+}
+
+.banner {
+  padding: 0 10px 0 10px;
+  border-radius: 10px;
+  margin: 0 10px;
+  text-align: center;
+  &.danger {
+    background-color: #e06666;
+    border: 2px solid #9f4e4e;
+    color: white;
+  }
+}

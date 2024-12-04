@@ -1,0 +1,99 @@
+:host {
+    //////////////////////////
+    /// Nav menu style
+    //////////////////////////
+    .detail-nav {
+        justify-content: space-around;
+        align-items: center;
+        height: 44px;
+        background: #ececed;
+        margin-bottom: -44px;
+        overflow: hidden;
+        display: flex;
+        transition: margin 500ms ease-in-out;
+        position: sticky;
+        z-index: 2;
+        mat-icon {
+            font-size: 2em;
+            font-weight: bold;
+            height: auto;
+            width: auto;
+            cursor: pointer;
+            transition: color ease-in-out .2s, transform linear .2s;
+            color: #0b2d71;
+        }
+        mat-icon:hover {
+            color: #009dd9;
+        }
+        mat-icon:active {
+            transform: scale(1.1);
+            color: #8c8f93;
+        }
+        button, button:focus {
+            border: none;
+            outline: none;
+            background-color: transparent;
+        }
+        button:disabled {
+            mat-icon {
+                color: #666;
+                cursor: default;
+            }
+        }
+    }
+    .detail-nav.active {
+        margin-bottom: 0px;
+    }
+    
+
+    //////////////////////////
+    /// Section Navigation Style
+    //////////////////////////
+    
+    .section-nav {
+        position: absolute;
+        width: 300px;
+        min-width: 30vw;
+        max-width: 80vw;
+        bottom: 0;
+        right: 10px;
+        background-color: #ececed;
+        padding: 5px;
+        transition: all ease-in-out .3s;
+        max-height: 0;
+        z-index: 1;
+        overflow: hidden;
+        .header {
+            border-bottom: 1px solid #0b2d71;
+        }
+        .body {
+            max-height: 40vh;
+            overflow-y: auto;
+            .item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 5px 8px;
+                transition: background-color linear .2s;
+                text-transform: lowercase;
+                cursor: pointer;
+                .title {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .active-section {
+                    color: #0066b2;
+                    font-weight: 500;
+                }
+            }
+            .item:hover {
+                background-color: #009dd955;
+            }
+        }
+    }
+    .section-nav.active {
+        bottom: 50px;
+        max-height: 50vh;
+    }
+}

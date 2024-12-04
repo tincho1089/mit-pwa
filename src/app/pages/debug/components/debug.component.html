@@ -1,0 +1,282 @@
+<div>
+
+
+    <div class="row">
+        <div class="col-4"></div>
+        <h4 class="col-4">{{'debug.actions' | translate}}</h4>
+        <div class="col-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.import' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div mat-icon-button class="col-2">
+            <input accept=".json" type="file"  (change)="importInspection($event)" />
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.debugMode' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div mat-icon-button class="col-2 icon">
+            <mat-icon *ngIf="isDebug" [inline]="true" (click)="toggleDebugMode()">check_box</mat-icon>
+            <mat-icon *ngIf="!isDebug" [inline]="true" (click)="toggleDebugMode()">check_box_outline_blank</mat-icon>
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'filters.onlineSearch' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div mat-icon-button class="col-2 icon">
+            <mat-icon *ngIf="isOnlineSearch" [inline]="true" (click)="toggleOnlineSearch()">check_box</mat-icon>
+            <mat-icon *ngIf="!isOnlineSearch" [inline]="true" (click)="toggleOnlineSearch()">check_box_outline_blank</mat-icon>
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.forceUpdate' | translate}}</span>
+        </div>
+        <div class="col-2"></div>
+        <div mat-icon-button class="col-2 icon">
+            <mat-icon [inline]="true" (click)="forceUpdate()">browser_updated</mat-icon>
+        </div>
+        <div class="col-3"></div>
+    </div>
+   
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.logout' | translate}}</span>
+        </div>
+        <div class="col-2"></div>
+        <div mat-icon-button class="col-2 icon">
+            <mat-icon [inline]="true" (click)="logout()">exit_to_app</mat-icon>
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.wipeDB' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div mat-icon-button class="col-2 icon">
+            <mat-icon [inline]="true" (click)="wipeDB()">delete_outline</mat-icon>
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.reopenSubmitted' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div mat-icon-button class="col-2 icon">
+            <mat-icon [inline]="true" (click)="reopenSubmittedInspections()">file_open</mat-icon>
+        </div>
+        <div class="col-3"></div>
+    </div>
+   
+    
+
+    <div class="row">
+        <div class="col-4"></div>
+        <h4 class="col-4">{{'debug.appInfo' | translate}}</h4>
+        <div class="col-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.appVersion' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>{{version}}</span>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.Browser' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>{{browser}}</span>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.OS' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>{{OS}}</span>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>PWA:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>{{isPWA}}</span>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.storageUsage' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>{{storageUsage}}</span>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.storageQuota' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>{{storageQuota}}</span>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+    
+    <div class="row">
+        <div class="col-4"></div>
+        <h4 class="col-4">{{'debug.locationInfo' | translate}}</h4>
+        <div class="col-4"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.lookup' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <mat-icon [inline]="true" (click)="getLocation()">search</mat-icon>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.latitude' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>{{lat}}</span>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.longitude' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>{{lng}}</span>
+        </div>
+        <div class="col-3"></div>
+    </div>
+    
+   
+    <div class="row">
+        <div class="col-4"></div>
+        <h4 class="col-4">{{'debug.SW' | translate}}</h4>
+        <div class="col-4"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.state' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>{{swState}}</span>
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>Caches:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>
+                {{cacheNames.length}}
+                <mat-icon [inline]="true" (click)="showCaches()">pageview</mat-icon>
+            </span>
+            
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>Cache Size:</span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2 center">
+            <span>
+                {{totalCacheSize}}
+            </span>
+            
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.unregisterSW' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div mat-icon-button class="col-2 icon">
+            <mat-icon [inline]="true" (click)="unregisterServiceWorkers()">eject</mat-icon>
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-2 center">
+            <span>{{'debug.wipeSWCache' | translate}}:</span>
+        </div>
+        <div class="col-2"></div>
+        <div mat-icon-button class="col-2 icon">
+            <mat-icon [inline]="true" (click)="deleteCaches()">auto_delete</mat-icon>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>

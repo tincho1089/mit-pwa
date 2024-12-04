@@ -1,0 +1,21 @@
+<div *ngIf="response.isShow" [formGroup]="form">
+    <div [formGroupName]="section">
+        <section>
+            <div [ngSwitch]="response.itemType">
+                <div *ngSwitchCase="warningEnum" class="warning">
+                    <img alt="warning" src="assets/images/warning.jpg" />
+                </div>
+                <div *ngSwitchCase="cautionEnum" class="caution">
+                    <img alt="caution" src="assets/images/caution.jpg" />
+                </div>
+                <div *ngSwitchCase="dangerEnum" class="danger">
+                    <img alt="danger" src="assets/images/danger.jpg" />
+                </div>
+            </div>
+
+            
+
+            <p><mat-checkbox [formControlName]="response.questionId">I acknowledge</mat-checkbox></p>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="controls">
+    <div *ngIf="showControl" [formGroup]="form">
+        <div [formGroupName]="section">
+            <mat-form-field *ngIf="editable" appearance="outline"
+                [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                <input matInput  
+                    [matDatepicker]="picker"
+                    [formControlName]="response.questionId"
+                    [id]="'date-' + response.questionId"
+                >
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <div *ngIf="!editable" class="label-control-form">
+                <label type="number" [id]="'date-label-' + response.questionId"> {{response.answer | date : 'M/d/yyyy'}}</label>
+            </div>
+        </div>
+    </div>
+</div>

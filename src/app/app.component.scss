@@ -1,0 +1,32 @@
+main.container {
+  padding: 0px;
+  section {
+    padding: 0px;
+    .row { margin: 0; }
+    .col {
+      border: none;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+html {
+  overflow-y: auto;
+}
+
+main.container section .row .col {
+  /* nextpage used !important, so I have to too */
+  padding: 5px 10px !important;
+}
+
+@media screen and (max-width: 600px) {
+
+  main.container section .row .col {
+    /* nextpage used !important, so I have to too */
+    padding: 5px !important;
+  }
+}
+.transparent {
+  color: #0000 !important;
+}

@@ -1,0 +1,148 @@
+<div class="controls">
+  <div *ngIf="showControl" [formGroup]="form">
+      <div [formGroupName]="section" >
+        <div [formGroup]="formGroup" *ngIf="formGroup && editable">
+          <div class="row" formGroupName="details" >
+              <div class="col-6">
+                  <mat-form-field *ngIf="showControl" appearance="outline">
+                    <mat-label>
+                        {{ 'pressure.minAirPressure' | translate}}
+                    </mat-label>
+                    <input matInput
+                      title="Min Air Pressure"
+                      type="string"
+                      formControlName="Min Air Pressure"
+                      [id]="'input-' + response.question +'-minAirPressure'"
+                    />
+                  </mat-form-field>
+                </div>
+          </div>
+          <div class="row" formGroupName="details">
+              <div class="col-6">
+                  <mat-form-field *ngIf="showControl" appearance="outline">
+                  <mat-label>
+                      {{ 'pressure.maxAirPressure' | translate}}
+                  </mat-label>
+                  <input matInput
+                  title="Max Air Pressure"
+                  type="string"
+                  formControlName="Max Air Pressure"
+                  [id]="'input-' + response.question +'-maxAirPressure'"
+                  />
+                  </mat-form-field>
+              </div>
+            </div>
+              <div class="row" >
+                <div formGroupName="details" class="col-6">
+                  <mat-form-field *ngIf="showControl" appearance="outline">
+                      <mat-label>
+                          {{ 'pressure.asFoundAirPressure' | translate }}
+                      </mat-label>
+                    <!-- Changing numeric input to string, to show the negative sign (Ticket#: 5216671) -->
+                    <input matInput
+                    title="As Found Air Pressure"
+                      type="string"
+                      formControlName="As Found Air Pressure"
+                      [id]="'input-' + response.question +'-AsFoundAirPressure'"
+                    />
+                  </mat-form-field>
+                </div>
+                <div
+                  formGroupName="passFail"
+                  class="col-6"
+                  *ngIf="formGroup.get('passFail.Pass Fail').value === 'Fail'"
+                >
+                <mat-form-field *ngIf="showControl" appearance="outline">
+                  <mat-label>
+                      {{ 'pressure.asLeftAirPressure' | translate }}
+                  </mat-label>
+                    <!-- Changing numeric input to string, to show the negative sign (Ticket#: 5216671) -->
+                    <input matInput
+                    title="As Left Air Pressure"
+                      type="string"
+                      formControlName="As Left Air Pressure"
+                      [id]="'input-' + response.question +'-AsLeftAirPressure'"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row" formGroupName="passFail" *ngIf="formGroup.get('passFail.Pass Fail').value">
+                <div class="col-6 pb-3">
+                      <mat-label
+                      [ngClass]="formGroup.get('passFail.PassFail').value === 'Fail' ? 'fail':'pass'"  
+                      >
+                      {{ 'commons.' + formGroup.get('passFail.Pass Fail').value |
+                      translate }}
+                      </mat-label>
+                </div>
+                <div
+                  class="col-6"
+                  *ngIf="formGroup.get('passFail.Pass Fail').value === 'Fail'"
+                >
+
+                  <app-dropdown-search *ngIf="showControl"
+                    [appearance]="'outline'"
+                    [parentParentForm]="form"
+                    [sectionArray]="sectionArray"
+                    [label]="'commons.Failure Code' | translate"
+                    [controlName]="'FailureCode'"
+                    [idSelect]="'select-'+ response.question +'-failure-code'"
+                    [options]="failOptions"
+                    [passFailCode]="true">
+                  </app-dropdown-search>
+                  
+                </div>
+              </div>
+        </div>
+        <div *ngIf="!editable">
+          <table class="summary-responses">
+            <tr class="divider">
+              <th class="summary-responses">
+                {{ 'pressure.minAirPressure' | translate}}
+              </th>
+              <td class="summary-responses">
+                {{ formGroup.get('details.Min Air Pressure').value }}
+              </td>
+            </tr>
+            <tr class="divider">
+              <th class="summary-responses">
+                {{ 'pressure.maxAirPressure' | translate}}
+              </th>
+              <td class="summary-responses">
+                {{ formGroup.get('details.Max Air Pressure').value }}
+              </td>
+            </tr>
+            <tr class="divider">
+              <th class="summary-responses">
+                {{ 'pressure.asFoundAirPressure' | translate}}
+              </th>
+              <td class="summary-responses">
+                {{ formGroup.get('details.As Found Air Pressure').value }}
+              </td>
+            </tr>
+            <tr class="divider">
+              <th class="summary-responses">
+                {{ 'pressure.asLeftAirPressure' | translate}}
+              </th>
+              <td class="summary-responses">
+                {{ formGroup.get('passFail.As Left Air Pressure').value }}
+              </td>
+            </tr>
+            <tr class="divider" *ngIf="formGroup.get('passFail.Pass Fail').value === 'Pass'">
+              <th class="summary-responses">
+                {{ formGroup.get('passFail.Pass Fail').value }}
+              </th>
+            </tr>
+            <tr class="divider" *ngIf="formGroup.get('passFail.Pass Fail').value === 'Fail'">
+              <th class="summary-responses">
+                {{ 'commons.Failure Code' | translate}}: 
+              </th>
+              <td class="summary-responses">
+                {{ formGroup.get('passFail.FailureCode').value }}
+              </td>
+            </tr>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>

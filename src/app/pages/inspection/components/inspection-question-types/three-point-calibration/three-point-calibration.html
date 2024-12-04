@@ -1,0 +1,116 @@
+<ng-container *ngIf="showControl" [formGroup]="form">
+  <div >
+    <div class="centered-row" *ngIf="editable">
+      <div >
+        <div class="column-gap">
+            <div *ngFor="let detailsForm of getFormGroup(); let i = index" class="row-gap">
+              <b class="column-header">{{ 'threePointCalibration.calibrationCheckPoint' | translate }}: </b>
+              <span>{{ spans[i].value }}%</span>
+              <div [formGroup]="detailsForm">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'threePointCalibration.calculated' | translate }}</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    inputmode="decimal"
+                    formControlName="Calculated"
+                    [id]="'input-calculated-' + response.questionId + '-' + i"
+                  />
+                  <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                    <b>%</b>
+                  </span>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'threePointCalibration.asFound' | translate }}</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    inputmode="decimal"
+                    formControlName="AsFound"
+                    [id]="'input-as-found-' + response.questionId + '-' + i"
+                  />
+                  <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                    <b>%</b>
+                  </span>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'threePointCalibration.error' | translate }}</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    inputmode="decimal"
+                    formControlName="Error"
+                    [id]="'input-error-' + response.questionId + '-' + i"
+                  />
+                  <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                    <b>%</b>
+                  </span>
+                </mat-form-field>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- <div class="centered-row" *ngIf="!editable">
+        <div class="column-gap" >
+          <div *ngFor="let detailsForm of getFormGroup(); let i = index" class=" divider row-gap">
+            <b class="text info">{{ spans[i].value }}%</b>
+            <div [formGroup]="detailsForm">
+              <div class="divider row-gap">
+                <b class="column-header">{{ 'threePointCalibration.calculated' | translate }}:</b>
+                <span>{{ detailsForm.get('Calculated').value }}</span>
+              </div>
+              <div class="divider row-gap">
+                <b class="column-header">{{ 'threePointCalibration.asFound' | translate }}:</b>
+                <span>{{ detailsForm.get('AsFound').value }}</span>
+              </div>
+              <div class="divider row-gap">
+                <b class="column-header">{{ 'threePointCalibration.error' | translate }}:</b>
+                <span>{{ detailsForm.get('Error').value }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div> -->
+    <table class="summary-responses" *ngIf="!editable">
+      <thead>
+        <tr>
+          <th class="summary-responses">Property</th>
+          <th *ngFor="let detailsForm of getFormGroup(); let i = index" class="divider row-gap summary-responses">
+            <span>{{ spans[i].value }}%</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      
+        <tr class="column-gap summary-responses">
+          <td class="summary-responses">
+            <span>{{ 'threePointCalibration.calculated' | translate }}</span>
+          </td>
+          <td *ngFor="let detailsForm of getFormGroup(); let i = index" class="divider row-gap summary-responses">
+            <span>{{ detailsForm.get('Calculated').value }}</span>
+          </td>
+        </tr>
+        <tr class="column-gap summary-responses">
+          <td class="summary-responses">
+            <span>{{ 'threePointCalibration.asFound' | translate }}</span>
+          </td>
+          <td *ngFor="let detailsForm of getFormGroup(); let i = index" class="divider row-gap summary-responses">
+            <span>{{ detailsForm.get('AsFound').value }}</span>
+          </td>
+        </tr>
+        <tr class="column-gap summary-responses">
+          <td class="summary-responses">
+            <span>{{ 'threePointCalibration.error' | translate }}</span>
+          </td>
+          <td *ngFor="let detailsForm of getFormGroup(); let i = index" class="divider row-gap summary-responses">
+            <span>{{ detailsForm.get('Error').value }}%</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>

@@ -1,0 +1,48 @@
+.general {
+  margin: 11px 0 !important;
+  .button {
+    width: 50%;
+  }
+
+  ::ng-deep .mat-vertical-content-container {
+    margin-left: 0;
+    border-bottom: solid 1px #cdcdcd;
+  }
+
+  ::ng-deep .mat-vertical-stepper-header .mat-step-icon {
+    visibility: hidden;
+    margin-right: 0px;
+  }
+
+  ::ng-deep .mat-step-header {
+    padding: 30px 0 13px;
+    position: relative;
+    background-color: transparent;
+    outline: none;
+  }
+
+  ::ng-deep .mat-step-label.mat-step-label {
+    text-overflow: inherit;
+    white-space: normal;
+  }
+
+  .stepper-title {
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+    padding-right: 20px;
+    margin-bottom: 0;
+  }
+
+  .material-icons {
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    transform: translate(-50%, -50%);
+    display: flex;
+  }
+
+  .subsection-title {
+    margin-bottom: 0px !important;
+  }
+}

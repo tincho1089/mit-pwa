@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "https-sonarqube-azure-chevron-com",
+        "projectKey": "GUIT.FWE.AI_Inspections:mit-pwa"
+    }
+}

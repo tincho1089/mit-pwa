@@ -1,0 +1,78 @@
+<div class="row wo-equipment">
+    <div class="col-4 equipment-col">
+        <mat-card class="meridium-details-card">
+            <mat-card-header>
+                <mat-card-title-group>
+                    <mat-card-title>
+                        <h4>{{ 'equipment.equipmentIdentification' | translate }}</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle></mat-card-subtitle>
+                </mat-card-title-group>
+            </mat-card-header>
+            <mat-card-content class="meridiumDetailsTable">
+                <mat-table  *ngIf="meridiumDetails.equipmentData.EquipmentDetail != null" mat-table [dataSource]="meridiumDetails.equipmentData.EquipmentDetail">
+                    <ng-container matColumnDef="DisplayName">
+                        <mat-header-cell *matHeaderCellDef>{{ 'equipment.fieldName' | translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let equip">{{equip.DisplayName}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Value" >
+                        <mat-header-cell *matHeaderCellDef>{{ 'equipment.value' | translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let equip">{{equip.Value}} </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="['DisplayName', 'Value'];sticky:true"></mat-header-row>
+                    <mat-row class="meridium-row" *matRowDef="let row; columns: ['DisplayName', 'Value']; let i = index"></mat-row>
+                </mat-table>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div class="col-4 equipment-col">
+        <mat-card class="meridium-details-card">
+            <mat-card-header>
+                <mat-card-title-group>
+                    <mat-card-title>
+                        <h4>{{ 'equipment.basicIdentification' | translate }}</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle></mat-card-subtitle>
+                </mat-card-title-group>
+            </mat-card-header>
+            <mat-card-content class="meridiumDetailsTable">
+                <mat-table  *ngIf="meridiumDetails.equipmentData.BasicInformation != null" mat-table [dataSource]="meridiumDetails.equipmentData.BasicInformation">
+                    <ng-container matColumnDef="DisplayName">
+                        <mat-header-cell *matHeaderCellDef>{{ 'equipment.fieldName' | translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let equip">{{equip.DisplayName}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Value" >
+                        <mat-header-cell *matHeaderCellDef>{{ 'equipment.value' | translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let equip">{{equip.Value}} </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="['DisplayName', 'Value'];sticky:true"></mat-header-row>
+                    <mat-row class="meridium-row" *matRowDef="let row; columns: ['DisplayName', 'Value']; let i = index"></mat-row>
+                </mat-table>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div class="col-4 equipment-col">
+        <mat-card class="meridium-details-card">
+            <mat-card-header>
+                <mat-card-title-group>
+                    <mat-card-title>
+                        <h4>{{ 'equipment.damageMechanism' | translate }}</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle></mat-card-subtitle>
+                </mat-card-title-group>
+            </mat-card-header>
+            <mat-card-content class="meridiumDetailsTable">
+                <mat-table  *ngIf="meridiumDetails.equipmentData.DamageMechanism != null" mat-table [dataSource]="meridiumDetails.equipmentData.DamageMechanism">
+                    <ng-container matColumnDef="DisplayName">
+                        <mat-header-cell *matHeaderCellDef>{{ 'equipment.damageMechanism' | translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let equip">{{equip[0].Value}} </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="['DisplayName'];sticky:true"></mat-header-row>
+                    <mat-row class="meridium-row" *matRowDef="let row; columns: ['DisplayName']; let i = index"></mat-row>
+                </mat-table>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

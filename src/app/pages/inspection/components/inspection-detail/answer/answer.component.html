@@ -1,0 +1,64 @@
+<div class="answer row">
+    <!--Question Status Red/Green Indicator-->
+    <div class="answer-status" [ngClass]="validateCompletedSectionClass()"></div>
+    <!-- Question -->
+    <div class="answer-wrapper">
+        <div class="row">
+            <div class="col-6 cell" *ngIf="needFactory">
+                <p class="title" text-wrap [innerHTML]="response.question"></p>
+            </div>
+
+            <div class="col-5 cell" *ngIf="needFactory">
+                <app-question-wrapper 
+                    [form]="form" 
+                    [response]="response" 
+                    [section]="response.inspectionSection"
+                    [editable]="false"
+                    [equipDetails]="equipDetails">
+                </app-question-wrapper>
+            </div>
+
+            <!-- Question -->
+            <div class="col-6 cell" *ngIf="!needFactory">
+                <p class="title" text-wrap [innerHTML]="response.question"></p>
+            </div>
+            <div class="col-5 cell" *ngIf="!needFactory">
+                <!-- Response -->
+                <label [innerHtml]="response.answer"></label>
+            </div>    
+                    
+            <div>
+                <!-- Comments / Recommendations -->
+                <div class="row" *ngIf="response.comments" class="text-info">
+                    <label no-padding no-margin>
+                        <b>{{ 'answer.comments' | translate }}:</b> {{ response.comments }}
+                    </label>
+                </div>
+                <div class="row" >
+                    <div class="row" *ngIf="response.recommendation">
+                        <label no-padding no-margin class="text-info">
+                            <b>{{ 'answer.recommendation' | translate }}:</b> {{ response.recommendation }}
+                        </label>
+                    </div>
+                    <div class="row" *ngIf="response.attention">
+                        <label no-padding no-margin class="text-danger">
+                            <b>{{ 'answer.immediateAttention' | translate }}</b>
+                        </label>
+                    </div>
+                    <div class="row" *ngIf="response.followUpWO">
+                        <label no-padding no-margin class="text-danger">
+                            <b>{{ 'answer.workOrderRecommended' | translate }}</b>
+                        </label>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-6 cell">                        
+                            <photoview [response]="response" [responseImages]="responseImages"></photoview>
+                        </div>
+                    </div>
+        
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>

@@ -1,0 +1,13 @@
+<div class="row" [formGroup]="form">
+    <div [formGroupName]="section">
+        <div class="col-12">
+            <mat-radio-group [formControlName]="response.questionId" *ngIf="editable">
+                <mat-radio-button *ngFor="let o of options; let i = index" [value]="o.value"
+                    [id]="'radio-' + response.questionId +'-'+ o.value">{{o.description}}</mat-radio-button>
+            </mat-radio-group>
+            <label *ngIf="!editable && selected">
+                {{ 'meridium-inspection.' + selected.value | translate }}
+            </label>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,149 @@
+<div *ngIf="showControl" [formGroup]="form">
+    <div [formGroupName]="section" *ngIf="formGroup">
+        <div [formGroup]="formGroup" *ngIf="editable">
+            <div formArrayName="details">
+                <div *ngFor="let item of items; let i = index" [formGroupName]="i">
+                    <!-- Setting: -->
+                    <div class="row">
+                        <div class="col-6">
+                            <mat-label class="item-label">
+                                <b>{{'percentSpan.setting' | translate}}:</b> {{ item.fieldName }}
+                            </mat-label>
+                        </div>
+                    </div>
+                    <!-- Set Point In -->
+                    <div class="row">
+                        <div class="col-6">
+                            <mat-label class="item-label">
+                                <b>{{'percentSpan.setPoint' | translate}} ({{units}}):</b> {{ item.currVal }}
+                            </mat-label>
+                        </div>
+                    </div>
+                    <!-- As found Measured -->
+                    <div class="row">
+                        <div class="col-3">
+                            <mat-form-field appearance="outline">
+                                <mat-label class="item-label">
+                                    {{'percentSpan.asFoundMeasured' | translate}} ({{units}}):
+                                </mat-label>
+                                <input matInput type="text" formControlName="AsFound" clearInput
+                                    [id]="'input-' + response.questionId + '-' + item.fieldName + '-as-found'" />
+                            </mat-form-field>
+                        </div>
+                        <!-- Percent Error -->
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <mat-label class="errorLabel">
+                                <b>{{ 'commons.percentError' | translate }}: <span [ngClass]="{'percentError': !isValidError(formGroup.get('details.' + i + '.ErrorF').value), 
+                                    'percentValid': isValidError(formGroup.get('details.' + i  +'.ErrorF').value) &&
+                                     (!!formGroup.get('details.' + i  + '.ErrorF').value || formGroup.get('details.' + i + '.ErrorF').value == '0')}">{{ formGroup.get('details.' + i + '.ErrorF').value}}%</span></b>
+                              </mat-label>
+                        </div>
+                    </div>
+                    <!-- As left Measured -->
+                    <div class="row" [hidden]="isValidError(formGroup.get('details.' + i + '.ErrorF').value)">
+                        <div class="col-3">
+                            <mat-form-field appearance="outline">
+                                <mat-label class="item-label">
+                                    {{'percentSpan.asLeftMeasured' | translate}} ({{units}}):
+                                </mat-label>
+                                <input matInput type="text" formControlName="AsLeft" clearInput
+                                    [id]="'input-' + response.questionId + '-' + item.fieldName + '-as-left'" />
+                            </mat-form-field>
+                        </div>
+                        <!-- Percent Error -->
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <mat-label class="errorLabel">
+                                <b>{{ 'commons.percentError' | translate }}: <span [ngClass]="{'percentError': !isValidError(formGroup.get('details.' + i + '.ErrorL').value), 
+                                    'percentValid': isValidError(formGroup.get('details.' + i  +'.ErrorL').value) &&
+                                     (!!formGroup.get('details.' + i  + '.ErrorL').value || formGroup.get('details.' + i + '.ErrorL').value == '0')}">{{ formGroup.get('details.' + i + '.ErrorL').value}}%</span></b>
+                              </mat-label>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <div formGroupName="passFail" *ngIf="editable">
+                <div class="row" *ngIf="formGroup?.get('passFail.PassFail').value">
+                    <div class="col-sm-2 col-md-4 col-lg-4">
+                        <mat-label [ngClass]="formGroup?.get('passFail.PassFail').value === 'Fail' ? 'fail':'pass'">
+                            {{'commons.' + formGroup.get('passFail.PassFail').value | translate}}
+                        </mat-label>
+                    </div>
+                    <div class="col-sm-2 col-md-4 col-lg-6">
+                        <div *ngIf="formGroup.get('passFail.PassFail').value === 'Fail'">
+
+                            <app-dropdown-search [appearance]="'outline'" [label]="'commons.Failure Code' | translate" [parentParentForm]="form" 
+                              [sectionArray]="sectionArray" [controlName]="'FailureCode'" [idSelect]="'select-'+ response.question +'-failure-code'" 
+                              [passFailCode]="true" [options]="failOptions">
+                            </app-dropdown-search>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!editable" justify-content-center>
+            <div *ngFor="let item of items; let i = index">
+                <div class="row">
+                    <span class="text-dark bold">
+                        {{'percentSpan.setting' | translate}}:
+                        {{ item.fieldName }}
+                    </span>
+                </div>
+                <div class="row">
+                    <mat-label class="item-label">
+                        {{'percentSpan.setPoint' | translate}}:
+                        {{ item.currVal }} {{ item.units }}
+                    </mat-label>
+                </div>
+                <div class="row">
+                    <mat-label class="item-label">
+                        {{'percentSpan.asFoundMeasured' | translate}}:
+                        {{ formGroup.get('details.' + i + '.AsFound').value }}
+                    </mat-label>
+                </div>
+                <div class="row" *ngIf="formGroup.get('details.' + i + '.ErrorF').value">
+                    <mat-label class="item-label" [ngClass]="!isValidError(formGroup.get('details.' + i + '.ErrorF').value) ? 
+                              'percentError':'percentValid'">
+                        {{'commons.percentError' | translate}}:
+                        {{ formGroup.get('details.' + i + '.ErrorF').value }}%
+                    </mat-label>
+                </div>
+                <div class="row">
+                    <mat-label class="item-label" *ngIf="formGroup.get('details.' + i + '.AsLeft').value">
+                        {{'percentSpan.asLeftMeasured' | translate}}:
+                        {{ formGroup.get('details.' + i + '.AsLeft').value }}
+                    </mat-label>
+                </div>
+                <div class="row" *ngIf="formGroup.get('details.' + i + '.ErrorL').value">
+                    <mat-label class="item-label" [ngClass]="!isValidError(formGroup.get('details.' + i + '.ErrorL').value) ? 
+                    'percentError':'percentValid'">
+                        {{'commons.percentError' | translate}}:
+                        {{ formGroup.get('details.' + i + '.ErrorL').value }}%
+                    </mat-label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <div class="col-6">
+                        <mat-label *ngIf="!!formGroup.get('passFail.PassFail').value"
+                            [ngClass]="formGroup.get('passFail.PassFail').value === 'Fail' ? 'fail':'pass'"
+                            [attr.data-is-valid]="
+                        formGroup.get('passFail.PassFail').value === 'Pass'
+                        ">
+                            {{ 'commons.' + formGroup.get('passFail.PassFail').value |
+                            translate }}
+                        </mat-label>
+                    </div>
+                    <div class="col-6" *ngIf="formGroup.get('passFail.PassFail').value === 'Fail'">
+                        <b>{{'commons.Failure Code' | translate}}:</b>
+                        <mat-label class="text">
+                            {{ formGroup.get('passFail.FailureCode').value }}
+                        </mat-label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div> 

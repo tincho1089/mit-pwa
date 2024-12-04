@@ -1,0 +1,40 @@
+<div class="controls" *ngIf="showControl" [formGroup]="form">
+        <div [formGroupName]="section">
+            <div [formGroup]="formGroup" *ngIf="formGroup && editable">
+                <div class="content">
+                    <div class="content-1">
+                        <!-- To Translate -->
+                        <mat-label>Pass/Fail</mat-label>
+                        <mat-radio-group formControlName="pass-fail">
+                            <mat-radio-button *ngFor="let option of options"
+                                [id]="'radio-'+ response.questionId +'-' + option.value" [value]="option.value">
+                                {{option.value}}</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+                <div class="content-2" *ngIf="formGroup.value['pass-fail'] === 'Fail' && failOptions.length > 0">
+
+                    <app-dropdown-search *ngIf="showControl"
+                        [appearance]="'outline'"
+                        [parentParentForm]="form"
+                        [sectionArray]="sectionArray"
+                        [label]="'commons.Failure Code' | translate"
+                        [controlName]="'failure'"
+                        [idSelect]="'select-' + response.questionId"
+                        [options]="failOptions">
+                    </app-dropdown-search>
+
+                </div>
+                
+            </div>
+            <div *ngIf="!editable">
+                <div class="label-control-form" *ngIf="!!formGroup.get('pass-fail').value">
+                    <label>Pass/Fail:</label> <span> {{formGroup.get('pass-fail').value}} </span>
+                </div>
+                <div class="label-control-form" *ngIf="formGroup.value['pass-fail'] === 'Fail'">
+                    <label>Failure Code:</label> <span> {{formGroup.get('failure').value}} </span>
+                </div>
+
+            </div>
+        </div>
+</div>

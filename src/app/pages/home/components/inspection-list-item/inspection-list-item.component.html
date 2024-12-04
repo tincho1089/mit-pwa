@@ -1,0 +1,152 @@
+<mat-card class="card-profile vertical-line" [ngClass]="wo.isImported ? 'imported' : ''">
+    <mat-card-header class="wo-header">
+        <mat-card-title>
+            <div class="wo-code">{{wo.code}} <mat-icon *ngIf="this.wo.groupId">groups</mat-icon></div>
+            <div class="wo-description">{{wo.description}}</div>
+        </mat-card-title>
+        <div *ngIf="wo.equipmentPropertyFilterLabel.boldText != ''" class="ep-filter-label-box">
+            <span>{{ wo.equipmentPropertyFilterLabel.startText }}<span class="bold">{{ wo.equipmentPropertyFilterLabel.boldText }}</span>{{ wo.equipmentPropertyFilterLabel.endText }}</span>
+        </div>
+        <div class="status-container">
+            <div class="wo-status" [ngClass]="woStatus.getBGStyle()">
+                {{ 'status.'+woStatus.getStatusName() | translate | lowercase}}
+            </div>
+        </div>
+    </mat-card-header>
+    <mat-card-content class="wo-card-content">
+        <div class="wo-information">
+            <div class=" card-column first-col col-sm-12 col-md-6">
+                <div class="wo-prop" *ngIf="wo.userName.length > 0">
+                    <span class="bold text-left">{{ 'commons.assignedTo' | translate }}:</span>
+                    {{wo.userName}}
+                </div>
+                <div class="wo-prop">
+                    <span class="bold text-left">{{ 'inspection.template' | translate }}:</span>
+                    {{wo.inspectionType}}
+                </div>
+                <div [ngClass]="isOverdue(wo.scheduledEndDate)" class="wo-prop"> 
+                    <span class="bold text-left">{{ 'inspection.dueDate' | translate }}: </span> 
+                    <span>{{wo.scheduledEndDate | date}}</span>
+                </div>
+                <div class="wo-prop text-light-red" *ngIf="wo.aiInternalStatus==3">
+                    <span class="bold text-left">{{ 'inspection.returnComments' | translate }}:</span>
+                    <span>{{wo.returnComment}}</span>
+                </div>
+            </div>
+            <div class="card-column col-sm-12 col-md-6">
+                <div class="wo-prop">
+                    <span class="bold text-left">{{ 'inspection.equipment' | translate }}:</span> 
+                    <span>{{wo.equipmentCode}}</span>
+                </div>
+                <div class="wo-prop">
+                    <span class="bold text-left">{{ 'inspection.equipmentDescription' | translate}}:</span>
+                    <span>{{wo.equipmentDescription}}</span>
+                </div>
+                <div class="wo-prop">
+                    <span class="bold text-left">{{'inspection.equipmentClass' | translate}}:</span>
+                    <span>{{wo.equipmentClassDesc}}</span>
+                </div>
+                <div class="wo-prop">
+                    <span class="bold text-left">{{ 'filters.area' | translate }}:</span> 
+                    <span>{{wo.area}}</span>
+                </div>
+                <div class="wo-prop">
+                    <span class="bold text-left">{{ 'filters.subArea' | translate }}:</span> 
+                    <span>{{wo.department}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="wo-actions">
+            <ng-container [ngSwitch]="wo.aiInternalStatus" *ngIf="!wo.isImported">
+                <ng-container *ngSwitchCase="0">
+                    <button 
+                        class="button btn bg-dark-blue"
+                        (click)="startInspection()"
+                    >
+                        {{ 'inspection.start' | translate }}
+                    </button>
+                </ng-container>
+                <ng-container *ngSwitchCase="1">
+                    <button 
+                        *ngIf="isOwnedByCurrentUser || !isContributable"
+                        class="button btn bg-dark-blue"
+                        [routerLink]="['/inspection', wo.id]"
+                    >
+                        {{ 'inspection.resume' | translate }}
+                    </button>
+                    <button 
+                        *ngIf="isContributable" 
+                        class="button btn bg-dark-blue" 
+                        (click)="contribute()"
+                    >
+                        {{ 'inspection.contribute' | translate }}
+                    </button>
+                </ng-container>
+                <ng-container *ngSwitchCase="2">
+                    <button 
+                        class="button btn bg-dark-orange" 
+                        (click)="reopenCompleted(wo)"
+                    > 
+                        {{'inspection.reopen' | translate}}
+                    </button>
+                    <button 
+                        class="button btn bg-medium-teal" 
+                        (click)="uploadWO(wo)"
+                    >
+                        {{ 'inspection.upload' | translate }}
+                    </button>
+                </ng-container>
+                <ng-container *ngSwitchCase="3">
+                    <button 
+                        class="button btn bg-dark-blue" 
+                        [routerLink]="['/inspection', wo.id]"
+                    >
+                        {{ 'inspection.resume' | translate }}
+                    </button>
+                </ng-container>
+                <ng-container *ngSwitchCase="99">
+                    <button 
+                        class="button btn bg-dark-orange"
+                        (click)="reopenSubmitted(wo)"
+                    > 
+                        {{ 'inspection.reopen' | translate }}
+                    </button>
+                    <button 
+                        class="button btn bg-medium-orange"
+                        (click)="remove(wo)"
+                    >
+                        {{ 'inspection.remove' | translate }}
+                    </button>
+                    <button 
+                        class="button btn bg-light-orange"
+                        (click)="openPDF(wo)"
+                    >
+                        {{ 'inspection.openPDF' | translate }}
+                    </button>
+                </ng-container>
+                <ng-container *ngSwitchCase="100">
+                    <button 
+                        class="button btn bg-medium-orange"
+                        (click)="remove(wo)"
+                    >
+                        {{ 'inspection.remove' | translate }}
+                    </button>
+                </ng-container>
+            </ng-container>
+            <ng-container *ngIf="wo.isImported">
+                <button 
+                    class="button btn bg-light-blue"
+                    [routerLink]="['/inspection', wo.id]"
+                >
+                    {{ 'commons.open' | translate }}
+                </button>
+                <button class="button btn bg-medium-teal" (click)="uploadWO(wo)"> 
+                    {{ 'inspection.upload' | translate }}
+                </button>
+                <button class="button btn bg-medium-orange" (click)="remove(wo)"> 
+                    {{ 'inspection.remove' | translate }}
+                </button>
+            </ng-container>
+        </div>
+    </mat-card-content>
+</mat-card>

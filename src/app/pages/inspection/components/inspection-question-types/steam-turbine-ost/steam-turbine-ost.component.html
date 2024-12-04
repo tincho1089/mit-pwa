@@ -1,0 +1,88 @@
+<div class="controls">
+    <div [formGroup]="form">
+        <div [formGroupName]="section">
+            <div [formGroup]="formGroup">
+                <div *ngIf="formGroup && editable">
+                    <div>
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{GET_STREAM_TURBINE_OST}} </mat-label>
+                            <input matInput type="number" [id]="'input-' + GET_STREAM_TURBINE_OST"
+                                [formControlName]="GET_STREAM_TURBINE_OST">
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field appearance="outline" readonly>
+                            <mat-label>{{GET_MAXIMUM_SEARCH_SPEED}} </mat-label>
+                            <input matInput readonly type="number" [id]="'input-' + GET_MAXIMUM_SEARCH_SPEED"
+                                [formControlName]="GET_MAXIMUM_SEARCH_SPEED">
+                        </mat-form-field>
+                    </div>
+                    <div>
+
+                        <app-dropdown-search
+                            *ngIf="showControl"
+                            [appearance]="'outline'"
+                            [parentParentForm]="form"
+                            [sectionArray]="sectionArray"
+                            [label]="GET_GOVERNOR_TYPE"
+                            [placeHolder]="'Select a Governor Type'"
+                            [controlName]="GET_GOVERNOR_TYPE"
+                            [options]="governorTypeOptions"
+                        ></app-dropdown-search>
+
+                    </div>
+                    <div>
+                        <mat-form-field appearance="outline" readonly >
+                            <mat-label>{{GET_ALLOWABLE_TRIP_SPEED_RANGE}}</mat-label>
+                            <input matInput readonly type="text" readonly
+                                [formControlName]="GET_ALLOWABLE_TRIP_SPEED_RANGE">
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <div class="button-container">
+                            <button type="button" id="reset" class="btn btn-secondary text-white" (click)="reset()">Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!editable" class="not-editable">
+
+                    <table class="summary-responses">
+                        <tr class="divider">
+                          <th class="summary-responses">
+                            {{GET_STREAM_TURBINE_OST}}
+                          </th>
+                          <td class="summary-responses">
+                            {{ getControlValue(GET_STREAM_TURBINE_OST) }}
+                          </td>
+                        </tr>
+                        <tr class="divider">
+                            <th class="summary-responses">
+                                {{GET_MAXIMUM_SEARCH_SPEED}}
+                            </th>
+                            <td class="summary-responses">
+                                {{ getControlValue(GET_MAXIMUM_SEARCH_SPEED) }}
+                            </td>
+                          </tr>
+                          <tr class="divider">
+                            <th class="summary-responses">
+                                {{GET_GOVERNOR_TYPE}}
+                            </th>
+                            <td class="summary-responses">
+                                {{ getControlValue(GET_GOVERNOR_TYPE) }}
+                            </td>
+                          </tr>
+                          <tr class="divider">
+                            <th class="summary-responses">
+                                {{GET_ALLOWABLE_TRIP_SPEED_RANGE}}
+                            </th>
+                            <td class="summary-responses">
+                              {{ getControlValue(GET_ALLOWABLE_TRIP_SPEED_RANGE) }}
+                            </td>
+                          </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

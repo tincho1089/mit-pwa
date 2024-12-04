@@ -1,0 +1,27 @@
+<div class="controls">
+    <div [formGroup]="form">
+        <div [formGroupName]="section">
+            <div *ngIf="editable">
+                <div class="row">
+                    <div class="col-12">
+                        <mat-radio-group [formControlName]="response.questionId">
+                            <mat-radio-button *ngFor="let option of options; let i = index"
+                                [value]="option.value">{{option.description}}</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!editable">
+                <div class="row">
+                    <div class="col-4">           
+                    </div>
+                    <div class="col-6">
+                        <label *ngIf="selected" class="text">
+                            {{ selected.description }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<ng-container *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section">
+    <div fxLayout="column" fxLayoutAlign="start stretch">
+      <table class="summary-responses" *ngIf="!editable">
+        <!-- Header Row -->
+        <tr>
+            <th class="summary-responses" *ngFor="let label of ['hmiInfo.parameter', 'hmiInfo.ep', 'hmiInfo.hmi']">{{ label | translate}}</th>
+        </tr>
+      
+        <!-- Data Rows -->
+        <tr *ngFor="let s of spans; let i = index" class="summary-responses">
+          <td class="summary-responses">
+            <span>{{ s.value }}</span>
+          </td>
+          <td class="summary-responses">
+            <span>{{ formGroup.get('details.' + i + '.EP').value }}</span>
+          </td>
+          <td class="summary-responses">
+            <span>{{ formGroup.get('details.' + i + '.HMI').value }}</span>
+          </td>
+        </tr>
+      </table>
+
+      <div [formGroup]="formGroup" *ngIf="editable">
+        <div formGroupName="details">
+          <div
+            fxLayout="row"
+            fxLayoutAlign="start"
+            *ngFor="let s of spans; let i = index"
+            [formGroupName]="i"
+            class="divider"
+          >
+            <div fxFlex="50">
+              <mat-label class="item-label">
+                <b>{{ 'hmiInfo.parameter' | translate }}: </b>
+                {{ s.value }}
+              </mat-label>
+            </div>
+            <div fxFlex="25">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'hmiInfo.ep' | translate }}</mat-label>
+                <input matInput type="text" formControlName="EP" />
+              </mat-form-field>
+            </div>
+            <div fxFlex="25">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'hmiInfo.hmi' | translate }}</mat-label>
+                <input matInput type="text" formControlName="HMI" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</ng-container>

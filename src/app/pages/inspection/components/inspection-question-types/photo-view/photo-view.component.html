@@ -1,0 +1,19 @@
+<div class="row" >
+    <div *ngFor="let image of responseImages">
+        <div class="row">
+            <div class="col-6">
+                <img [alt]="''" *ngIf="!image.thumbnail && image.photo.indexOf('data:image/') == -1"                            
+                [src] = "'data:image/jpeg;base64,' + image.photo" style="max-width: 100px" (click)="openImage('data:image/png;base64,' + image.photo, image)" loading="lazy" placeholder/>
+                <img [alt]="''" *ngIf="image.thumbnail && image.photo.indexOf('data:image/') == -1"                            
+                [src] = "image.thumbnail" style="max-width: 100px" (click)="openImage('data:image/png;base64,' + image.photo, image)" loading="lazy" placeholder/>
+                <img [alt]="''" *ngIf="!image.thumbnail && image.photo.indexOf('data:image/') > -1" 
+                [src] = "image.photo" style="max-width: 100px" (click)="viewImage(image)" loading="lazy" placeholder/>
+                <img [alt]="''" *ngIf="image.thumbnail && image.photo.indexOf('data:image/') > -1" 
+                [src] = "image.thumbnail" style="max-width: 100px" (click)="viewImage(image)" loading="lazy" placeholder/>
+            </div>
+        </div>
+        <div class="row">
+            <div>{{image.imageCaption }}</div>
+        </div>
+    </div>
+</div>

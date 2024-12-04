@@ -1,0 +1,43 @@
+<div *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section">
+    <div *ngIf="formArray && editable" [formGroupName]="response.questionId">
+      <div class="row" *ngFor="let m of measurements; let i = index" [formGroupName]="i">
+        <div>
+          <mat-label class="item-label">{{ m.description }}</mat-label>
+        </div>
+        <div *ngFor="let t of ['As Found', 'As Left']" formGroupName="Row">
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label stacked>{{ 'commons.' + t | translate}}</mat-label>
+              <input matInput type="number" [id]="'input-' + response.questionId + '-' + m.description +'-'+ t"
+                [formControlName]="t"
+                [disabled]="form.get(sectionArray) && form.get(sectionArray).status === 'DISABLED'">
+              <span matTextSuffix>{{response.units}}</span>
+              <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">You must enter a value.</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table *ngIf="formArray && !editable" class="summary-responses">
+      <tr>
+        <td class="summary-responses"><b>Property</b></td>
+        <td class="summary-responses"><b>{{ 'commons.As Found' | translate}}</b></td>
+        <td class="summary-responses"><b>{{ 'commons.As Left' | translate}}</b></td>
+      </tr>
+      <tr *ngFor="let m of measurements; let i = index ">
+        <td class="summary-responses">
+          <mat-label>
+            <b>{{ m.description }}:</b>
+          </mat-label>
+        </td>
+        <td *ngFor="let t of ['As Found', 'As Left']" class="summary-responses">
+          <mat-label>
+            {{ formArray.get(i + '.Row.' + t).value }}
+          </mat-label>
+        </td>
+      </tr>
+
+    </table>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+.result {
+    display: inline-block;
+    font-weight: bold;
+    margin: 5px 0 !important;
+
+    &.success {
+        color: green;
+    }
+
+    &.fail {
+        color: red;
+    }
+
+    mat-icon {
+        margin-right: 7px;
+    }
+}
+
+.not-editable {
+    span {
+        display: block;
+    }
+    mat-label{
+        font-weight: bold;
+    }
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+
+    button {
+        margin: 15px 7.5px !important;
+    }
+}
+
+mat-label {
+    color: black;
+}

@@ -1,0 +1,16 @@
+@import './../../../../../../styles/variables.scss';
+
+:host {
+    border-color: map-get($colors, border-item) !important;
+    mat-label {
+        display: block;
+        font-weight: 300 !important;
+        color: map-get($colors, primary);
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+a {
+    cursor:  pointer;
+}

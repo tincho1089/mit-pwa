@@ -1,0 +1,26 @@
+<h3 mat-dialog-title>{{'commons.details' | translate}} - {{ Id }}</h3>
+
+<hr style="width: 100%;">
+
+<div mat-dialog-content>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" *ngFor="let ts of tableStructure">
+            <mat-label style="text-wrap: wrap;margin: 0;"><b>{{ts.displayName}}</b></mat-label>
+            <span *ngIf="reading[ts.property] && reading[ts.property] !== 'null' && ts.displayName !== 'Equipment Class:'">
+                {{ reading[ts.property] }}
+            </span>
+            <span *ngIf="reading[ts.property] && reading[ts.property] !== 'null' && ts.displayName === 'Equipment Class:'">
+                {{ (reading.EquipmentClass ? reading.EquipmentClass + '-' : '') + reading['equipmentClassDesc'] }}
+            </span>
+        </div>
+    </div>
+</div>
+
+<hr style="width: 100%;">
+
+<div mat-dialog-actions class="row">
+    <div class="col">
+        <button mat-button class="button btn btn-primary text-white"
+        [mat-dialog-close]="true" (click)="dialogRef.close()">{{ 'commons.close' | translate }}</button>
+    </div>
+</div>

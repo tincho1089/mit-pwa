@@ -1,0 +1,28 @@
+:host {
+    width: 100%;
+    .inspection-json-viewer {
+        background-color: #4441;
+
+        .header {
+            width: 100%;
+            background-color: #0002;
+            height: 35px;
+            display: block;
+            padding: 5px;
+
+            span {
+                padding: 0px 10px;
+            }
+            mat-icon {
+                margin-bottom: -6px;
+            }
+        }
+
+        .dynamic-scroll {
+            overflow-y:auto;
+            .json-viewer {
+                display: block;
+            }
+        }
+    }
+}

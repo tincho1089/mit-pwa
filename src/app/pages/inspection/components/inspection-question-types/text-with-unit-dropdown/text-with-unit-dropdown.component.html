@@ -1,0 +1,27 @@
+<div class="controls" *ngIf="formGroup">
+    <div [formGroup]="form">
+        <div [formGroupName]="section">
+            <div [formGroup]="formGroup">
+                <div *ngIf="editable" class="content-1">
+                    <mat-form-field appearance="outline"
+                        [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                        <input matInput type="text" [id]="'text-input-' + response.questionId" formControlName="Value">
+                        <button matSuffix mat-icon-button (click)="clearInput()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                        <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">You must enter a value.</mat-error>
+                    </mat-form-field>
+
+                    <app-dropdown-search [appearance]="'outline'" [parentParentForm]="form"
+                        [options]="options" [sectionArray]="sectionArray" [label]="'Unit'" [controlName]="'Unit'"
+                        [idSelect]="'input-' + response.questionId" [response]="response">
+                    </app-dropdown-search>
+                    
+                </div>
+                <div *ngIf="!editable">
+                    <label [id]="'label-' + response.questionId"> {{response.answer}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

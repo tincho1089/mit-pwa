@@ -1,0 +1,79 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars:
+    web:
+      dev:
+        aspName: mit-test-cvx
+        appName: mit-pwa-dev-cvx
+        kvCert: mit-pwa-dev
+        registerDNS: true
+        bindDNS: true
+        domainName: mit-pwa-dev.azure.chevron.com
+      test:
+        aspName: mit-test-cvx
+        appName: mit-pwa-test-cvx
+        kvCert: mit-pwa-test
+        registerDNS: true
+        bindDNS: true
+        domainName: mit-pwa-test.azure.chevron.com
+      prod:
+        aspName: mit-cvx
+        appName: mit-pwa-cvx
+        kvCert: mit-pwa
+        registerDNS: true
+        bindDNS: true
+        domainName: mit-pwa.azure.chevron.com
+        
+  tasks:
+
+    - name: Display deployment pattern
+      debug:
+        msg: "Running the {{ deployment_type }} deployment pattern"
+    ###########################
+    # CODE ONLY DEPLOY
+    ###########################
+    - block:
+      # https://dev.azure.com/chevron/AnsibleRoles/_git/ansible-role-azure-zipdeploy
+      - name: "Deploy Code Only"
+        include_role:
+          name: ansible-role-azure-zipdeploy  
+        vars:
+          azure_zipdeploy_app_service_name: "{{ web[cvx_environment_name].appName }}"
+
+      when: deployment_type == "code_only"
+    
+    ###########################
+    # FULL RESOURCE DEPLOYMENT
+    ###########################
+    - block:
+      # https://dev.azure.com/chevron/AnsibleRoles/_git/ansible-role-azure-app-service
+      - name: Create App Service
+        include_role:
+          name: ansible-role-azure-app-service
+        vars:
+          azure_app_service_name: "{{ web[cvx_environment_name].appName }}"
+          azure_app_service_asp_name: "{{ web[cvx_environment_name].aspName }}"
+          azure_app_service_register_dns: "{{ web[cvx_environment_name].registerDNS }}"
+          azure_app_service_bind_dns: "{{ web[cvx_environment_name].bindDNS }}"
+          azure_app_service_auth_enabled: false
+          azure_app_service_fqdn: "{{ web[cvx_environment_name].domainName }}"
+          azure_appinsights_javascript_enabled: false
+          azure_app_service_customappsettings:
+            - name: ida:ClientId
+              value: "{{ cvx_az_client_id }}"
+            - name: ida:ClientSecret
+              value: "{{ cvx_az_client_secret }}"
+      # https://dev.azure.com/chevron/AnsibleRoles/_git/ansible-role-azure-app-service-bindcertificate
+      - name: Bind Certificate
+        include_role:
+          name: ansible-role-azure-app-service-bindcertificate
+        vars:
+          azure_app_service_asp_name: "{{ web[cvx_environment_name].aspName }}"
+          azure_app_service_name: "{{ web[cvx_environment_name].appName }}"
+          azure_app_service_fqdn: "{{ web[cvx_environment_name].domainName }}"
+          azure_app_service_bindcertificate_name: "{{ web[cvx_environment_name].domainName }}"
+          azure_keyvault_cert_secretname: "{{ web[cvx_environment_name].kvCert }}"
+      
+      when: deployment_type == "full"

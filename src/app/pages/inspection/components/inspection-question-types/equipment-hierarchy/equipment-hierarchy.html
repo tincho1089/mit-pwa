@@ -1,0 +1,37 @@
+<div *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section" *ngIf="formGroup">
+    <div [formGroup]="formGroup">
+      <div formGroupName="details">
+        <ng-container *ngIf="editable">
+          <div fxLayout="row" fxLayoutGap="16px">
+            <div fxFlex="100">
+              <mat-form-field  appearance="outline">
+                <mat-label>Sub Equipment</mat-label>
+                <input matInput [matAutocomplete]="auto" formControlName="SubEquipment" />
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEquipment">
+                  <mat-option *ngFor="let option of options" [value]="option">
+                    {{ option['Equipment Desc'] }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <div *ngIf="!hasSubEquipmentData">
+                <p class="text-danger" >no equipment hierarchy data found</p>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <ng-container *ngIf="!editable">
+        <div fxLayout="row" fxLayoutAlign="center">
+          <div fxFlex="100">
+            <mat-label>
+              {{ formGroup.get('details.SubEquipment').value
+              ? formGroup.get('details.SubEquipment').value['Equipment Desc']
+              : '' }}
+            </mat-label>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

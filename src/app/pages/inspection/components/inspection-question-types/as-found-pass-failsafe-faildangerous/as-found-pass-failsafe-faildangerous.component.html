@@ -1,0 +1,73 @@
+<div class="controls" *ngIf="showControl" [formGroup]="form">
+        <div [formGroupName]="section">
+            <table style="border-collapse: collapse; width: 100%;" *ngIf="!editable">
+                <tr *ngFor="let control of formGroup.controls | keyvalue">
+                  <th style="padding: 8px; border: none;">{{ control.key }}: </th>
+                  <td style="padding: 8px; border: none;">{{ control.value.value }}</td>
+                </tr>
+            </table>
+        <div class="row pt-3" [formGroup]="formGroup" *ngIf="formGroup && editable">
+                <div class="col-4">
+                    <div class="fornmfield">
+
+                        <app-dropdown-search *ngIf="editable"
+                        [appearance]="'outline'"
+                        [parentParentForm]="form"
+                        [sectionArray]="sectionArray"
+                        [label]="'As Found' | translate"
+                        [controlName]="'As Found'"
+                        [idSelect]="'select-' + response.questionId + '-AsFound'"
+                        [options]="options"
+                        ></app-dropdown-search>
+
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="formfield" *ngIf="showQuestion()">
+
+                        <app-dropdown-search *ngIf="editable"
+                        [appearance]="'outline'"
+                        [parentParentForm]="form"
+                        [sectionArray]="sectionArray"
+                        [label]="'commons.As Left' | translate"
+                        [controlName]="'As Left'"
+                        [idSelect]="'select-' + response.questionId + '-AsLeft'"
+                        [options]="options"
+                        [commonOptionDescription]="true"
+                        ></app-dropdown-search>
+
+                    </div> 
+                </div>
+                <div class="col-4">
+                    <div class="formfield" *ngIf="showQuestion()">
+
+                        <app-dropdown-search *ngIf="editable"
+                        [appearance]="'outline'"
+                        [parentParentForm]="form"
+                        [sectionArray]="sectionArray"
+                        [label]="'commons.Failure Code' | translate"
+                        [controlName]="'Failure Code'"
+                        [idSelect]="'select-' + response.questionId + '-FailureCode'"
+                        [options]="failOptions"
+                        ></app-dropdown-search>
+
+                    </div>   
+                </div>
+                <div class="col-4">
+                    <div class="formfield" *ngIf="showQuestion()">
+                        <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                            <mat-label>{{'helper.commentsRequired' | translate}}</mat-label>
+                            <textarea
+                                matInput
+                                formControlName="Comments"
+                                [id]="'select-' + response.questionId + '-Comments'"
+                                (keydown.Space)="$event.stopPropagation()">
+                            >
+                            </textarea>
+                            <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                        </mat-form-field>
+                    </div>   
+                </div>
+            </div>
+        </div>
+</div>

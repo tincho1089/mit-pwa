@@ -1,0 +1,15 @@
+<div class="controls">
+    <div [formGroup]="form">
+        <div *ngIf="response.isShow" [formGroupName]="section">
+            <div *ngIf="editable">
+                <mat-checkbox [id]="'checkbox-'+response.questionId"
+                    [formControlName]="response.questionId"></mat-checkbox>
+            </div>
+            <div *ngIf="!editable" class="label-control-form">
+                <label text-wrap [innerHTML]="response.question">:</label>
+                <span>{{response.answer}}</span>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+resources:
+  repositories:
+    - repository: pf
+      type: git
+      name: CVX-DevOps/ADOPipeline
+      ref: refs/tags/latest-stable
+
+########################################################
+# WARNING: Removing/Modifying the following Parameters
+# may cause errors with your pipeline!
+########################################################
+parameters:
+  - name: forceUpdate
+    displayName: Update Pipeline
+    type: boolean
+    default: false
+  - name: deployEnvironment
+    displayName: Deployment Environment
+    type: string
+    default: prod
+    values:
+      - prod
+  - name: deploymentType
+    displayName: Deployment Type
+    type: string
+    default: code_only
+    values:
+      - code_only
+      - full
+  - name: isSastEnabled
+    displayName: SAST Scan
+    type: boolean
+    default: false
+########################################################
+
+trigger: 
+  - release
+
+stages:
+  - template: pipeline.yml@pf
+    parameters:
+      ${{ insert }}: ${{ parameters }} # DO NOT MODIFY
+      serviceId: 25752
+      releaseBranch: ' ' # prevents a prod build from getting deployed to test environmnent
+      projects:
+        - name: mit_pwa
+          outputPath: "/dist/mit-pwa"
+          type: node
+          nodeVersion: "18.19.x"
+          setEnvironment: true
+
+          isBuildActive: true
+          isDeployActive: true
+          isSASTScanActive: ${{ parameters.isSastEnabled }}
+          isDASTScanActive: false
+          dependabot: false
+          sonarqube:
+            sqExclusions: ''
+            additionalProperties: 'sonar.branch.name=${{ variables.branchName }}'
+
+          playbook: "pipeline/playbook.yml"
+          extraAnsibleVars: |
+            deployment_type: "${{ parameters.deploymentType }}"

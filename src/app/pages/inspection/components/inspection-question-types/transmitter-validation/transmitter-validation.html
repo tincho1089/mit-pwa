@@ -1,0 +1,155 @@
+<div *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section">
+    <div *ngIf="formGroup && editable" [formGroupName]="response.questionId">
+      <div formGroupName="details">
+        <div class="row">
+          <div class="col-4">
+            <mat-form-field appearance="outline">
+              <mat-label>
+                {{ 'transmitter.Accuracy' | translate}}
+              </mat-label>
+              <input placeholder="Accuracy" matInput formControlName="Accuracy" type="text"
+                [id]="'input-' + response.questionId + '-Accuracy'">
+              <span matTextSuffix><b>%</b></span>
+            </mat-form-field>
+          </div>
+        </div>
+        <div *ngFor="let detail of detailsDomain; let i = index" [formGroupName]="detail.value">
+          <div
+            *ngIf="detail.value === 'AsFound' || (detail.value === 'AsLeft' && formGroup.get('passFail.AsFPassFail').value === 'Fail') ">
+            <div class="row">
+              <div class="col-6 text-left">
+                <b>
+                  {{'commons.' + detail.description | translate}}
+                </b>
+              </div>
+              <div class="col-6 text-right">
+                <mat-label *ngIf="detail.value  ==='AsFound' && formGroup.get('passFail.AsFPassFail').value"
+                  [attr.data-is-valid]="formGroup.get('passFail.AsFPassFail').value === 'Pass'"
+                  [ngClass]="formGroup.get('passFail.AsFPassFail').value === 'Fail' ? 'fail':'pass'">
+                  {{ 'commons.' + formGroup.get('passFail.AsFPassFail').value |
+                  translate}}
+                </mat-label>
+                <mat-label *ngIf="detail.value ==='AsLeft' && formGroup.get('passFail.AsLPassFail').value"
+                  [attr.data-is-valid]="formGroup.get('passFail.AsLPassFail').value === 'Pass'"
+                  [ngClass]="formGroup.get('passFail.AsLPassFail').value === 'Fail' ? 'fail':'pass'">
+                  {{ 'commons.' + formGroup.get('passFail.AsLPassFail').value |
+                  translate}}
+                </mat-label>
+              </div>
+            </div>
+            <!-- Init Headers -->
+            <div class="">
+              <div class="row text-left">
+                <div class="col-2" *ngFor="let c of columns; let j = index">
+                  <b class="hidden-sm-down"
+                    [innerHTML]="'transmitter.' + c.value | translate:{units:units, commonUnit:outputUnits, engUnit: engUnit}">
+                  </b>
+                </div>
+              </div>
+              <!-- End Headers -->
+              <div *ngFor="let r of rows" [formGroupName]="r" class="row text-left">
+                <div class="col-2" *ngFor="let c of columns; let l = index">
+                  <mat-label class="hidden-sm-up"
+                    [innerHTML]="'transmitter.' + c.value | translate:{units:units, commonUnit:units, engUnit: engUnit}">
+                  </mat-label>
+                  <div *ngIf="'Error' !== c.value" class="item">
+                    <mat-form-field appearance="outline" *ngIf="'Target Output' !== c.value && 'Eng Unit' !== c.value">
+                      <input matInput [formControlName]="c.value">
+                    </mat-form-field>
+                    <span *ngIf="'Target Output' === c.value || 'Eng Unit' === c.value">
+                      {{formGroup.get('details.' + detail.value + '.' + r + '.' +
+                      c.value).value}}
+                    </span>
+                  </div>
+                  <mat-label *ngIf="'Error' === c.value && formGroup.get('details.' + detail.value + '.' + r + '.' +
+                  c.value).value" [ngClass]="
+                  isValidError(
+                  formGroup.get('details.' + detail.value + '.' + r + '.' +
+            c.value).value) ? 'pass' : 'fail'
+          ">
+                    {{formGroup.get('details.' + detail.value + '.' + r + '.' +
+                    c.value).value}}%
+                  </mat-label>
+                </div>
+                <hr>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div formGroupName="passFail">
+        <div *ngIf="formGroup.get('passFail.AsFPassFail').value === 'Fail'" class="row">
+          <div class="col-12">
+            
+            <app-dropdown-search
+              [appearance]="'outline'"
+              [sectionArray]="sectionArray"
+              [response]="response"
+              [parentParentForm]="form"
+              [label]="'commons.Failure Code' | translate"
+              [controlName]="'FailureCode'"
+              [options]="failOptions"
+              [passFailCode]="true"
+              [detailsGroup]="true"
+              [detailsGroupName]="'passFail'">
+            </app-dropdown-search>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!editable">
+      <div class="row">
+        <b>{{ 'transmitter.Accuracy' | translate }} </b>: {{ formGroup.get('details.Accuracy').value }}%
+      </div>
+      <div class="row" *ngFor="let detail of detailsDomain; let i = index">
+        <div
+          *ngIf="detail.value === 'AsFound' || (detail.value === 'AsLeft' && formGroup.get('passFail.AsFPassFail').value === 'Fail') ">
+          <div no-margin class="">
+            <b>{{'commons.' + detail.description | translate}} </b>
+          </div>
+
+          <table aria-hidden="true" >
+            <th class="summary-responses" *ngFor="let c of columns;">
+              <div>
+                <b
+                  [innerHTML]="'transmitter.' + c.value | translate:{units:units, commonUnit:outputUnits, engUnit:engUnit}"></b>
+              </div>
+            </th>
+
+            <ng-container *ngFor="let r of rows">
+              <tr>
+                <td *ngFor="let c of columns; let j = index">
+                  <span *ngIf="'Error' !== c.value">
+                    {{ formGroup.get('details.' + detail.value + '.' + r + '.' +
+                    c.value).value }}
+                  </span>
+                  <span *ngIf="'Error' === c.value && formGroup.get('details.' + detail.value + '.' + r + '.' +
+            c.value).value">
+                    {{formGroup.get('details.' + detail.value + '.' + r + '.' +
+                    c.value).value}}
+                </span>
+                </td>
+              </tr>
+            </ng-container>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <table aria-hidden="true">
+          <tr>
+            <td colspan="3">
+              <div *ngIf="formGroup.get('passFail.AsFPassFail').value === 'Fail'">
+                <b>{{ 'commons.Failure Code' | translate}}</b>
+                <mat-label class="text">
+                  {{ formGroup.get('passFail.FailureCode').value }}
+                </mat-label>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

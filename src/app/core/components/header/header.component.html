@@ -1,0 +1,127 @@
+<header>
+    <div class="header">
+        <!-- LEFT SIDE -->
+        <div class="left edge">
+            <mat-icon 
+                *ngIf="!hideHomePageIcons" 
+                [matMenuTriggerFor]="menu"
+            >menu</mat-icon>
+    
+            <mat-icon 
+                [routerLink]="['home']" 
+                *ngIf="hideHomePageIcons" 
+                matTooltip="{{'home.home' | translate}}"
+                aria-hidden="false"
+            >home</mat-icon>
+    
+            <mat-icon 
+                *ngIf="settingsService.get('debugMode')"
+                class="debug-ico text-light-purple"
+                matTooltip="{{'debug.debugMode' | translate}}"
+            >bug_report</mat-icon>
+        
+    
+        </div>
+
+        <!-- MIDDLE -->
+        <div 
+            class="brand" 
+            [routerLink]="['/home']"
+            [ngClass]="'env-'+environment.toLowerCase()"
+        >
+            <img 
+                class="logo" 
+                src="assets/icon/cvx_logo.png" 
+                alt="Chevron Logo"
+            />
+            <div class="brand-text">
+                <div class="title" [routerLink]="['/home']">
+                    {{ 'header.appName' | translate }} 
+                </div>
+                <div class="desc" *ngIf="environment != 'Prod'">
+                    {{ ('header.'+environment.toLowerCase()+'Environment') | translate }}
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="right edge">
+            <mat-icon 
+                *ngIf="isLoggedIn && !hideHomePageIcons && !isOnlineSearch" 
+    
+                (click)="initiateSync()"
+                matTooltip="{{ 'home.Sync' | translate }}"
+            >sync</mat-icon>
+
+        </div>
+    </div>
+
+    <!-- Logged in name -->
+    <div class="bottom-right">
+        <div mat-icon-button class="icon-user" *ngIf="settingsService.get('user')">
+            <span class="welcome-user">{{settingsService.getUser()?.FullName}}</span>
+        </div>
+    </div>
+
+
+    
+</header>
+
+<!-- Main menu -->
+<!--  icons reference: https://fonts.google.com/icons -->
+<mat-menu #menu="matMenu" class="header-menu">
+ 
+    <button mat-menu-item (click)="openFeedbackForm()">
+        <mat-icon [inline]="true">chat</mat-icon>
+        {{ 'filters.feedback' | translate }}
+    </button>
+    <button mat-menu-item [routerLink]="['cleanup']">
+        <mat-icon [inline]="true">cleaning_services</mat-icon>
+        {{'filters.cleanup' | translate}}
+    </button> 
+    <button mat-menu-item (click)="openDeletePanel()">
+        <mat-icon [inline]="true">delete_forever</mat-icon>
+        {{ 'filters.deleteInspection' | translate }}
+    </button>
+    <button mat-menu-item [routerLink]="['debug']">
+        <mat-icon [inline]="true">adb</mat-icon>
+        {{ 'debug.debug' | translate }}
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="appSettingsMenu">
+        <mat-icon [inline]="true">settings</mat-icon>
+        {{ 'debug.appSettings' | translate }}
+    </button>
+    <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
+        <mat-icon [inline]="true">logout</mat-icon>
+        {{ 'filters.logout' | translate }}
+    </button>
+</mat-menu>
+
+<!-- Translations menu -->
+<mat-menu #transMenu="matMenu">
+    <button 
+        mat-menu-item 
+        *ngFor="let lang of translations;"
+        (click)="setLanguage(lang[0])" 
+        [ngClass]="translateService.currentLang == lang[0] ? 'text-light-blue' : ''"
+    >
+        {{ lang[1] }}
+    </button>
+</mat-menu>
+
+<!-- App Settings menu -->
+<mat-menu #appSettingsMenu="matMenu" class="header-menu">
+    <button mat-menu-item [matMenuTriggerFor]="transMenu">
+        <mat-icon [inline]="true">translate</mat-icon>
+        {{ 'language.title' | translate }}
+    </button>
+    <button mat-menu-item (click)="$event.stopPropagation(); setIsCompressImage(this.settingsService.get('isCompressImage'))">
+        <mat-slide-toggle [checked]="this.settingsService.get('isCompressImage')"></mat-slide-toggle>
+        {{'filters.compressImages' | translate}} 
+    </button>
+    <button mat-menu-item (click)="$event.stopPropagation(); setWipeDataOnLogout(this.settingsService.get('wipeDataOnLogout'))">
+        <mat-slide-toggle [checked]="this.settingsService.get('wipeDataOnLogout')"></mat-slide-toggle>
+        {{'filters.wipeDataOnLogout' | translate}} 
+    </button>
+</mat-menu>

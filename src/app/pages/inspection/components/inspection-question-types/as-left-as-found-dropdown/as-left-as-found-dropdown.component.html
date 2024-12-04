@@ -1,0 +1,61 @@
+<div class="controls" *ngIf="showControl" [formGroup]="form">
+    <div [formGroupName]="section">
+        <div class="row pt-3" [formGroup]="formGroup">
+            <div class="col-3" *ngIf="editable">
+                <div class="formfield">
+
+                    <app-dropdown-search *ngIf="editable"
+                        [appearance]="'outline'"
+                        [parentParentForm]="form"
+                        [sectionArray]="sectionArray"
+                        [label]="'As Found' | translate"
+                        [controlName]="'As Found'"
+                        [idSelect]="'select-' + response.questionId + '-AsFound'"
+                        [options]="options">
+                    </app-dropdown-search>
+
+                </div>
+            </div>
+            <div class="col-3" *ngIf="editable">
+                <div class="formfield">
+                    <mat-label *ngIf="formGroup.get('As Found Pass/Fail').value"
+                        [ngClass]="formGroup.get('As Found Pass/Fail').value === 'Fail' ? 'fail':'pass'">
+                        {{'commons.' + formGroup.get('As Found Pass/Fail').value | translate}}
+                    </mat-label>
+                </div>
+            </div>
+            <div class="col-3" *ngIf="editable">
+                <div class="formfield" *ngIf="formGroup.value['As Found Pass/Fail'] === 'Fail'">
+
+                    <app-dropdown-search *ngIf="editable"
+                        [appearance]="'outline'"
+                        [parentParentForm]="form"
+                        [sectionArray]="sectionArray"
+                        [label]="'As Left' | translate"
+                        [controlName]="'As Left'"
+                        [idSelect]="'select-' + response.questionId + '-AsLeft'"
+                        [options]="options">
+                    </app-dropdown-search>
+
+                </div>
+            </div>
+            <div class="col-3" *ngIf="editable">
+                <div class="formfield" *ngIf="formGroup.get('As Left Pass/Fail').value">
+                    <mat-label [ngClass]="formGroup.get('As Left Pass/Fail').value === 'Fail' ? 'fail':'pass'">
+                        {{ 'commons.' + formGroup.get('As Left Pass/Fail').value | translate}}
+                    </mat-label>
+                </div>
+            </div>
+            <table *ngIf="!editable" class="summary-responses">
+                <tr *ngFor="let item of formGroup.controls | keys">
+                    <th class="summary-responses" *ngIf="formGroup.get(item.key).value">
+                        {{item.key | translate}}: 
+                    </th>
+                    <td class="summary-responses" *ngIf="formGroup.get(item.key).value">
+                       {{ formGroup.get(item.key).value }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

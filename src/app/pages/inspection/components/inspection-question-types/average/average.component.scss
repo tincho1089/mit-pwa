@@ -1,0 +1,38 @@
+.input-form-container {
+    display: flex;
+    align-items:center;
+
+    div:first-child {
+        width: 65%;
+    }
+
+    div:last-child {
+        width: 25%;
+    }
+
+    button {
+        margin-left: 15px;
+        margin-bottom: 20px;
+        width: 80%;
+    }
+
+}
+
+button {
+    color: white !important;
+}
+
+.add-value-button-container {
+    display: flex;
+    justify-content: center;
+
+    button {
+        width: 50%;
+    }
+
+}
+
+.average {
+    margin-bottom: 10px;
+    font-size: 18px;
+}

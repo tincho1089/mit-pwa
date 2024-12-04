@@ -1,0 +1,15 @@
+<!-- app.component.html -->
+<app-header></app-header>
+<main class="container">
+    <app-loading-indicator></app-loading-indicator>
+    <!-- COLUMN 1 -->
+    <section class="column" id="column1">
+        <div class="row">
+            <div class="col">
+                <!-- left column content (25% width) -->
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </section>
+</main>
+<app-footer></app-footer>

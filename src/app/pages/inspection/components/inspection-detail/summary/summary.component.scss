@@ -1,0 +1,69 @@
+.summary {
+  margin: 11px 0 !important;
+
+  ::ng-deep .mat-stepper-vertical-line::before {
+    border-left-style: none;
+  }
+
+  ::ng-deep .mat-vertical-stepper-header .mat-step-icon {
+    visibility: hidden;
+    margin-right: 0px;
+  }
+
+  ::ng-deep .mat-step-header {
+    padding: 30px 0 13px;
+    position: relative;
+    background-color: #dbdcdd;
+    outline: none;
+  }
+
+  .stepper-title {
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .material-icons {
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    transform: translate(-50%, -50%);
+    display: flex;
+  }
+
+  //   To keep all sections opened
+  ::ng-deep .mat-vertical-stepper-content {
+    visibility: visible !important;
+    height: 100% !important;
+  }
+
+  .disable-anchor {
+    pointer-events: none;
+    opacity: 0.65; 
+  }
+  .summary-actions {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    a {
+      text-transform: lowercase;
+      // need important b/c flex overrides otherwise
+      margin: 10px !important;
+    }
+  }
+
+  ::ng-deep .mat-vertical-content-container {
+    margin: 0px 2%;
+  }
+
+  .header {
+    background-color: #dbdcdd;
+    // margin: 3px;
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: lowercase;
+    width: calc(50% - 2px);
+  }
+}

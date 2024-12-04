@@ -1,0 +1,98 @@
+<div *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section" *ngIf="!editable">
+    <div [formGroup]="formGroup" ngDis>
+      <div formGroupName="details" style="place-content: stretch flex-end !important;">
+        <table class="summary-responses">
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tr *ngFor="let m of measurements" class="summary-responses">
+            <td class="summary-responses">
+              <span> <b>{{ 'leakTest.' + m.value | translate }}</b> </span>
+            </td>
+            <td class="summary-responses">
+              <span [id]="'input-' + response.questionId + '-' + m.description">
+                {{ formGroup.get('details.' + m.value).value }}
+              </span>
+            </td>
+          </tr>
+          <br>
+          <tr class="summary-responses">
+            {{ 'leakTest.recordResult' | translate:{maxLeak: maxLeak} | translate }}
+          </tr>
+          <br>
+          <tr class="summary-responses">
+            <b>
+              <span>{{ formGroup.get('passFail.PassFail').value}}</span>
+            </b>
+          </tr>
+          <tr class="summary-responses">
+            <b>
+              <span>{{ formGroup.get('passFail.FailureCode').value}}</span>
+            </b>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="formGroup && editable">
+    <div [formGroup]="formGroup">
+      <div fxLayout="column" fxLayoutAlign="start stretch">
+        <img src="assets/images/leaktest.png" alt="leaktest" *ngIf="editable" />
+        <br>
+        <div formGroupName="details">
+          <div *ngFor="let m of measurements">
+            <div class="row">
+              <div class="col-sm-2 col-md-4 col-lg-6">
+                <mat-form-field appearance="outline">
+                  <mat-label stacked>{{ 'leakTest.' + m.value | translate }}</mat-label>
+                  <input matInput type="string" [formControlName]="m.value"
+                    [id]="'input-' + response.questionId + '-' + m.description" [disabled]="!editable">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          {{ 'leakTest.recordResult' | translate:{maxLeak: maxLeak} | translate }}
+        </div>
+        <br>
+        <div>
+
+          <div formGroupName="passFail">
+            <div class="row" *ngIf="formGroup?.get('passFail.PassFail').value">
+                <div class="col-6 col-md-4">
+                    <mat-label [ngClass]="formGroup.get('passFail.PassFail').value === 'Fail' ? 'fail':'pass'">
+                        {{'commons.' + formGroup.get('passFail.PassFail').value | translate}}
+                    </mat-label>
+                </div>
+                <div class="col-6 col-md-8">
+                    <div *ngIf="formGroup.get('passFail.PassFail').value === 'Fail'">
+
+                      <app-dropdown-search *ngIf="showControl"
+                        [appearance]="'outline'"
+                        [parentParentForm]="form"
+                        [sectionArray]="sectionArray"
+                        [label]="'commons.Failure Code' | translate"
+                        [controlName]="'FailureCode'"
+                        [idSelect]="'select-'+ response.question +'-failure-code'"
+                        [options]="failOptions"
+                        [passFailCode]="true">
+                      </app-dropdown-search>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

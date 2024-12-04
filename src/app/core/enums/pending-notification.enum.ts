@@ -1,0 +1,6 @@
+export enum PENDING_NOTIFICATION {
+    NONE = 'NONE',
+    COMPLETED = 'COMPLETED',
+    INPROGRESS = 'IN-PROGRESS'
+  }
+  

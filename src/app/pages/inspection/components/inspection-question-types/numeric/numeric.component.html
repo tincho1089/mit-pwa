@@ -1,0 +1,16 @@
+<div class="controls">
+    
+    <div *ngIf="showControl" [formGroup]="form">
+        <div *ngIf="editable" [formGroupName]="section">
+            <mat-form-field appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                <input matInput type="number" [id]="'input-' + response.questionId" [formControlName]="response.questionId">
+                <span class="units">{{response.units}}</span>
+                <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">You must enter a value.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="!editable" class="label-control-form">
+            <label [id]="'label-' + response.questionId"> {{response.answer}}</label>
+            <span class="units">{{response.units}}</span>
+        </div>
+    </div>

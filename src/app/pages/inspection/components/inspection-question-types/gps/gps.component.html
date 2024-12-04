@@ -1,0 +1,47 @@
+<div class="row gps" [formGroup]="formGroup" *ngIf="editable">
+    <div class="col-3">
+        <mat-form-field appearance="outline">
+            <mat-label>{{ 'gps.Latitude' | translate}}</mat-label>
+            <textarea matInput formControlName="latitude" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+        </mat-form-field>
+    </div>
+    <div class="col-3">
+        <mat-form-field appearance="outline">
+            <mat-label>{{ 'gps.Longitude' | translate}}</mat-label>
+            <textarea matInput formControlName="longitude" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+        </mat-form-field>
+    </div>
+
+    <div class="col-3 card-column-buttons">
+        <a class="button btn btn-primary text-white" (click)="getLocation()"> get coordinates </a>
+    </div>
+
+    <div  class="col-3 card-column-buttons">
+        <mat-label *ngIf="fetchLocation">Fetching Location...</mat-label>
+        <mat-error *ngIf="geoLocationError.length > 0">{{geoLocationError}}</mat-error>
+    </div>
+
+    <div class="col-3 card-column-buttons">
+      <div class="remember-Row">
+        <mat-label>{{ 'commons.remember' | translate }}</mat-label>
+        <mat-slide-toggle [checked]="this.isCacheable" (change)="onRememberToggleChange($event)">
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+</div>
+
+<div class="row" *ngIf="!editable">
+    <table class="summary-responses">
+        <tr class="divider" *ngFor="let item of formGroup.controls | keys">
+          <th class="summary-responses">
+            {{ item.key }}
+          </th>
+          <td class="summary-responses">
+            {{ formGroup.get(item.key).value }}
+          </td>
+        </tr>
+    </table>
+</div>

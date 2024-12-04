@@ -1,0 +1,36 @@
+
+<footer >
+    <insp-detail-nav></insp-detail-nav>
+    <div class="footer-container" [ngClass]="expanded ? 'expanded' : 'retracted'">
+        <div class="detailed-footer" *ngIf="expanded">
+            <ul>
+                <li>{{ 'footer.lastUpdate' | translate }}: {{ version }}</li>
+                <li>&copy; {{ year }} Chevron Corporation</li>
+                <li>{{ 'footer.companyConfidential' | translate }}</li>
+                <li>OpCo: <a href="https://chevron.sharepoint.com/sites/SurfaceDigital">Surface Digital Platform</a></li>
+            </ul>
+            <ul>
+                <li>{{ 'footer.contContact' | translate }}: <a>{{ 'footer.contact' | translate }}</a> </li>
+                <li>{{ 'footer.techContact' | translate }}: <a>{{ 'footer.contact' | translate }}</a>
+                </li>
+            </ul>
+        </div>
+        <div *ngIf="!expanded">
+            <ul>
+                <li>{{ 'footer.version' | translate }}: {{version}}</li>
+            </ul>
+        </div>
+        <div class="btn-container">
+            <div (click)="sharedService.scrollToTop()">
+                <mat-icon matTooltip="{{'footer.scrollTop' | translate }}" [inline]="true">arrow_circle_up</mat-icon>
+            </div>
+            
+            <div (click)="expanded = !expanded">
+                <mat-icon matTooltip="{{'footer.expand' | translate }}" *ngIf="!expanded" [inline]="true">expand_less</mat-icon>
+                <mat-icon matTooltip="{{'footer.retract' | translate }}" *ngIf="expanded" [inline]="true">expand_more</mat-icon>
+            </div>
+        </div>
+    </div>
+    
+    
+</footer>

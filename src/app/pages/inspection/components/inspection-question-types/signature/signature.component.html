@@ -1,0 +1,20 @@
+<div class="signature">
+    <div class="row">
+        <div class="col-2 card-column-buttons">
+            <a class="button btn btn-primary text-white" (click)="addSignature()"> add signature </a>
+        </div>
+    </div>
+    <div *ngFor="let image of inspectionResponseImagesList">
+        <div class="row">
+            <div class="col-6">
+                <button mat-icon-button class="close-button" (click)="removeSignature(image)">
+                    <mat-icon class="close-icon" color="warn">close</mat-icon>
+                </button>
+                <img [alt]="image.serverId" *ngIf="image.photo.indexOf('data:image/') == -1"
+                    [src]="'data:image/png;base64,' + image.photo" />
+                <img [alt]="image.serverId" *ngIf="image.photo.indexOf('data:image/') > -1" [src]="image.photo" />
+            </div>
+            <div class="col-6"></div>
+        </div>
+    </div>
+</div>

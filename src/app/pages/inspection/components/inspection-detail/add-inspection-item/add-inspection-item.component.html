@@ -1,0 +1,109 @@
+<ng-container *ngIf="formGroup" [formGroup]="formGroup">
+    <mat-card>
+        <mat-card-content>
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <h3>{{'inspection.itemType' | translate}}:</h3>
+                </div>
+                <div class="col-12 col-md-8">
+                    <mat-radio-group class="row" formControlName="type">
+                        <div class="col-12 col-md-6" *ngFor="let item of itemType">
+                            <mat-radio-button [value]="item.value" (change)="_onTypeChange($event)"></mat-radio-button>
+                            <mat-label> {{'answer.' + item.value | translate}}</mat-label>
+                        </div>
+                    </mat-radio-group>
+                </div>
+            </div>
+            <div *ngIf="formGroup.get('type').value === 'recommendation'" class="row">
+                <div class="col-12 col-md-4"></div>
+                <div class="col-12 col-md-8">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <mat-checkbox formControlName="followUpWO"></mat-checkbox>
+                            <mat-label>{{'answer.workOrderRecommended' | translate}}</mat-label>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <mat-checkbox formControlName="attention"></mat-checkbox>
+                            <mat-label>{{'answer.immediateAttention' | translate}}</mat-label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <h3>{{'inspection.section' | translate}}:</h3>
+                </div>
+                <div class="col-12 col-md-7">
+                    <mat-form-field appearance="outline">
+                        <mat-select (selectionChange)="_onSectionChange()" formControlName="section">
+                            <mat-option *ngFor="let s of sections" [value]="s">
+                                {{ s }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                    <mat-error *ngIf="(formGroup.get('section').invalid && (formGroup.get('section').dirty || formGroup.get('section').touched))">
+                        {{'helper.inputRequired' | translate}}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row" *ngIf="formGroup.get('section').value != 'Additional Items'">
+                <div class="col-12 col-md-4">
+                    <h3>{{'inspection.subSection' | translate}}:</h3>
+                </div>
+                <div class="col-12 col-md-7">
+                    <mat-form-field appearance="outline">
+                        <mat-select formControlName="subsection">
+                            <mat-option *ngFor="let s of subSections" [value]="s">
+                                {{ s }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <h3>{{'inspection.title' | translate}}:</h3>
+                </div>
+                <div class="col-12 col-md-7">
+                    <mat-form-field appearance="outline">
+                        <input matInput formControlName="title" type="text">
+                    </mat-form-field>
+                    <mat-error *ngIf="(formGroup.get('title').invalid && (formGroup.get('title').dirty || formGroup.get('title').touched))">
+                        {{'helper.inputRequired' | translate}}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <h3>{{'helper.comments' | translate}}:</h3>
+                </div>
+                <div class="col-12 col-md-7">
+                    <mat-form-field appearance="outline">
+                        <textarea matInput formControlName="comments" rows="3"></textarea>
+                    </mat-form-field>
+                    <mat-error *ngIf="(formGroup.get('comments').invalid && (formGroup.get('comments').dirty || formGroup.get('comments').touched))">
+                        {{'helper.commentsRequired' | translate}}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row" *ngIf="formGroup.get('type').value === 'recommendation'">
+                <div class="col-12 col-md-4">
+                    <h3>{{'helper.recommendations' | translate}}:</h3>
+                </div>
+                <div class="col-12 col-md-7">
+                    <mat-form-field appearance="outline"> 
+                        <textarea matInput formControlName="recommendation" rows="3"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-4">
+                    <a class="button btn btn-primary text-white" (click)="save()">{{'details.add' | translate }}</a>
+                </div>
+                <div class="col-12 col-md-4">
+                    <a class="button btn btn-primary text-white" (click)="navigateBackToDetails()">{{'commons.cancel' | translate }}</a>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</ng-container>

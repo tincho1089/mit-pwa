@@ -1,0 +1,142 @@
+<ng-container *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section">
+    <div [formGroup]="formGroup" *ngIf="formGroup && editable">
+      <div formGroupName="details">
+        <div fxLayout="column" fxLayoutGap="16px">
+
+            <app-dropdown-search
+              [appearance]="'outline'"
+              [parentParentForm]="form"
+              [sectionArray]="sectionArray"
+              [label]="'failureCode.condition' | translate"
+              [controlName]="'Condition'"
+              [options]="conditions"
+              [detailsGroup]="true">
+          </app-dropdown-search>
+          
+          <div formArrayName="AnomaliesArray">
+            <div
+              *ngFor="let anomaly of anomaliesArray.controls; let i = index"
+              [formGroupName]="i"
+            >
+              <br />
+              <div fxLayout="column" fxLayoutGap="16px">
+
+                <app-dropdown-search
+                  [appearance]="'outline'"
+                  [parentParentForm]="form"
+                  [sectionArray]="sectionArray"
+                  [label]="'failureCode.anomalyCode' | translate"
+                  [controlName]="'AnomalyCode'"
+                  [options]="anomalyCodes"
+                  [detailsGroup]="true"
+                  [detailsType]="'AnomaliesArray'"
+                  [detailsIndex]="i">
+                </app-dropdown-search>
+
+                <div
+                  *ngIf="anomaliesArray.controls[i].get('AnomalyCode').value === 'COR' || anomaliesArray.controls[i].get('AnomalyCode').value === 'COD'"
+                >
+
+                  <app-dropdown-search
+                    [appearance]="'outline'"
+                    [parentParentForm]="form"
+                    [sectionArray]="sectionArray"
+                    [label]="'failureCode.rustLevel' | translate"
+                    [controlName]="'RustLevel'"
+                    [options]="rustLevels"
+                    [detailsGroup]="true"
+                    [detailsType]="'AnomaliesArray'"
+                    [detailsIndex]="i">
+                  </app-dropdown-search>
+                  
+                  <app-dropdown-search
+                    [appearance]="'outline'"
+                    [parentParentForm]="form"
+                    [sectionArray]="sectionArray"
+                    [label]="'failureCode.rustGrade' | translate"
+                    [controlName]="'RustGrade'"
+                    [options]="rustGrades"
+                    [detailsGroup]="true"
+                    [detailsType]="'AnomaliesArray'"
+                    [detailsIndex]="i">
+                  </app-dropdown-search>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="center" *ngIf="formGroup.get('details.Condition').value === 'Unsatisfactory'">
+            <button mat-raised-button type="button" (click)="addAnomalyCode()">
+              {{ 'failureCode.addMoreAnomalyCode' | translate }}
+            </button>
+          </div>
+         
+
+          <br>
+      </div>
+
+   
+    </div>
+
+   
+    </div>
+    
+    <div fxLayout="row" fxLayoutAlign="center" *ngIf="!editable">
+      <div fxFlex="100%">
+        <div *ngIf="formGroup.get('details.Condition').value == 'Satisfactory'" >
+          <b class="column-header">{{ 'failureCode.condition' | translate }}: </b>
+          <span>{{ formGroup.get('details.Condition').value }}</span>
+        </div>
+
+        <div *ngIf="formGroup.get('details.Condition').value != 'Satisfactory'" >
+          <!-- loop over anomalies -->
+          <div *ngFor="let anomaly of anomaliesArray.controls; let i = index" class="divider">
+            <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
+              <b class="column-header">{{ 'failureCode.condition' | translate }}: </b>
+              <span>{{ formGroup.get('details.Condition').value }}</span>
+            </div>
+  
+            
+            <div
+              fxLayout="row"
+              fxLayoutGap="16px"
+              fxLayoutAlign="start center"
+              class="divider"
+            >
+              <b class="column-header">{{ 'failureCode.anomalyCode' | translate }}: </b>
+              <span>{{ getItemDescription(anomaliesArray.controls[i].get('AnomalyCode').value, 'AC') }}</span>
+            </div>
+            
+            <div
+              *ngIf="anomaliesArray.controls[i].get('AnomalyCode').value === 'COR' || anomaliesArray.controls[i].get('AnomalyCode').value === 'COD'"
+              fxLayout="row"
+              fxLayoutGap="16px"
+              fxLayoutAlign="start center"
+              class="divider"
+            >
+              <b class="column-header">{{ 'failureCode.rustLevel' | translate }}: </b>
+              <span>{{ getItemDescription(anomaliesArray.controls[i].get('RustLevel').value, 'RL') }}</span>
+            </div>
+            
+            <div
+              *ngIf="anomaliesArray.controls[i].get('AnomalyCode').value === 'COR' || anomaliesArray.controls[i].get('AnomalyCode').value === 'COD'"
+              fxLayout="row"
+              fxLayoutGap="16px"
+              fxLayoutAlign="start center"
+              class="divider"
+            >
+              <b class="column-header">{{ 'failureCode.rustGrade' | translate }}: </b>
+              <span>{{ getItemDescription(anomaliesArray.controls[i].get('RustGrade').value, 'RG') }}</span>
+            </div>
+            <br>
+  
+        </div>
+        
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

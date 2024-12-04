@@ -1,0 +1,258 @@
+<div class="row wo-equipment">
+    <div class="col-12">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title-group>
+                    <mat-card-title>
+                        <h4 class="tml-details">{{ 'tml.tmlDetails' | translate }}</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle></mat-card-subtitle>
+                </mat-card-title-group>                
+            </mat-card-header>
+            <mat-card-content>
+        
+                <div class="d-flex flex-row-reverse flex-wrap align-items-center">
+                    <div class="col-4">
+                        <a class="button btn btn-primary text-white" (click)="showAddTML()">
+                            {{'tml.create' | translate}}
+                        </a>  
+                    </div>
+        
+                    <div class="col-4">
+                        <mat-label>
+                            <b>{{'tml.filterType' | translate}}:</b>
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                            <mat-select  
+                                matInput       
+                                [(ngModel)]="tmlFilterType"
+                                (selectionChange)="onFilterChange()">
+                                <mat-option value="ShowAll">
+                                    {{'tml.ShowAll' | translate}}
+                                </mat-option>
+                                <mat-option value="ShowActive">
+                                    {{'tml.ShowActive' | translate}}
+                                </mat-option>
+                                <mat-option value="ShowInactive">
+                                    {{'tml.ShowInactive' | translate}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+        
+                    <div class="col-4">
+                        <mat-label>
+                            <b>{{'tml.inspectorName' | translate}}:</b>
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                            <input    
+                            matInput   
+                            id="input-inspector-name"
+                            type="text"
+                            [formControl]="inspectorNameFormControl">
+                        </mat-form-field>
+                    </div>
+                    
+                </div>
+                <form [formGroup]="tmlDetailsForm" *ngIf="tmlDetails">
+                    <ng-container formArrayName="tmlReadings" *ngIf="readings?.length">
+                         <div class="d-flex align-items-stretch flex-no-wrap tml-card" *ngFor="let read of readings; let i = index" [formGroupName]="i">
+                            <!--'orange': (read['Measure TML'] || read['MeasureTML']) && read.isValid && read.FollowUpRequired,-->
+                            <div class="tml-status"           
+                                [ngClass]="{'null': !read['Measure TML'] && !read['MeasureTML'], 
+                                'orange': (read['Measure TML'] || read['MeasureTML']) && read.isValid && read.FollowUpRequired,
+                                'green': (read['Measure TML'] || read['MeasureTML']) && read.isValid,
+                                'red' : (read['Measure TML'] || read['MeasureTML']) && !read.isValid
+                                }">
+                            </div>
+                            
+                            <div class="wrap-content">
+                                <div class="d-flex">
+                                    <div class="content">
+                                        <div class="row">
+                                            <ng-container *ngFor="let item of items; let j = index;">
+                                                <div class="col-12 tmlContentColumn"
+                                                    *ngIf="read.showTML || item.property === 'TML ID' || item.property === 'TML Description' || item.property === 'Activity Code'">
+        
+                                                    <mat-label>
+                                                        <b>{{item.displayName}}:</b>                                                
+                                                    </mat-label>
+                    
+                                                    <ng-container [ngSwitch]="item.property">
+                    
+                                                        <ng-container *ngSwitchCase="'TML ID'">
+                                                            <mat-label class="tmlIdLabel" (click)="seeDetail(read)">
+                                                                {{read[item.property]}}
+                                                            </mat-label>
+                                                        </ng-container>
+                                                        
+                                                        <ng-container *ngSwitchDefault>
+                                                        <span
+                                                            *ngIf="read[item.property] && read[item.property] !== 'null'"
+                                                        >
+                                                            {{read[item.property]}}
+                                                        </span>
+                                                        </ng-container>
+                    
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <ng-container *ngIf="read.showTML  && (read['Measure TML'] || read['MeasureTML'])">
+                                            <div class="row">
+                                                <ng-container *ngIf="tmlDetails?.isTMLGPSenabled">
+                                                    <div class="col-12">
+                                                        <div class="row" style="flex-wrap: nowrap;">
+                                                            <mat-label>
+                                                                <b>{{'commons.coordinates' | translate}}:</b>
+                                                            </mat-label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="col-6 col-md-4">
+                                                                <mat-label>
+                                                                    <b>{{'gps.Latitude' | translate}}</b>
+                                                                </mat-label>
+                                                                <mat-form-field appearance="outline">
+                                                                    <input matInput type="number" inputmode="decimal" formControlName="Coordinate X"
+                                                                        clearInput>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-6 col-md-4">
+                                                                <mat-label>
+                                                                    <b>{{'gps.Longitude' | translate}}</b>
+                                                                </mat-label>
+                                                                <mat-form-field appearance="outline">
+                                                                    <input matInput type="number" inputmode="decimal" formControlName="Coordinate Y"
+                                                                        clearInput>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-12 col-md-4 ">
+                                                                <a class="button btn btn-primary text-white" (click)="getGPS(i)">
+                                                                    {{'gps.getCoordinates' | translate}}
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                            <div class="col-12" formArrayName="ListReadings">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="row" style="flex-wrap: nowrap;">
+                                                            <mat-label>
+                                                                <b>{{'tml.newReadings' | translate}}</b>
+                                                            </mat-label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-4 col-md-3" *ngFor="let reading of tmlDetailsForm?.get('tmlReadings.' + i + '.ListReadings')['controls'];let c = index">
+                                                        <div class="row">
+                                                            <mat-form-field appearance="outline">
+                                                                <input matInput 
+                                                                [id]="'input-'+ read['TML ID'] + '-' + (c+1)"
+                                                                type="number"
+                                                                inputmode="decimal"
+                                                                [formControlName]="c"
+                                                                (keypress)="numberOnlyValidation($event)"                 
+                                                                placeholder="{{c + 1}}">
+                                                            </mat-form-field>
+                                                        </div>
+                                                        
+                                                    </div>
+        
+                                                    <div class="col-4" *ngIf="tmlDetailsForm.get('tmlReadings.' + i + '.corrosionRate') && read.isValid">
+                                                        <div class="row">
+                                                            <mat-label>
+                                                                <b>{{'tml.shortTermCorrosionRate' | translate}}:</b>
+                                                            </mat-label>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="corrosion">
+                                                                <span                                               
+                                                                    class="corrosionRate"
+                                                                    [attr.data-is-valid]="tmlDetailsForm.get('tmlReadings.' + i +
+                                                                    '.corrosionRate').value < 0.02"
+                                                                    >
+                                                                    {{tmlDetailsForm.get('tmlReadings.' + i +
+                                                                    '.corrosionRate').value}} /yr
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+        
+                                                <div class="row justify-content-center banner danger" 
+                                                    *ngIf="tmlDetailsForm.get('tmlReadings.' + i + '.ListReadings') && tmlDetailsForm.get('tmlReadings.' + i + '.ListReadings').status === 'INVALID'">
+                                                    <div class="col-12">
+                                                        <span [innerHTML]="'tml.thicknessAlert' | translate:{value: .02}"></span>
+                                                    </div>
+                                                </div>
+        
+                                                <div class="row justify-content-center banner danger" 
+                                                    *ngIf="read['Last Read Min Thick'] !== null && 
+                                                    read.isValid && getDifference(read.minValue,read['Last Read Min Thick'])">
+                                                    <div class="col-12">
+                                                        <span [innerHTML]="'tml.previousReadingAlert' | translate:{value: .02}"></span>
+                                                    </div>
+                                                </div>
+        
+                                                <div class="row justify-content-center banner danger" 
+                                                *ngIf="read['Critical Thick'] !== null && read.isValid && read.minValue  < read['Critical Thick']">
+                                                    <div class="col-12">
+                                                        <span [innerHTML]="'tml.criticalThicknessAlert' | translate:{value: .02}"></span>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+        
+                                            
+                                            
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <mat-label>
+                                                        <b>{{'helper.comments' | translate}}:</b>
+                                                    </mat-label>                                            
+                                                </div>
+                                                <div class="col-12">
+                                                    <mat-form-field appearance="outline">
+                                                        <textarea  
+                                                            matInput                   
+                                                            formControlName="comments"
+                                                            rows="3"
+                                                            [id]="'tml-comments-' + i">
+                                                        </textarea>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <a class="button btn btn-primary text-white" (click)="showEditTML(i)">
+                                                        {{'commons.edit' | translate}}
+                                                    </a>                                            
+                                                </div>
+                                                <div class="col-6">
+                                                    <a  class="button btn bg-dark-orange text-white" (click)="deleteTML(i)">
+                                                        {{'commons.remove' | translate}}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </ng-container>                                 
+                                    </div>
+        
+                                    <div class="accordion-toggle">
+                                        <i *ngIf="!read.showTML" class="material-icons app-toolbar-menu align-right" (click)="showTML(read)">add_circle</i>
+                                        <i *ngIf="read.showTML" class="material-icons app-toolbar-menu align-right" (click)="showTML(read)">do_not_disturb_on</i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+        
+                         </div>
+                    </ng-container>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

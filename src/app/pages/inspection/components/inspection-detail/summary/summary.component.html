@@ -1,0 +1,82 @@
+<div class="summary">
+    <div *ngIf="summaryForm" [formGroup]="summaryForm">
+        <mat-stepper orientation="vertical" labelPosition="end" #stepper>
+            <mat-step *ngFor="let section of sections; let i = index">
+                <div *ngFor="let subSection of sections[i].subSections">
+                    <div *ngIf="subSection.isShow == true">
+                        <ng-template matStepLabel>
+                            <h4 class="text-medium-blue stepper-title">
+                                {{ section.title | lowercase }}
+                                <span *ngIf="subSection.title">- {{ subSection.title | lowercase }}</span>
+                                <i *ngIf="summaryForm?.get([section.title]).status === 'VALID' || summaryForm?.get([section.title]).status === 'DISABLED'"
+                                    class="material-icons app-toolbar-menu text-light-green">check_circle</i>
+                                <i *ngIf="summaryForm?.get([section.title]).status === 'INVALID'"
+                                    class="material-icons app-toolbar-menu align-right text-light-red">unpublished</i>
+                            </h4>
+                        </ng-template>
+                        <h3>
+                            {{ subSection.title }}
+                        </h3>
+                        <div class="row hidden-sm-down">
+                            <div class="col-6 header" style="margin-right:3px">{{ 'summary.question' | translate }}
+                            </div>
+                            <div class="col-6 header">{{ 'summary.response' | translate }}</div>
+                        </div>
+                        <summary-scroll [subSectionResponses]=subSection.responses [summaryForm]="summaryForm"
+                            [equipDetails]="equipDetails" [inspectionImages]="inspectionImages">
+                        </summary-scroll>
+                    </div>
+                </div>
+            </mat-step>
+        </mat-stepper>
+    </div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title-group>
+                <mat-card-title>
+                    <h4 *ngIf="inspection && inspection.bu && !inspection.bu.toLowerCase().startsWith('abu')">{{
+                        'summary.inspectionSummary' | translate }}:</h4>
+                    <h4 *ngIf="inspection && inspection.bu  && inspection.bu.toLowerCase().startsWith('abu')">Executive
+                        Summary:</h4>
+                </mat-card-title>
+                <mat-card-subtitle></mat-card-subtitle>
+            </mat-card-title-group>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-form-field appearance="outline">
+                <textarea matInput rows="6" cols="20" maxlength="4000" minlength="12"
+                    [(ngModel)]="inspection.summaryComments" (ngModelChange)="onCommentChanges()"
+                    [ngModelOptions]="{standalone: true}" autocorrect="on" autocomplete="on" spellcheck="on"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="fill"
+                *ngIf="inspection && inspection.bu && inspection.bu.toLowerCase().startsWith('abu')">
+                <mat-label>Choose an item</mat-label>
+                <input matInput [value]="selectedOption" (click)="openDialog()" [(ngModel)]="inspection.summary"
+                    (ngModelChange)="onSummaryChanges()">
+            </mat-form-field>
+            <div class="summary-actions">
+                <a class="button btn btn-primary text-white" (click)="loadAllComments()" id="button-draft-summary"
+                    *ngIf="enableFlag">
+                    {{'summary.createDraft' | translate }}
+                </a>
+
+                <a class="button btn btn-primary text-white" [ngClass]="!enableFlag ? 'disable-anchor' : ''"
+                    (click)="finish()" id="button-finish-inspection">
+                    {{'summary.finishInspection' | translate }}
+                </a>
+
+                <a class="button btn btn-primary text-white" (click)="previewPDF()" id="button-preview-pdf">
+                    {{'summary.previewPDF' | translate }}
+                </a>
+            </div>
+            <div class="row">
+                <div class="col-6">
+
+                </div>
+                <div class="col-6">
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

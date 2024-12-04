@@ -1,0 +1,49 @@
+@import './../../../../../../styles/variables.scss';
+
+$qStatusWidth: 5px;
+$transTime: .5s;
+
+.answer {
+  .inspection-header {
+    font-weight: 400;
+    text-align: left;
+    font-size: 1rem;
+    font-family: "GothamBold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 2.4rem;
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: #000000;
+  }
+  p.title {
+    font-weight: 600;
+  }
+  .cell {
+    margin: 3px;
+    padding: 3px;
+    p {
+      margin: 5px
+    }
+  }
+  
+  .answer-status {
+    width: $qStatusWidth;
+    transition: $transTime;
+  }
+  
+  .answer-status.complete {
+    background-color: map-get($colors, ok);
+  }
+  
+  .answer-status.incomplete {
+    background-color: map-get($colors, error);
+  }
+  
+  .answer-wrapper {
+    -ms-flex: 0 0 calc(100% - $qStatusWidth);
+    flex: 0 0 calc(100% - $qStatusWidth);
+    max-width: calc(100% - $qStatusWidth);
+  }
+}
+.answer.row {
+  margin-bottom: 0;
+}

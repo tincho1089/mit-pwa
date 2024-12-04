@@ -1,0 +1,66 @@
+
+<div class="controls" *ngIf="showControl" [formGroup]="form">
+        <div [formGroupName]="section">
+            <div [formGroup]="formGroup" *ngIf="!editable" >
+                <table class="summary-responses">
+                    <tr>
+                      <th class="summary-responses">
+                        {{ 'commons.As Found' | translate }}:
+                      </th>
+                      <td class="summary-responses">
+                        {{ formGroup.value['As Found'] }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="summary-responses">
+                        {{ 'commons.As Left' | translate }}:
+                      </th>
+                      <td class="summary-responses">
+                        {{ formGroup.value['As Left'] }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="summary-responses">
+                        {{ 'commons.Failure Code' | translate }}:
+                      </th>
+                      <td class="summary-responses">
+                        {{ formGroup.value['Failure Code'] }}
+                      </td>
+                    </tr>
+                  </table>
+            </div>
+           
+           <div class="row pt-3" [formGroup]="formGroup" *ngIf="formGroup && editable">
+
+                <div class="col-4">
+                    <div class="formfield">
+                        
+                        <app-dropdown-search *ngIf="editable" [appearance]="'outline'" [parentParentForm]="form"
+                        [options]="options" [sectionArray]="sectionArray" [label]="'commons.As Found' | translate"
+                        [controlName]="'As Found'" [idSelect]="'select-' + response.questionId + '-AsFound'" [commonOptionDescription]="true">
+                        </app-dropdown-search>
+
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="formfield" *ngIf="formGroup.value['As Found'] === 'Fail'">
+
+                        <app-dropdown-search *ngIf="editable" [appearance]="'outline'" [parentParentForm]="form"
+                        [options]="options" [sectionArray]="sectionArray" [label]="'commons.As Left' | translate"
+                        [controlName]="'As Left'" [idSelect]="'select-' + response.questionId + '-AsLeft'" [commonOptionDescription]="true">
+                        </app-dropdown-search>
+
+                    </div> 
+                </div>
+                <div class="col-4">
+                    <div class="formfield" *ngIf="formGroup.value['As Found'] === 'Fail'">
+
+                        <app-dropdown-search *ngIf="editable" [appearance]="'outline'" [parentParentForm]="form"
+                        [options]="failOptions" [sectionArray]="sectionArray" [label]="'commons.Failure Code' | translate"
+                        [controlName]="'Failure Code'" [idSelect]="'select-' + response.questionId + '-FailureCode'" [commonOptionDescription]="false">
+                        </app-dropdown-search>
+
+                    </div>   
+                </div>            
+        </div>
+</div>

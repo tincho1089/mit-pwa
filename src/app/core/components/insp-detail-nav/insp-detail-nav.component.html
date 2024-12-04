@@ -1,0 +1,109 @@
+<div *ngIf="isRendered">
+    <div class="detail-nav" [ngClass]="isShow ? 'active' : ''">
+        
+        <button 
+            (click)="addInspectionItem()"
+            matTooltip="{{'details.add' | translate }}"
+            matTooltipPosition="above" 
+        >
+            <mat-icon>add</mat-icon>
+        </button>
+        <button 
+            (click)="previousSection()" 
+            [disabled]="!isValidStep(-1)"
+            matTooltip="{{'details.previous' | translate }}"
+            matTooltipPosition="above" 
+        >
+            <mat-icon  >arrow_upward</mat-icon>
+        </button>
+        
+        <button 
+            mat-button
+            (click)="nextSection()" 
+            [disabled]="!isValidStep(1)"
+            matTooltip="{{'details.next' | translate }}"
+            matTooltipPosition="above" 
+            
+        >
+            <mat-icon  >arrow_downward</mat-icon>
+        </button>
+        <button 
+            *ngIf="equipProps != null"
+            (click)="toggleEquipProperties()"
+            matTooltip="{{'details.peekEquipProp' | translate }}"
+            matTooltipPosition="above" 
+        >
+            <mat-icon >table_view</mat-icon>
+        </button>
+        <button 
+            (click)="toggleSectionNav()"
+            matTooltip="{{'details.jumpToSection' | translate }}"
+            matTooltipPosition="above" 
+        >
+            <mat-icon >list</mat-icon>
+        </button>
+    </div>
+    
+    <div class="section-nav" [ngClass]="isShowSections ? 'active' : ''">
+        <div class="header">
+            <h3>{{'details.sections' | translate}}:</h3>
+        </div>
+        <div class="body">
+            <div 
+                class="item"
+                *ngFor="let section of sections; let i = index;"
+                (click)="openSectionByIndex(i)"
+            >
+                <span class="title" [ngClass]="getStepper()?.selectedIndex == i ? 'active-section' : ''">
+                    {{section.title}}
+                </span>
+                <div class="icon">
+                    <i *ngIf="section.status" class="material-icons app-toolbar-menu text-light-green">check_circle</i>
+                    <i *ngIf="!section.status" class="material-icons app-toolbar-menu align-right text-light-red">unpublished</i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-nav" [ngClass]="isShowEquipProp ? 'active' : ''">
+        <div class="header">
+            <h3>{{ 'wo.titleEquipmentDetails' | translate }}</h3>
+        </div>
+        <div class="body">
+            <div 
+                class="item" style="text-transform: none; cursor: default"
+                *ngFor="let equipProp of equipProps; let i = index;"
+            >
+                <span class="title"
+                    *ngIf="(equipProp.updatedVal == null || equipProp.updatedVal == undefined || equipProp.updatedVal == '') && (equipProp.currVal == null || equipProp.currVal == undefined || equipProp.currVal == '')"
+                >
+                    {{ equipProp.fieldName }}
+                </span>
+                <span class="title"
+                    *ngIf="(equipProp.updatedVal == null || equipProp.updatedVal == undefined || equipProp.updatedVal == '') && (equipProp.currVal != null && equipProp.currVal != undefined && equipProp.currVal != '')"
+                >
+                    {{ equipProp.fieldName }}: {{ equipProp.currVal }}
+                </span>
+                <span class="title"
+                    *ngIf="(equipProp.updatedVal != null && equipProp.updatedVal != undefined && equipProp.updatedVal != '')"
+                >
+                    {{ equipProp.fieldName }}: {{ equipProp.updatedVal }}
+                </span>
+                <div class="icon" style="cursor: pointer; color: #0b2d71;">
+                        <mat-icon
+                            *ngIf="(equipProp.updatedVal == null || equipProp.updatedVal == undefined || equipProp.updatedVal == '') && (equipProp.currVal != null && equipProp.currVal != undefined && equipProp.currVal != '')"
+                            (click)="copyEquipProp(equipProp.currVal)"
+                        >
+                            content_copy
+                        </mat-icon>
+                        <mat-icon
+                            *ngIf="(equipProp.updatedVal != null && equipProp.updatedVal != undefined && equipProp.updatedVal != '')"
+                            (click)="copyEquipProp(equipProp.updatedVal)"
+                        >
+                            content_copy
+                        </mat-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

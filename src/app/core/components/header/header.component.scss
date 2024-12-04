@@ -1,0 +1,121 @@
+:host {
+  header {
+    padding-top: 5px;
+    min-height: 100px; //nextpage.....
+    height: 100px;
+  }
+  .header {
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    vertical-align: top;
+    text-align: center;
+    min-height: 0;
+    mat-icon {
+      font-size: 34px;
+      color: #0b2d71;
+      margin: 5px;
+      width: 35px;
+      height: 35px;
+      cursor: pointer;
+    }
+    .edge {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 10vw;
+      min-width: 35px;
+    }
+    .left {
+      margin-left: 10px;
+      justify-content: start;
+      .debug-ico {
+        font-size: 25px;
+        opacity: .6;
+        cursor:crosshair;
+      }
+
+    }
+    
+
+    .brand {      
+      margin: auto;
+      .logo {
+        width: 2.2em;
+      }
+      .brand-text {
+        margin-left: 5px;
+        .title {
+          color: #009dd9;
+          font-weight: bold;
+          font-family: GothamBold,Arial,sans-serif!important;
+        }
+        .desc {
+          margin-left: 5px;
+          color: black;
+          font-family: GothamBook,Arial,sans-serif!important;
+        }
+      }
+    }
+    .brand:hover {
+      cursor: pointer;
+    }
+    // prod specific styling (b/c it doesnt have desc)
+    .brand.env-prod {
+      .logo {
+        margin-top: 10px;
+        width: 2.5em;
+      }
+      .brand-text {
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .title {
+          margin: auto;
+        }
+      }
+    }
+    .right {
+      justify-content: end;
+      margin-right: 10px;
+    }
+  }
+
+
+
+
+  // logged in name
+  .bottom-right {
+    bottom: 0px;
+    right: 0px;
+    position: absolute;
+    .icon-user {
+      display: inline-flex;
+      margin: 0 5px 0 0;
+    }
+    .icon-user::before {
+      margin-top: -3px;
+    }
+    .welcome-user {
+      text-align: left;
+      width: 100%;
+      padding-top: 0;
+      margin-bottom: 0;
+      color: #000;
+      font-family: "GothamBook", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+  }
+
+  
+  
+}
+::ng-deep .header-menu .mat-mdc-menu-item  {
+  text-transform: lowercase;
+  mat-icon {
+    max-width: 16px;
+  }
+}

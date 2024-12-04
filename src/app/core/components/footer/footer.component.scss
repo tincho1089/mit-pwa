@@ -1,0 +1,54 @@
+
+.footer-container.expanded {
+    text-align: center;
+}
+.footer-container.retracted {
+    text-align: left;
+    height: 45px;
+    ul {
+        margin: 0;
+    }
+}
+footer {
+    position: sticky;
+    z-index: 2;
+    bottom:0;
+    padding: 0;
+}
+insp-detail-nav {
+    position:relative;
+    z-index: 2;
+}
+.footer-container {
+    background-color: #ececed;
+    z-index: 3;
+    padding: 10px;
+    bottom: 0;
+    position:sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .detailed-footer {
+        width: calc(100% - 50px);
+    }
+    
+    .btn-container {
+        display: inline-flex;
+        mat-icon {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: -15px 0 -13px 0; /* idk why mat-icon spacing is so screwed */
+            cursor: pointer;
+            transition: color ease-in-out .2s, transform linear .2s;
+            color: #0b2d71;
+        }
+        mat-icon:hover {
+            color: #009dd9;
+            
+        }
+        mat-icon:active {
+            transform: scale(1.1);
+            color: #8c8f93;
+        }
+    }
+}

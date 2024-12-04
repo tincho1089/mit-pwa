@@ -1,0 +1,157 @@
+<ng-container *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section">
+    <div fxLayout="column" fxLayoutAlign="start stretch">
+      <table class="summary-responses" *ngIf="!editable && spans">
+        <tr>
+          <th fxFlex="16.67">
+            <b>{{ 'alarmSetting.alarm' | translate }}</b>
+          </th>
+          <th fxFlex="16.67">
+            <b>{{ 'alarmSetting.alarmSetting' | translate }}</b>
+          </th>
+          <th fxFlex="16.67">
+            <b>{{ 'alarmSetting.calculated' | translate }}</b>
+          </th>
+          <th fxFlex="16.67">
+            <b>{{ 'alarmSetting.asFound' | translate }}</b>
+          </th>
+          <th fxFlex="16.67">
+            <b>{{ 'alarmSetting.error' | translate }}</b>
+          </th>
+          <th fxFlex="16.67">
+            <b>{{ 'alarmSetting.cccAlarm' | translate }}</b>
+          </th>
+        </tr>
+      
+        <ng-container *ngFor="let s of spans; let i = index">
+          <tr>
+            <td fxFlex="16.67">
+              <ng-container>
+                <b class="text info">{{ s.value }}</b>
+              </ng-container>
+            </td>
+            <td fxFlex="16.67">
+              <span class="text">{{ formGroup?.get('details.' + i + '.AlarmSetting').value }}</span>
+            </td>
+            <td fxFlex="16.67">
+              <span class="text">{{ formGroup?.get('details.' + i + '.Calculated').value }}</span>
+            </td>
+            <td fxFlex="16.67">
+              <span class="text">{{ formGroup?.get('details.' + i + '.AsFound').value }}</span>
+            </td>
+            <td fxFlex="16.67">
+              <span class="text">{{ formGroup?.get('details.' + i + '.Error').value }}%</span>
+            </td>
+            <td fxFlex="16.67">
+              <span class="text">{{ formGroup?.get('details.' + i + '.CccAlarm').value }}</span>
+            </td>
+          </tr>
+        </ng-container>
+      </table>
+      
+      <!-- <table class="summary-responses" *ngIf="!editable">
+        <tr>
+          <td fxFlex="16.67">
+            <b>{{ 'alarmSetting.alarm' | translate }}</b>
+          </td>
+          <td fxFlex="16.67">
+            <b>{{ 'alarmSetting.alarmSetting' | translate }}</b>
+          </td>
+          <td fxFlex="16.67">
+            <b>{{ 'alarmSetting.calculated' | translate }}</b>
+          </td>
+          <td fxFlex="16.67">
+            <b>{{ 'alarmSetting.asFound' | translate }}</b>
+          </td>
+          <td fxFlex="16.67">
+            <b>{{ 'alarmSetting.error' | translate }}</b>
+          </td>
+          <td fxFlex="16.67">
+            <b>{{ 'alarmSetting.cccAlarm' | translate }}</b>
+          </td>
+        </tr>
+      </table>
+      <table class="summary-responses" *ngIf="!editable">
+        <tr>
+          <td fxFlex="16.67">
+            <ng-container *ngFor="let s of spans; let i = index">
+              <b class="text info">{{ s.value }}</b>
+            </ng-container>
+          </td>
+          <td fxFlex="16.67">
+            <ng-container *ngFor="let s of spans; let i = index">
+              <span class="text">{{ formGroup.get('details.' + i + '.AlarmSetting').value }}</span>
+            </ng-container>
+          </td>
+          <td fxFlex="16.67">
+            <ng-container *ngFor="let s of spans; let i = index">
+              <span class="text">{{ formGroup.get('details.' + i + '.Calculated').value }}</span>
+            </ng-container>
+          </td>
+          <td fxFlex="16.67">
+            <ng-container *ngFor="let s of spans; let i = index">
+              <span class="text">{{ formGroup.get('details.' + i + '.AsFound').value }}</span>
+            </ng-container>
+          </td>
+          <td fxFlex="16.67">
+            <ng-container *ngFor="let s of spans; let i = index">
+              <span class="text">{{ formGroup.get('details.' + i + '.Error').value }}%</span>
+            </ng-container>
+          </td>
+          <td fxFlex="16.67">
+            <ng-container *ngFor="let s of spans; let i = index">
+              <span class="text">{{ formGroup.get('details.' + i + '.CccAlarm').value }}</span>
+            </ng-container>
+          </td>
+        </tr>
+      </table> -->
+
+
+      <div [formGroup]="formGroup" *ngIf="formGroup && editable">
+        <div formGroupName="details">
+          <div
+            fxLayout="row"
+            fxLayoutAlign="start"
+            *ngFor="let s of spans; let i = index"
+            [formGroupName]="i"
+            class="divider"
+          >
+            <div class="vertical-alignment">
+              <mat-label class="item-label">
+                <b>{{ 'alarmSetting.alarm' | translate }}: </b>
+                {{ s.value }}
+              </mat-label>
+
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'alarmSetting.alarmSetting' | translate }}</mat-label>
+                <input matInput type="text" formControlName="AlarmSetting" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'alarmSetting.calculated' | translate }}</mat-label>
+                <input matInput type="text" formControlName="Calculated" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'alarmSetting.asFound' | translate }}</mat-label>
+                <input matInput type="text" formControlName="AsFound" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'alarmSetting.error' | translate }}</mat-label>
+                <input matInput type="text" formControlName="Error" />
+                <mat-icon matSuffix>percent</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'alarmSetting.cccAlarm' | translate }}</mat-label>
+                <input matInput type="text" formControlName="CccAlarm" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</ng-container>

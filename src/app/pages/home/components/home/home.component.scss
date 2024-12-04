@@ -1,0 +1,452 @@
+@import 'qr-scanner';
+
+.home {
+  /************** The important stuff... **************/
+
+  // viewport height - header - footer - padding
+  height: calc(100vh - 100px - 45px - 10px);
+
+  // this deals with having the cards- logic for 1, 2, and 3 rows of filters
+  // 100% parent viewport - filter header - margins
+  @media (min-width: 857px) { .scroll-box { height: calc(100% - 180px - 10px); } } // 1 row
+  @media (max-width: 857px) { .scroll-box { height: calc(100% - 220px - 10px); } } // 2 rows
+  @media (max-width: 449px) { .scroll-box { height: calc(100% - 260px - 10px); } } // 3 rows
+
+  .hide-status {
+    height: calc(100% - 120px - 10px);
+  }
+  
+  /************** End important stuff... **************/
+
+  position: relative;
+  padding-top: 5px;
+  overflow: hidden;
+  .scroll-box {
+    
+    overflow-y: scroll;
+  }
+
+  
+
+  .inspections-list-header {
+    position: relative;
+    padding: 10px;
+    padding-bottom: 0px;
+    background-color: #fff;
+    h1 {
+      text-transform: lowercase;
+    }
+  }
+
+  
+
+
+
+  // dumb circle active thing
+  ::ng-deep {
+    .mat-mdc-icon-button {
+      outline: none;
+    }
+    .mat-mdc-option {
+      padding: 10px;
+    }
+
+  }
+
+  @media (min-width: 767px) {
+    $width-percentage: 70%;
+
+    .search-section {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+
+      .search-box {
+        width: $width-percentage;
+        display: inline-flex;
+      }
+      .clear-filter-button {
+        text-decoration: underline;
+      }
+      .status-chip-toggle {
+        display: flex;
+        justify-content: center;
+        transform: scale(1);
+        font-weight: bold;
+        color: #0b2d71;
+      }
+    }
+  
+    .ep-inner-section {
+      background-color: whitesmoke;
+      width: $width-percentage;
+      padding: 5px 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ep-filter-boxes {
+      display: inline-flex;
+      flex-direction: row;
+
+      .ep-box1 {
+        margin-bottom: -20px;
+        margin-right: 5px;
+      }
+
+      .ep-box2 {
+        margin-bottom: -20px;
+        margin-left: 5px;
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    $width-percentage: 100%;
+
+    .search-section {
+      .search-box {
+        width: $width-percentage;
+        display: inline-flex;
+      }
+      .clear-filter-button {
+        text-decoration: underline;
+      }
+      .status-chip-toggle {
+        display: flex;
+        justify-content: center;
+        font-weight: bold;
+        color: #0b2d71;
+      }
+    }
+  
+    .ep-inner-section {
+      background-color: whitesmoke;
+      width: $width-percentage;
+      padding: 5px 10px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+
+  // status chips...
+  .status-key-box {
+    margin: auto;
+    .listbox {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+    .chip-box {
+      display: -ms-flexbox;
+      display: flex;
+      flex: 1;
+      overflow-x: auto;
+      align-items: center;
+    }
+    .chip {
+      margin-left: auto;
+      width: 130px;
+      height: 32px;
+      margin-left: 3px;
+      margin-right: 3px;
+      margin-top: 4px;
+      margin-bottom: 4px;
+      font-size: 0.9rem !important;
+      opacity: .6;
+      transition: all .2s ease-in-out;
+    }
+    .chip:hover {
+      opacity: 0.6; //when selecting on touchpad devices, it may look like it is still selected after deselecting, hence making opacity 0.6
+      font-weight: 500;
+      .chips-quantity {
+        background-color: #fff;
+      }
+    }
+    .chip-status {
+      color: white;
+      padding-left: 8px;
+    }
+    .chips-quantity {
+      background-color: #ccc;
+      color: #0b2d71;
+      border-top-right-radius: 50%;
+      border-bottom-right-radius: 50%;
+      position: absolute;
+      /* Position the number element absolutely */
+      top: 50%;
+      /* Center vertically */
+      right: 4px;
+      /* Adjust the right offset as needed */
+      width: 32px;
+      height: 24px;
+      transform: translateY(-50%);
+      /* Center vertically */
+      font-size: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      transition: all .2s ease-in-out;
+    }
+    ::ng-deep {
+      .mdc-evolution-chip__graphic {
+        display:none;
+      }
+      .mat-mdc-chip-selected, // if individual chip selected
+      .none-selected > mat-chip-option // if no chips selected, apply to all
+      {
+        opacity: 1 !important;
+        transform: scale(1.02);
+        font-weight: 500;
+        box-shadow: rgba(0, 0, 0, 0.7) 2px 3px 8px;
+        .chips-quantity {
+          background-color: #fff;
+        }
+      }
+    }
+
+  }
+  // END status chips (ya it's long)
+
+  .empty-wos {
+    background-color: white;
+    width: 100%;
+    text-align: center;
+    padding: 30px 10px;
+  }
+  
+  
+
+  .qr-scanner {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    position: fixed !important;
+    width: 80% !important;
+    top: 10% !important;
+    left: 10% !important;
+    right: 10% !important;
+  }
+
+  .qr-code-stop {
+    visibility: hidden;
+  }
+
+  .qr-code-start {
+    visibility: visible;
+  }
+
+  .close-qr-scanner {
+    position: fixed;
+    top: 5%;
+    right: 10%;
+    background: #000;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    display: table;
+    font-family: "GothamBold", Arial, sans-serif;
+    font-size: 16px;
+    padding: 8px 20px;
+    text-decoration: none;
+    border-bottom-style: none;
+    border-radius: 0;
+  }
+
+  .wo-list {
+    padding-right:5px;
+    padding-bottom:105px;
+  }
+
+  .right {
+    text-align: right;
+  }
+
+  .inline {
+    display: inline-flex;
+    flex-direction: row;
+  }
+
+  .button:after {
+    content: none !important;
+  }
+
+  .online-sync-buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+  }
+
+  .online-sync-buttons {
+    font-size: 24px;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline;
+  }
+
+}
+.ep-section {
+  display: flex;
+  justify-content: center;
+
+  .ep-box1 {
+    margin-bottom: -20px;
+  }
+
+  .ep-box2 {
+    margin-bottom: -20px;
+  }
+}
+::ng-deep .home .search-box .mat-mdc-form-field-subscript-wrapper {
+  /* needs important b/c material defined it like this */
+  margin-bottom: -1.25em !important; 
+}
+::ng-deep {
+  // make the mat-menu submenu arrow point opposite dir
+  // im so sorry if this ever breaks
+  .left-submenu-arrow .mat-mdc-menu-submenu-icon {
+    position: relative;
+    left: -100%;
+    transform: rotate(180deg);
+  }
+  .left-submenu-arrow.mat-mdc-menu-item {
+    justify-content: flex-end;
+    margin-left: 10px;
+  }
+  // custom junk for the status filter menu - 
+  //  needs to be out of home class b/c it's rendered outside it
+  .status-filter-button {
+    display: flex;
+    justify-content: space-between;
+    width: 180px; //adjust for spacing issues
+    flex-wrap: nowrap;
+    vertical-align: middle;
+    font-weight: 500;
+    .menu-status-quantity {
+      margin-left: 5px;
+      height: 25px;
+      width: 25px;
+      background-color: lightgray;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      vertical-align: middle;
+      div {
+        margin-top: 1px;
+      }
+      .high-cnt {
+        font-size:12px;
+        margin: 4px 0 0 0;
+      }
+    }
+  }
+
+  .filter-submenu {
+    padding-left: 10px;
+    padding-right: 10px;
+    max-height: 200px;
+    scrollbar-width: thin;
+    mat-form-field {
+      // background color of input box
+      .mat-mdc-text-field-wrapper {
+        background-color: #5551 !important;
+      }
+      // dumb space below input
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+    }
+  }
+
+  .filter-ep-submenu {
+    padding-left: 10px;
+    padding-right: 10px;
+    max-height: 280px;
+    mat-form-field {
+      // background color of input box
+      .mat-mdc-text-field-wrapper {
+        background-color: #5551 !important;
+      }
+    }
+
+    .ep-section {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      padding: 15px 0px;
+    }
+
+    .inline {
+      display: inline-flex;
+      flex-direction: row;
+    }
+  }
+
+  .filter-checkbox:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper-submenu {
+    margin-bottom: 0px !important;
+  }
+
+  .mat-mdc-menu-item-text{
+    margin: 10px;
+  }
+
+  .mat-menu-checkbox{
+    display: flex;
+    align-items: center;
+    padding: 0px;
+    margin: -20px 0px 0px 0px;
+
+    label{
+      padding-top: 25px;
+    }
+  }
+
+  .mat-menu-checkbox:nth-of-type(1){
+    padding-right: 15px;
+  }
+
+  .mat-menu-checkbox:nth-of-type(2){
+    padding-left: 15px;
+  }
+
+  .warning-banner {
+    background: #faab18;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #faab18;
+  }
+
+  .error-banner {
+    background: #97002e;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #97002e;
+  }
+  
+  .text-banner {
+    background: #FFFFFF;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #faab18;
+    height: 6%;
+  }
+  
+  .warning-icon {
+    margin: 5px;
+    color: #FFFFFF;
+  }
+  
+  .warning-body {
+    color: #000000;
+    padding-left: 10px;
+  }
+}

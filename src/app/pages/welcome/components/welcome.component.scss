@@ -1,0 +1,13 @@
+:host {
+    mat-card-header{
+        text-align: center;
+        margin: auto;
+        padding: 1em 0;
+    }
+    mat-card-content {
+        text-align: left;
+    }
+    mat-card-footer {
+        padding: 1em 0;
+    }
+}

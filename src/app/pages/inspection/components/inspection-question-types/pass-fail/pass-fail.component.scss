@@ -1,0 +1,25 @@
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content-1 {
+    @extend .flex-column;
+    mat-label {
+        margin-left: 10px;
+    }
+}
+
+.content-2 {
+    @extend .flex-column;
+    width: 60%;
+}
+
+mat-radio-group mat-radio-button:nth-child(2) {
+    margin-left: 15px;
+}

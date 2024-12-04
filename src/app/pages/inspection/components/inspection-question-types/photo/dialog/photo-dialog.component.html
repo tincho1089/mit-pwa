@@ -1,0 +1,43 @@
+<div class="row web-cam-container" style="overflow: hidden">
+    <!-- Browser capture -->
+    <webcam
+      *ngIf="!useNativeCapture"
+      [trigger]="triggerObservable"
+      (imageCapture)="handleImage($event)"
+      [allowCameraSwitch]="allowCameraSwitch"
+      [switchCamera]="nextWebcamObservable"
+      [videoOptions]="videoOptions"
+      [imageQuality]="1"
+      (cameraSwitched)="cameraWasSwitched($event)"
+      (initError)="handleInitError($event)"
+      mirrorImage="never"
+      [ngStyle]="{'scale': zoomLevel}"
+    ></webcam>
+    <!-- Native capture -->
+    <input 
+      #nativeInput
+      *ngIf="useNativeCapture" 
+      (change)="ingestNativePhoto($event)"
+      type="file" accept="image/*" capture>
+  </div>
+  <div mat-dialog-actions class="justify-content-center">
+    <button [disabled]="zoomLevel <= 1" *ngIf="!useNativeCapture" (click)="zoomOut()"><mat-icon>zoom_out</mat-icon></button>
+    <a>{{zoomLevel.toFixed(1)}}x</a>
+    <button *ngIf="!useNativeCapture" (click)="zoomIn()"><mat-icon>zoom_in</mat-icon></button> 
+  </div>
+  <div mat-dialog-actions class="justify-content-center">
+    <div class="card-column-buttons">
+      <a
+        class="button btn btn-primary text-white photo-btn"
+        (click)="triggerSnapshot()"
+      >
+      <span>{{ 'photo.take' | translate }}</span>
+      </a>
+      <a
+      class="button btn btn-primary text-white photo-btn"
+      (click)="close()"
+    >
+    <span>{{ 'commons.close' | translate }}</span>
+    </a>
+    </div>
+  </div>

@@ -1,0 +1,41 @@
+<div class="controls">
+    <div [formGroup]="form">
+        <div [formGroupName]="section">
+            <div *ngIf="editable">
+                <div class="row">
+                    <div class="col-12">
+                        <mat-radio-group [formControlName]="response.questionId">
+                            <mat-radio-button *ngFor="let option of options; let i = index"
+                                [value]="option.value">{{option.description}}</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!editable">
+                <div class="row">
+                    <div class="col-4">           
+                    </div>
+                    <div class="col-6">
+                        <label *ngIf="selected" class="text">
+                            {{ selected.description }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="editable && circuitPipingList.length > 0 && 
+    (form.get(sectionArray).value === 'MI' ||
+    form.get(sectionArray).value === 'IR')">
+        <div class="col-12">
+            <mat-form-field appearance="outline">
+                <mat-label>Line segment</mat-label>
+                <mat-select no-padding [(ngModel)]="circuitPiping" (ngModelChange)="onCiruitPipingChanges()">
+                    <option label="-- circuit piping --"></option>
+                    <mat-option *ngFor="let cp of circuitPipingList" [value]="cp">{{cp}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+</div>

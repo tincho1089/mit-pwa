@@ -1,0 +1,9 @@
+.error-feedback {
+    float: right;
+}
+
+::ng-deep {
+    mat-form-field.readonly-input .mat-mdc-text-field-wrapper {
+        background-color: #f3f4f8 !important;
+    }
+}

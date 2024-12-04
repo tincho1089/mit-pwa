@@ -1,0 +1,145 @@
+@import './mat-form-field.scss';
+
+
+.label-control-form {
+
+  label,
+  mat-label {
+    margin-right: 5px;
+    font-weight: 500;
+  }
+}
+
+app-detail-tab {
+  .question:nth-child(even) {
+    .helper-accordion {
+      background-color: transparent;
+    }
+  }
+
+  .question:nth-child(odd) {
+    .helper-accordion {
+      background-color: map-get($colors, odd-question);
+    }
+  }
+}
+
+app-summary-tab {
+  .question:nth-child(even) {
+      background-color: transparent;
+    
+  }
+
+  .question:nth-child(odd) {
+      background-color: map-get($colors, odd-question);
+    
+  }
+
+  table.summary-responses {
+    border-collapse: collapse !important; 
+    width: 100% !important;
+  }
+
+  table tbody tr:nth-child(odd) td {
+    background: inherit;
+  }
+  
+  td.summary-responses {
+    padding: 8px !important;
+    border: none !important;
+  }
+
+  th.summary-responses {
+    font-size: bold;
+    padding: 8px !important;
+    border: none !important;
+  }
+  
+}
+
+
+app-general-tab {
+  .question:nth-child(even) {
+    .helper-accordion {
+      background-color: transparent;
+    }
+  }
+
+  .question:nth-child(odd) {
+    .helper-accordion {
+      background-color: map-get($colors, odd-question);
+    }
+  }
+}
+
+// NextPage overwrites the calendar table tr td style
+.mat-datepicker-popup {
+  table tr td {
+    display: table-cell !important;
+  }
+}
+
+.mat-vertical-content {
+  padding: 0 !important;
+}
+
+
+
+.stack-label-form-field {
+  display: flex;
+  flex-direction: column;
+
+  mat-label {
+    margin-bottom: 5px;
+  }
+}
+
+.lowercase {
+  text-transform: lowercase !important;
+}
+
+
+// SCROLLBAR SETTINGS
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ccc;
+}
+::-webkit-scrollbar-track:hover {
+  background-color: #bbb;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+  background: #999;
+  transition: all .2s ease-in-out;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+  cursor: pointer;
+  transform: scale(1.05);
+}
+// END SCROLLBAR
+
+// For small devices
+// NextPage has a display none class to hide the tables on small devices
+@media (max-width: 767.98px) {
+  table tr td {
+      display: table-cell;
+  }
+}
+
+@media (max-width: 767.98px) {
+  table tr th {
+      display: table-cell;
+  }
+}

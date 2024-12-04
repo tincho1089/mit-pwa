@@ -1,0 +1,45 @@
+resources:
+  repositories:
+  - repository: pf
+    type: git
+    name: CVX-DevOps/ADOPipeline
+    ref: refs/tags/latest-stable
+
+########################################################
+# WARNING: Removing/Modifying the following Parameters
+# may cause errors with your pipeline!
+########################################################
+parameters:
+- name: forceUpdate
+  displayName: Update Pipeline
+  type: boolean
+  default: false
+########################################################
+
+# leave auto triggers so sast can get builds on each env
+trigger:
+ - dev
+ - test
+ - release
+
+stages:
+- template: pipeline.yml@pf
+  parameters:
+    ${{ insert }}: ${{ parameters }} # DO NOT MODIFY
+    serviceId: 25752
+
+    projects:
+    - name: mit_pwa
+      outputPath: '/dist'
+      type: node
+      nodeVersion: '18.19.x'
+      setEnvironment: true
+        
+      isBuildActive: true
+      isDeployActive: false
+      isSASTScanActive: true
+      isDASTScanActive: false
+      dependabot: false
+      sonarqube:
+        sqExclusions: ''
+        additionalProperties: 'sonar.branch.name=${{ variables.branchName }}'

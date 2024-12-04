@@ -1,0 +1,168 @@
+<div class="camera">
+    <h1 *ngIf="data.showPhotoEditorTitle" mat-dialog-title class="dialog-title">{{ 'photo.editor' | translate }}</h1>
+    <div mat-dialog-actions>
+
+          <a *ngIf="data.showDrawButton && !isDrawingMode && !isEraserMode && !isTextMode" class="button btn btn-primary text-white photo-btn" (click)="addDrawing()"
+            ><mat-icon class="hover">draw</mat-icon> <span>{{ 'photo.draw' | translate }}</span></a
+          >
+
+
+          <a *ngIf="data.showTextButton && !isTextMode && !isDrawingMode && !isEraserMode" class="button btn btn-primary text-white photo-btn" (click)="addInitialText()"
+            ><mat-icon class="hover">text_fields</mat-icon>
+              <span>{{ 'photo.text' | translate }}</span>
+            </a
+          >
+
+    </div>
+
+      <h3 *ngIf="isTextMode" style="text-align: center">{{ 'photo.editTextMessage' | translate }}</h3>
+
+      <div class="row" *ngIf="isTextMode">
+        <div class="col-3 button-flex"><h3>{{ 'photo.textColor' | translate }}: </h3><br /></div>
+        <div class="row">
+          <button
+            class="text-button"
+            style="background-color: #c2281d;"
+            (click)="changeTextColor('red')"
+          ></button>
+          <button
+            class="text-button"
+            style="background-color: #de722f;"
+            (click)="changeTextColor('orange')"
+          ></button>
+          <button
+            class="text-button"
+            style="background-color: #edbf4c;"
+            (click)="changeTextColor('yellow')"
+          ></button>
+          <button
+            class="text-button"
+            style="background-color: #5db37e;"
+            (click)="changeTextColor('green')"
+          ></button>
+          <button
+            class="text-button"
+            style="background-color: #459cde;"
+            (click)="changeTextColor('light_blue')"
+          ></button>
+          <button
+            class="text-button"
+            style="background-color: #4250ad;"
+            (click)="changeTextColor('blue')"
+          ></button>
+          <button
+            class="text-button"
+            style="background-color: #000000;"
+            (click)="changeTextColor('black')"
+          ></button>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="isDrawingMode">
+        <div class="col-2 button-flex"><h3>{{ 'photo.brushColor' | translate }}: </h3><br /></div>
+        <div class="row">
+          <button
+            class="brush-button"
+            style="background-color: #c2281d;"
+            (click)="changeBrushColor('red')"
+          ></button>
+          <button
+            class="brush-button"
+            style="background-color: #de722f;"
+            (click)="changeBrushColor('orange')"
+          ></button>
+          <button
+            class="brush-button"
+            style="background-color: #edbf4c;"
+            (click)="changeBrushColor('yellow')"
+          ></button>
+          <button
+            class="brush-button"
+            style="background-color: #5db37e;"
+            (click)="changeBrushColor('green')"
+          ></button>
+          <button
+            class="brush-button"
+            style="background-color: #459cde;"
+            (click)="changeBrushColor('light_blue')"
+          ></button>
+          <button
+            class="brush-button"
+            style="background-color: #4250ad;"
+            (click)="changeBrushColor('blue')"
+          ></button>
+          <button
+            class="brush-button"
+            style="background-color: #000000;"
+            (click)="changeBrushColor('black')"
+          ></button>
+        </div>
+        <div class="col-2 button-flex">
+          <button mat-icon-button id="copy-icon" *ngIf="!isEraserMode" (click)="clearDrawing()">
+            <img alt="icon" src="assets/icons/ink_eraser.png"/>
+          </button>
+          <button mat-icon-button id="copy-icon" *ngIf="isEraserMode" (click)="closeEraser()">
+            <mat-icon>done</mat-icon>
+          </button>
+      </div>
+      </div>
+      <div class="row" *ngIf="isDrawingMode">
+        <div class="col-2"><h3>{{ 'photo.brushSize' | translate }}: </h3></div>
+        <div class="row">
+          <mat-slider
+            class="example-margin"
+            min="0"
+            max="45"
+            step="1"
+            discrete
+            [displayWith]="formatLabel"
+          >
+            <input
+              matSliderThumb
+              [(ngModel)]="range"
+              (valueChange)="changeBrushWidth()"
+              #slider
+            />
+          </mat-slider>
+        </div>
+      </div>
+      <div mat-dialog-actions>
+        <div class="row">
+          <!-- Reset Zoom Button -->
+          <a *ngIf="!isDrawingMode && !isTextMode && !isEraserMode" class="button btn btn-primary text-white photo-btn" (click)="resetCanvas()"
+            ><mat-icon class="hover">fullscreen</mat-icon> <span>Reset Zoom</span></a
+          >
+          <!-- Undo Draw Button -->
+          <a *ngIf="isDrawingMode || isEraserMode" class="button btn btn-primary text-white photo-btn" (click)="undoDrawing()"
+            ><mat-icon class="hover">undo</mat-icon> <span>{{ 'commons.undo' | translate }}</span></a
+          >
+          <!-- Add Text While in Textmode Button -->
+          <a *ngIf="isTextMode" class="button btn btn-primary text-white photo-btn" (click)="addAdditionalText()"
+            ><mat-icon class="hover">text_fields</mat-icon> <span>{{ 'photo.text' | translate }}</span></a
+          >
+          <!-- Undo Text Button -->
+          <a *ngIf="isTextMode" class="button btn btn-primary text-white photo-btn" (click)="undoText()"
+            ><mat-icon class="hover">undo</mat-icon> <span>{{ 'commons.undo' | translate }}</span></a
+          >
+        </div>
+      </div>
+      <div mat-dialog-actions>
+        <div class="canvas-nav">
+          <canvas id="canvas" style="border:1px solid #ccc;"></canvas>
+        </div>
+      </div>
+      <div mat-dialog-actions>
+      <a *ngIf="data.showSaveButton && !isDrawingMode && !isTextMode && !isEraserMode" class="button btn btn-primary text-white photo-btn" (click)="save()"
+        ><mat-icon class="hover">save</mat-icon> <span>{{ 'commons.save' | translate }}</span></a
+      >
+      <a *ngIf="data.showCloseButton  && !isDrawingMode && !isTextMode && !isEraserMode" class="button btn btn-primary text-white photo-btn" (click)="close()"
+      ><mat-icon class="hover">close</mat-icon> <span>{{ 'commons.close' | translate }}</span></a
+    >
+    <a *ngIf="(isDrawingMode || isEraserMode) && !isTextMode" class="button btn btn-primary text-white photo-btn" (click)="addDrawing()"
+        ><mat-icon class="hover">save</mat-icon> <span>{{ 'photo.done' | translate }}</span></a
+      >
+      <a *ngIf="(!isDrawingMode && !isEraserMode) && isTextMode" class="button btn btn-primary text-white photo-btn" (click)="addInitialText()"
+      ><mat-icon class="hover">save</mat-icon> <span>{{ 'photo.done' | translate }}</span></a
+    >
+      </div>
+  </div>

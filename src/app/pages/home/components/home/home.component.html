@@ -1,0 +1,626 @@
+<div class="home">
+    <div class="inspections-list-header mb-1">
+        <div class="text-banner" *ngIf="hasPending !== 'NONE'">
+            <div [ngClass]="hasPending === 'IN-PROGRESS' ? 'warning-banner' : hasPending === 'COMPLETED' ? 'error-banner' : null">
+                <mat-icon [inline]="true" class="warning-icon">warning</mat-icon>
+              </div>
+              <h5 *ngIf="hasPending === 'IN-PROGRESS'" class="warning-body" [innerHTML]="'home.pendingChanges' | translate"></h5>
+              <h5 *ngIf="hasPending === 'COMPLETED'" class="warning-body" [innerHTML]="'home.completed' | translate"></h5>
+        </div>
+
+        <div class="flex-around">
+            <h2 class="lowercase mb-2">{{ 'inspection.myInspections' | translate }}</h2>
+        </div>
+
+        <!-- local db search -->
+        <ng-container *ngIf="!displayOnlineList">
+            <div class="row">
+                <div class="col-12 search-section">
+                    <div class="search-box">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{ 'filters.wo-woDesc' | translate }}, {{ 'filters.equip-equipDesc' | translate }} </mat-label>
+                            <input matInput type="text" (keyup)="textTriggerPullWorkOrders()" [(ngModel)]="filterStr" placeholder="{{ 'filters.searchHere' | translate }}">
+                            <div class="inline" matSuffix>
+                                <button matTooltip="{{ 'home.scanQR' | translate }}" matTooltipPosition="above" mat-icon-button aria-label="Clear"  (click)="startScanning()">
+                                    <mat-icon>qr_code_scanner</mat-icon>
+                                </button>
+                                <button
+                                    [matMenuTriggerFor]="filterMenu"
+                                    mat-icon-button
+                                    [ngClass]="(selectedStatuses.length || inspectionTypeFilter.filter.length || areaFilter.filter.length || subAreaFilter.filter.length || projectFilter.filter.length || groupFilter.filter.length || orgFilter.filter.length || equipmentPropertyFilteringEnabled() || hideSubmitted || dueToday) ? 'text-light-blue' : ''"
+                                    (contextmenu)="clearAllFilters(); $event.preventDefault()">
+                                    <mat-icon>filter_alt</mat-icon>
+                                </button>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <button mat-button *ngIf="showAdditionalFilters && (selectedStatuses.length || inspectionTypeFilter.filter.length || areaFilter.filter.length || subAreaFilter.filter.length || projectFilter.filter.length || groupFilter.filter.length || orgFilter.filter.length || equipmentPropertyFilteringEnabled() || hideSubmitted || dueToday)" class="clear-filter-button" (click)="clearAllFilters()">{{ 'filters.clear' | translate }}</button>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Online Search -->
+        <ng-container *ngIf="displayOnlineList">
+            <div class="row">
+                <div class="col-12 search-section">
+                    <div class="search-box">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{ 'filters.onlineSearch' | translate }}</mat-label>
+                            <input matInput type="text" [(ngModel)]="onlineSearchStr" (keyup.enter)="onlineSearch()" (keyup.shift.enter)="onlineSearch()" placeholder="{{ 'filters.searchHere' | translate }}">
+                            <div class="inline" matSuffix>
+                                <button matTooltip="{{ 'home.search' | translate }}" matTooltipPosition="above"
+                                    mat-icon-button aria-label="Clear" (click)="onlineSearch()">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                                <button
+                                    matTooltip="{{ 'home.resetOnlineSearch' | translate }}"
+                                    matTooltipPosition="above"
+                                    mat-icon-button
+                                    (click)="resetOnlineSearchResults()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button
+                                *ngIf="hasDownloadableInspections || currentWorkOrders.length > 0 || onlineSearchResults.length > 0 || selectedStatuses.length != 0 || areFiltersPopulated()"
+                                [matMenuTriggerFor]="filterMenu"
+                                mat-icon-button
+                                [ngClass]="(selectedStatuses.length || inspectionTypeFilter.filter.length || areaFilter.filter.length || subAreaFilter.filter.length || projectFilter.filter.length || groupFilter.filter.length || orgFilter.filter.length || equipmentPropertyFilteringEnabled() || hideSubmitted || dueToday) ? 'text-light-blue' : ''"
+                                (contextmenu)="clearAllFilters(); $event.preventDefault()">
+                                <mat-icon>filter_alt</mat-icon>
+                            </button>
+                            </div>
+                        </mat-form-field>
+                        <div class="online-sync-buttons-container">
+                            <ng-container *ngIf="hasDownloadableInspections; then showDownloadButton; else showSyncButton"></ng-container>
+                            <ng-template #showDownloadButton>
+                                <button class="button btn bg-dark-blue" (click)="download()">{{ 'home.download' | translate | lowercase }}</button>
+                            </ng-template>
+                            <ng-template #showSyncButton>
+                                <button class="button btn bg-medium-teal" (click)="sync()">{{ 'home.Sync' | translate | lowercase }}</button>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <!-- <button mat-button *ngIf="showAdditionalFilters && (selectedStatuses.length || inspectionTypeFilter.filter.length || areaFilter.filter.length || subAreaFilter.filter.length || projectFilter.filter.length || groupFilter.filter.length || orgFilter.filter.length || equipmentPropertyFilteringEnabled() || hideSubmitted || dueToday)" class="clear-filter-button" (click)="resetOnlineFilter()">{{ 'filters.clear' | translate }}</button> -->
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Additional Filters -->
+        <ng-container *ngIf="showAdditionalFilters">
+            <div class="row">
+                <mat-chip-listbox title="StatusFilter" multiple="true" class="status-key-box">
+                    <div
+                     class="listbox"
+                     [ngClass]="selectedStatuses.length ? '' : 'none-selected'"
+                    >
+                        <!--
+                    When no chips are selected, it behaves like all of them are selected-
+                    but that's actually just a combination of CSS and filter logic
+                -->
+                        <mat-chip-option
+                            *ngFor="let status of inspectionStatuses; index as i"
+                            class="chip"
+                            [ngClass]="status.getBGStyle()"
+                            (click)="filterByStatus(i); resetFilter();"
+                            [selected]="status.selected || selectedStatuses.includes(status.statusId)"
+                        >
+                            <span class="chip-status">
+                                {{ 'status.'+status.getStatusName() | translate | lowercase}}
+                            </span>
+                            <span class="chips-quantity">{{status.quantity}}</span>
+                        </mat-chip-option>
+                    </div>
+                </mat-chip-listbox>
+            </div>
+            <!-- button to hide additional filters -->
+            <div class="row">
+                <div class="col-12 search-section">
+                    <div class="status-chip-toggle">
+                        <mat-icon *ngIf="showAdditionalFilters" class="status-chip-toggle" (click)="toggleStatusFilterView(); resetFilter();">keyboard_arrow_up</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+         <!-- button to expand additional filters -->
+        <ng-container *ngIf="!showAdditionalFilters" >
+            <div class="row">
+                <div class="col-12 search-section">
+                    <div class="status-chip-toggle">
+                        <mat-icon class="status-chip-toggle" (click)="toggleStatusFilterView(); resetFilter();">keyboard_arrow_down</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+
+    <!-- Inspection list -->
+    <ng-container *ngIf="displayList && !displayOnlineList">
+        <ng-container *ngIf="currentWorkOrders.length > 0">
+            <div class="scroll-box wo-list" [ngClass]="{'hide-status' : !showAdditionalFilters}" infiniteScroll [scrollWindow]="false" [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
+                <div *ngFor="let wo of currentWorkOrders">
+                    <app-inspection-list-item [wo]="wo"></app-inspection-list-item>
+                </div>
+            </div>
+        </ng-container>
+        <div class="empty-wos" *ngIf="currentWorkOrders.length == 0">
+            <h4 *ngIf="selectedStatuses.length == 0 && !areFiltersPopulated()">{{ 'home.noInspFound' | translate }}</h4>
+            <h4 *ngIf="selectedStatuses.length != 0 || areFiltersPopulated()">{{ 'home.noInspFoundFilter' | translate }}</h4>
+        </div>
+    </ng-container>
+
+    <!-- Online Search Results -->
+    <ng-container *ngIf="displayOnlineList">
+        <div class="scroll-box wo-list" [ngClass]="{'hide-status' : !showAdditionalFilters}" infiniteScroll [scrollWindow]="false" [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
+            <app-online-search-inspection-list [workorders]="onlineSearchResults"
+                [displayOnlineSearchMaxRecordWarning]="displayOnlineSearchMaxRecordWarning">
+            </app-online-search-inspection-list>
+        </div>
+    </ng-container>
+
+    <!-- base filter menu -->
+    <mat-menu #filterMenu="matMenu">
+        <button
+            *ngIf="!displayOnlineList"
+            mat-menu-item
+            [matMenuTriggerFor]="filterStatus"
+            class="left-submenu-arrow"
+            [ngClass]="selectedStatuses.length ? 'text-light-blue' : ''"
+        >{{'commons.status' | translate }}</button>
+        <button
+            *ngIf="!displayOnlineList"
+            mat-menu-item
+            [matMenuTriggerFor]="filterInspectionTypeMenu"
+            class="left-submenu-arrow"
+            [ngClass]="inspectionTypeFilter.filter.length ? 'text-light-blue' : ''"
+        >{{'inspection.inspectionType' | translate }}</button>
+        <button
+            *ngIf="!displayOnlineList"
+            mat-menu-item
+            [matMenuTriggerFor]="filterAreaMenu"
+            class="left-submenu-arrow"
+            [ngClass]="areaFilter.filter.length ? 'text-light-blue' : ''"
+        >{{'filters.area' | translate }}</button>
+        <button
+            *ngIf="!displayOnlineList"
+            mat-menu-item
+            [matMenuTriggerFor]="filterSubAreaMenu"
+            class="left-submenu-arrow"
+            [ngClass]="subAreaFilter.filter.length ? 'text-light-blue' : ''"
+        >{{'filters.subArea' | translate }}</button>
+        <button
+            *ngIf="!displayOnlineList"
+            mat-menu-item
+            [matMenuTriggerFor]="filterProjectMenu"
+            class="left-submenu-arrow"
+            [ngClass]="projectFilter.filter.length ? 'text-light-blue' : ''"
+        >{{'filters.project' | translate }}</button>
+        <button
+            *ngIf="!displayOnlineList"
+            mat-menu-item
+            [matMenuTriggerFor]="filterGroupMenu"
+            class="left-submenu-arrow"
+            [ngClass]="groupFilter.filter.length ? 'text-light-blue' : ''"
+        >{{'filters.group' | translate }}</button>
+        <button
+            *ngIf="!displayOnlineList"
+            mat-menu-item
+            [matMenuTriggerFor]="filterOrgMenu"
+            class="left-submenu-arrow"
+            [ngClass]="orgFilter.filter.length ? 'text-light-blue' : ''"
+        >{{'filters.org' | translate }}</button>
+        <!-- base online filter menu -->
+            <!-- <button
+                *ngIf="displayOnlineList"
+                mat-menu-item
+                [matMenuTriggerFor]="filterOnlineStatus"
+                class="left-submenu-arrow"
+                [ngClass]="selectedStatuses.length ? 'text-light-blue' : ''"
+            >{{'commons.status' | translate }}</button>
+            <button
+                *ngIf="displayOnlineList"
+                mat-menu-item
+                [matMenuTriggerFor]="filterOnlineInspectionTypeMenu"
+                class="left-submenu-arrow"
+                [ngClass]="inspectionTypeFilter.filter.length ? 'text-light-blue' : ''"
+            >{{'inspection.inspectionType' | translate }}</button>
+            <button
+                *ngIf="displayOnlineList"
+                mat-menu-item
+                [matMenuTriggerFor]="filterOnlineAreaMenu"
+                class="left-submenu-arrow"
+                [ngClass]="areaFilter.filter.length ? 'text-light-blue' : ''"
+            >{{'filters.area' | translate }}</button>
+            <button
+                *ngIf="displayOnlineList"
+                mat-menu-item
+                [matMenuTriggerFor]="filterOnlineSubAreaMenu"
+                class="left-submenu-arrow"
+                [ngClass]="subAreaFilter.filter.length ? 'text-light-blue' : ''"
+            >{{'filters.subArea' | translate }}</button>
+            <button
+                *ngIf="displayOnlineList"
+                mat-menu-item
+                [matMenuTriggerFor]="filterOnlineProjectMenu"
+                class="left-submenu-arrow"
+                [ngClass]="projectFilter.filter.length ? 'text-light-blue' : ''"
+            >{{'filters.project' | translate }}</button>
+            <button
+                *ngIf="displayOnlineList"
+                mat-menu-item
+                [matMenuTriggerFor]="filterOnlineGroupMenu"
+                class="left-submenu-arrow"
+                [ngClass]="groupFilter.filter.length ? 'text-light-blue' : ''"
+            >{{'filters.group' | translate }}</button>
+            <button
+                *ngIf="displayOnlineList"
+                mat-menu-item
+                [matMenuTriggerFor]="filterOnlineOrgMenu"
+                class="left-submenu-arrow"
+                [ngClass]="orgFilter.filter.length ? 'text-light-blue' : ''"
+            >{{'filters.org' | translate }}</button> -->
+        <!-- equip property filter for both -->
+        <button
+            mat-menu-item
+            [matMenuTriggerFor]="filterEquipmentPropertiesMenu"
+            class="left-submenu-arrow"
+            [ngClass]="equipmentPropertyFilteringEnabled() ? 'text-light-blue' : ''"
+        >{{'home.equipmentProperty' | translate }}</button>
+        <!-- hide submitted and due today filter -->
+        <div mat-menu-item>
+            <div class="row" (click)="$event.stopPropagation()">
+                <div class="col-6 mat-menu-checkbox">
+                    <mat-checkbox [checked]="this.hideSubmitted" (change)="onHideSubmittedChange(); resetFilter()">
+                        <mat-label>{{ ('filters.hide' | translate) + ' ' + ('filters.submitted' | translate) }}</mat-label>
+                    </mat-checkbox>
+                </div>
+                <div class="col-6 mat-menu-checkbox">
+                    <mat-checkbox [checked]="this.dueToday" (change)="onDueTodayChange(); resetFilter()">
+                        <mat-label>{{ ('filters.due' | translate) + ' ' + ('filters.today' | translate) }}</mat-label>
+                    </mat-checkbox>
+                </div>
+            </div>
+        </div>
+    </mat-menu>
+
+    <!-- Status filter sub-menu -->
+    <mat-menu #filterStatus="matMenu" xPosition="before">
+        <button
+            mat-menu-item
+            *ngFor="let status of inspectionStatuses; index as i"
+            (click)="$event.stopPropagation(); filterByStatus(i)"
+
+        >
+            <div class="status-filter-button">
+                <!-- blank space if not selected -->
+                <mat-icon *ngIf="!status.selected"></mat-icon>
+                <mat-icon *ngIf="status.selected || selectedStatuses.includes(status.statusId)">done</mat-icon>
+
+                <div class="menu-status-name" [ngClass]="status.getTextStyle()" >
+                    {{ 'status.'+status.getStatusName() | translate | lowercase}}
+                </div>
+                <div class="menu-status-quantity">
+                    <div [ngClass]="status.quantity > 99 ? 'high-cnt' : ''">
+                        {{status.quantity}}
+                    </div>
+                </div>
+            </div>
+
+
+        </button>
+    </mat-menu>
+
+    <!-- Online Status filter sub-menu -->
+    <!-- <mat-menu #filterOnlineStatus="matMenu" xPosition="before">
+        <button
+            mat-menu-item
+            *ngFor="let status of inspectionStatuses; index as i"
+            (click)="$event.stopPropagation(); filterByStatus(i); filter()"
+
+        >
+            <div class="status-filter-button">
+                <mat-icon *ngIf="!status.selected"></mat-icon>
+                <mat-icon *ngIf="status.selected || selectedStatuses.includes(status.statusId)">done</mat-icon>
+
+                <div class="menu-status-name" [ngClass]="status.getTextStyle()" >
+                    {{ 'status.'+status.getStatusName() | translate | lowercase}}
+                </div>
+                <div class="menu-status-quantity">
+                    <div [ngClass]="status.quantity > 99 ? 'high-cnt' : ''">
+                        {{status.quantity}}
+                    </div>
+                </div>
+            </div>
+
+
+        </button>
+    </mat-menu> -->
+
+<!-- Inspection Type filter sub-menu -->
+<mat-menu #filterInspectionTypeMenu="matMenu" xPosition="before" class="filter-submenu">
+        <mat-form-field (click)="$event.stopPropagation()">
+            <mat-label>{{ 'inspection.inspectionType' | translate }}</mat-label>
+            <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="inspectionTypeFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+            <button             *ngIf="inspectionTypeFilter.filter.length > 0 || inspectionTypeFilter.str.length > 0"
+								matSuffix
+								matTooltip="{{ 'filters.clear' | translate }}"
+								matTooltipPosition="above"
+                                mat-icon-button
+								(click)="clearFilter(inspectionTypeFilter)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+        </mat-form-field>
+        <div class="filter-checkbox" *ngFor="let wo of inspectionTypeFilter.current" (click)="inspectionTypeFilter.setFilter(wo); textTriggerPullWorkOrders(); $event.stopPropagation()">
+        <mat-checkbox [value]="wo.inspectionType" [checked]="inspectionTypeFilter.filter.includes(wo.inspectionType)" >
+            {{wo.inspectionType}}</mat-checkbox>
+        </div>
+</mat-menu>
+
+<!-- Online Inspection Type filter sub-menu -->
+<!-- <mat-menu #filterOnlineInspectionTypeMenu="matMenu" xPosition="before" class="filter-submenu">
+    <mat-form-field (click)="$event.stopPropagation()">
+        <mat-label>{{ 'inspection.inspectionType' | translate }}</mat-label>
+        <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="inspectionTypeFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+        <button             *ngIf="inspectionTypeFilter.filter.length > 0 || inspectionTypeFilter.str.length > 0"
+                            matSuffix
+                            matTooltip="{{ 'filters.clear' | translate }}"
+                            matTooltipPosition="above"
+                            mat-icon-button
+                            (click)="clearFilter(inspectionTypeFilter)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+    </mat-form-field>
+    <div class="filter-checkbox" *ngFor="let wo of inspectionTypeFilter.current" (click)="inspectionTypeFilter.setFilter(wo); filter(); $event.stopPropagation()">
+    <mat-checkbox [value]="wo.inspectionType" [checked]="inspectionTypeFilter.filter.includes(wo.inspectionType)" >
+        {{wo.inspectionType}}</mat-checkbox>
+    </div>
+</mat-menu> -->
+
+    <!-- Area filter sub-menu -->
+    <mat-menu #filterAreaMenu="matMenu" xPosition="before" class="filter-submenu">
+            <mat-form-field (click)="$event.stopPropagation()">
+                <mat-label>{{ 'filters.area' | translate }}</mat-label>
+                <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="areaFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+                <button         *ngIf="areaFilter.filter.length > 0 || areaFilter.str.length > 0"
+								matSuffix
+								matTooltip="{{ 'filters.clear' | translate }}"
+								matTooltipPosition="above"
+                                mat-icon-button
+								(click)="clearFilter(areaFilter)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+            </mat-form-field>
+        <div class="filter-checkbox" *ngFor="let wo of areaFilter.current" (click)="areaFilter.setFilter(wo); textTriggerPullWorkOrders(); $event.stopPropagation()">
+        <mat-checkbox [value]="wo.area" [checked]="areaFilter.filter.includes(wo.area)">
+            {{wo.area}}</mat-checkbox>
+        </div>
+    </mat-menu>
+
+    <!-- Online Area filter sub-menu -->
+    <!-- <mat-menu #filterOnlineAreaMenu="matMenu" xPosition="before" class="filter-submenu">
+        <mat-form-field (click)="$event.stopPropagation()">
+            <mat-label>{{ 'filters.area' | translate }}</mat-label>
+            <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="areaFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+            <button         *ngIf="areaFilter.filter.length > 0 || areaFilter.str.length > 0"
+                            matSuffix
+                            matTooltip="{{ 'filters.clear' | translate }}"
+                            matTooltipPosition="above"
+                            mat-icon-button
+                            (click)="clearFilter(areaFilter)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+        </mat-form-field>
+    <div class="filter-checkbox" *ngFor="let wo of areaFilter.current" (click)="areaFilter.setFilter(wo); filter(); $event.stopPropagation()">
+    <mat-checkbox [value]="wo.area" [checked]="areaFilter.filter.includes(wo.area)">
+        {{wo.area}}</mat-checkbox>
+    </div>
+</mat-menu> -->
+
+        <!-- SubArea filter sub-menu -->
+        <mat-menu #filterSubAreaMenu="matMenu" xPosition="before" class="filter-submenu">
+                <mat-form-field (click)="$event.stopPropagation()">
+                    <mat-label>{{ 'filters.subArea' | translate }}</mat-label>
+                    <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="subAreaFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+                    <button     *ngIf="subAreaFilter.filter.length > 0 || subAreaFilter.str.length > 0"
+								matSuffix
+								matTooltip="{{ 'filters.clear' | translate }}"
+								matTooltipPosition="above"
+                                mat-icon-button
+								(click)="clearFilter(subAreaFilter)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                </mat-form-field>
+            <div class="filter-checkbox" *ngFor="let wo of subAreaFilter.current" (click)="subAreaFilter.setFilter(wo); textTriggerPullWorkOrders(); $event.stopPropagation()">
+            <mat-checkbox [value]="wo.department" [checked]="subAreaFilter.filter.includes(wo.department)">
+                {{wo.department}}</mat-checkbox>
+            </div>
+        </mat-menu>
+
+         <!-- Online SubArea filter sub-menu -->
+         <!-- <mat-menu #filterOnlineSubAreaMenu="matMenu" xPosition="before" class="filter-submenu">
+            <mat-form-field (click)="$event.stopPropagation()">
+                <mat-label>{{ 'filters.subArea' | translate }}</mat-label>
+                <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="subAreaFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+                <button     *ngIf="subAreaFilter.filter.length > 0 || subAreaFilter.str.length > 0"
+                            matSuffix
+                            matTooltip="{{ 'filters.clear' | translate }}"
+                            matTooltipPosition="above"
+                            mat-icon-button
+                            (click)="clearFilter(subAreaFilter)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+            </mat-form-field>
+        <div class="filter-checkbox" *ngFor="let wo of subAreaFilter.current" (click)="subAreaFilter.setFilter(wo); filter(); $event.stopPropagation()">
+        <mat-checkbox [value]="wo.department" [checked]="subAreaFilter.filter.includes(wo.department)">
+            {{wo.department}}</mat-checkbox>
+        </div>
+    </mat-menu> -->
+
+    <!-- Project filter sub-menu -->
+    <mat-menu #filterProjectMenu="matMenu" xPosition="before" class="filter-submenu">
+            <mat-form-field (click)="$event.stopPropagation()">
+                <mat-label>{{ 'filters.project' | translate }}</mat-label>
+                <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="projectFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+                <button         *ngIf="projectFilter.filter.length > 0 || projectFilter.str.length > 0"
+								matSuffix
+								matTooltip="{{ 'filters.clear' | translate }}"
+								matTooltipPosition="above"
+                                mat-icon-button
+								(click)="clearFilter(projectFilter)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+            </mat-form-field>
+            <div class="filter-checkbox" *ngFor="let wo of projectFilter.current" (click)="projectFilter.setFilter(wo); textTriggerPullWorkOrders(); $event.stopPropagation()">
+        <mat-checkbox [value]="wo.project" [checked]="projectFilter.filter.includes(wo.project)">
+            {{wo.project}}</mat-checkbox>
+            </div>
+    </mat-menu>
+
+     <!-- Online Project filter sub-menu -->
+     <!-- <mat-menu #filterOnlineProjectMenu="matMenu" xPosition="before" class="filter-submenu">
+        <mat-form-field (click)="$event.stopPropagation()">
+            <mat-label>{{ 'filters.project' | translate }}</mat-label>
+            <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="projectFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+            <button         *ngIf="projectFilter.filter.length > 0 || projectFilter.str.length > 0"
+                            matSuffix
+                            matTooltip="{{ 'filters.clear' | translate }}"
+                            matTooltipPosition="above"
+                            mat-icon-button
+                            (click)="clearFilter(projectFilter)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+        </mat-form-field>
+        <div class="filter-checkbox" *ngFor="let wo of projectFilter.current" (click)="projectFilter.setFilter(wo); filter(); $event.stopPropagation()">
+    <mat-checkbox [value]="wo.project" [checked]="projectFilter.filter.includes(wo.project)">
+        {{wo.project}}</mat-checkbox>
+        </div>
+</mat-menu> -->
+
+    <!-- Group filter sub-menu -->
+    <mat-menu #filterGroupMenu="matMenu" xPosition="before" class="filter-submenu">
+            <mat-form-field (click)="$event.stopPropagation()">
+                <mat-label>{{ 'filters.group' | translate }}</mat-label>
+                <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="groupFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+                <button         *ngIf="groupFilter.filter.length > 0 || groupFilter.str.length > 0"
+								matSuffix
+								matTooltip="{{ 'filters.clear' | translate }}"
+								matTooltipPosition="above"
+                                mat-icon-button
+								(click)="clearFilter(groupFilter)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+            </mat-form-field>
+            <div class="filter-checkbox" *ngFor="let wo of groupFilter.current" (click)="groupFilter.setFilter(wo); textTriggerPullWorkOrders(); $event.stopPropagation()">
+        <mat-checkbox [value]="wo.groups" [checked]="groupFilter.filter.includes(wo.groups)">
+            {{wo.groups}}</mat-checkbox>
+        </div>
+    </mat-menu>
+
+    <!-- Online Group filter sub-menu -->
+    <!-- <mat-menu #filterOnlineGroupMenu="matMenu" xPosition="before" class="filter-submenu">
+        <mat-form-field (click)="$event.stopPropagation()">
+            <mat-label>{{ 'filters.group' | translate }}</mat-label>
+            <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="groupFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+            <button         *ngIf="groupFilter.filter.length > 0 || groupFilter.str.length > 0"
+                            matSuffix
+                            matTooltip="{{ 'filters.clear' | translate }}"
+                            matTooltipPosition="above"
+                            mat-icon-button
+                            (click)="clearFilter(groupFilter)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+        </mat-form-field>
+        <div class="filter-checkbox" *ngFor="let wo of groupFilter.current" (click)="groupFilter.setFilter(wo); filter(); $event.stopPropagation()">
+    <mat-checkbox [value]="wo.groups" [checked]="groupFilter.filter.includes(wo.groups)">
+        {{wo.groups}}</mat-checkbox>
+    </div>
+</mat-menu> -->
+
+    <!-- Org filter sub-menu -->
+    <mat-menu #filterOrgMenu="matMenu" xPosition="before" class="filter-submenu">
+            <mat-form-field (click)="$event.stopPropagation()">
+                <mat-label>{{ 'filters.org' | translate }}</mat-label>
+                <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="orgFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+                <button         *ngIf="orgFilter.filter.length > 0 || orgFilter.str.length > 0"
+								matSuffix
+								matTooltip="{{ 'filters.clear' | translate }}"
+								matTooltipPosition="above"
+                                mat-icon-button
+								(click)="clearFilter(orgFilter)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+            </mat-form-field>
+            <div class="filter-checkbox" *ngFor="let wo of orgFilter.current" (click)="orgFilter.setFilter(wo); textTriggerPullWorkOrders(); $event.stopPropagation()">
+        <mat-checkbox [value]="wo.org" [checked]="orgFilter.filter.includes(wo.org)">
+            {{wo.org}}</mat-checkbox>
+            </div>
+    </mat-menu>
+
+    <!-- Online Org filter sub-menu -->
+    <!-- <mat-menu #filterOnlineOrgMenu="matMenu" xPosition="before" class="filter-submenu">
+        <mat-form-field (click)="$event.stopPropagation()">
+            <mat-label>{{ 'filters.org' | translate }}</mat-label>
+            <input matInput type="text" (keyup)="filterTriggerPullWorkOrders()" [(ngModel)]="orgFilter.str" placeholder="{{ 'filters.searchHere' | translate }}">
+            <button         *ngIf="orgFilter.filter.length > 0 || orgFilter.str.length > 0"
+                            matSuffix
+                            matTooltip="{{ 'filters.clear' | translate }}"
+                            matTooltipPosition="above"
+                            mat-icon-button
+                            (click)="clearFilter(orgFilter)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+        </mat-form-field>
+        <div class="filter-checkbox" *ngFor="let wo of orgFilter.current" (click)="orgFilter.setFilter(wo); filter(); $event.stopPropagation()">
+    <mat-checkbox [value]="wo.org" [checked]="orgFilter.filter.includes(wo.org)">
+        {{wo.org}}</mat-checkbox>
+        </div>
+</mat-menu> -->
+
+    <!-- Equipment Properties filter sub-menu -->
+    <mat-menu #filterEquipmentPropertiesMenu="matMenu" xPosition="before" class="filter-ep-submenu">
+        <ng-container *ngTemplateOutlet="equipmentPropertiesFilter"></ng-container>
+    </mat-menu>
+
+    <!-- QR scanner window -->
+    <div>
+        <button  [ngClass]="scanState()" (click)="closeQrCode()"  class="close-qr-scanner">X</button>
+        <div class="qr-scanner" id="reader">
+        </div>
+    </div>
+
+    <ng-template #equipmentPropertiesFilter>
+        <div class="ep-section" (click)="$event.stopPropagation()">
+            <div class="ep-inner-section">
+                <span class="text-danger" *ngIf="filterEPField == '' && filterEPStr != ''">{{ 'home.equipmentPropertyFilterWarning' | translate }}</span>
+                <div class="ep-filter-boxes">
+                    <mat-form-field appearance="outline" class="ep-box1">
+                        <mat-label>{{ 'home.equipmentProperty' | translate | lowercase }}</mat-label>
+                        <mat-select [(ngModel)]="filterEPField" placeholder="{{ 'filters.selectOne' | translate }}">
+                            <div *ngFor="let epName of equipmentPropertiesList">
+                                <mat-option [value]="epName">{{epName}}</mat-option>
+                            </div>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="ep-box2">
+                        <mat-label>{{ 'filters.filter' | translate }}</mat-label>
+                        <input matInput type="text" [(ngModel)]="filterEPStr" (keyup.enter)="filter();" (keyup.shift.enter)="filter();" placeholder="{{ 'filters.filterHere' | translate }}">
+                        <div class="inline" matSuffix>
+                            <button matTooltip="{{ 'filters.filter' | translate }}" matTooltipPosition="above"
+                                mat-icon-button aria-label="Clear" (click)="filter();">
+                                <mat-icon>search</mat-icon>
+                            </button>
+                            <button
+                                matTooltip="{{ 'home.reset' | translate }}"
+                                matTooltipPosition="above"
+                                mat-icon-button
+                                (click)="resetEquipmentPropertiesFilter()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+</div>
+

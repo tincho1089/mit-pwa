@@ -1,0 +1,54 @@
+<div class="inspection-detail">
+    <div class="title-row">
+        <div class="col-12">
+            <mat-card class="card form-inline">
+                <mat-card-header>
+                    <mat-card-title-group>
+                        <mat-card-title>
+                            <h3 class="text-dark" *ngIf="inspectionDetailsService.workorder">
+                                <div class="wo-code-container">
+                                    <span>{{inspectionDetailsService.workorder.code}}</span>
+                                    <mat-icon (click)="openWeb()" matTooltip="{{ 'inspection.openWeb' | translate }}">open_in_new</mat-icon>
+                                </div>
+                                {{equipmentTitleLabel}}
+                            </h3>
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            <h5 class="text-dark" *ngIf="inspectionDetailsService.workorder">
+                                {{inspectionDetailsService.workorder.inspectionType}}
+                                <span *ngIf="showRevisionVersion()">[Rev. {{inspectionDetailsService.workorder.revisionVersion}}]</span>
+                            </h5>
+                        </mat-card-subtitle>
+                    </mat-card-title-group>
+                </mat-card-header>
+            </mat-card>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <mat-tab-group (selectedTabChange)="changeProjectTab($event)"
+            [(selectedIndex)]="selectedProjectIndex">
+                <mat-tab label="{{ 'wo.overview' | translate }}">
+                    <ng-template matTabContent>
+                        <app-wo-equipment-tab [inspection]="inspectionDetailsService.workorder"></app-wo-equipment-tab>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab label="{{ 'wo.general' | translate }}">
+                    <ng-template matTabContent>
+                        <app-general-tab [inspection]="inspectionDetailsService.workorder"></app-general-tab>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab label="{{ 'wo.detail' | translate }}">
+                    <ng-template matTabContent>
+                        <app-detail-tab [inspection]="inspectionDetailsService.workorder"></app-detail-tab>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab label="{{ 'wo.summary' | translate }}">
+                    <ng-template matTabContent>
+                        <app-summary-tab [inspection]="inspectionDetailsService.workorder"></app-summary-tab>
+                    </ng-template>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

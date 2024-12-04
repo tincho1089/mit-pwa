@@ -1,0 +1,96 @@
+.wo-code {
+    font-weight: bold;
+    color: black;
+    text-transform: lowercase;
+}
+
+.wo-description {
+    color: gray;
+    text-transform: lowercase;
+    margin-left: 5px;
+}
+
+.imported {
+    background-color: #fcf;
+}
+
+.status-container {
+    float: right;
+}
+.wo-header {
+    justify-content: space-between;
+}
+
+.wo-status {
+    padding: 5px 10px;
+    font-weight: 500;
+    color: #fff;
+    margin: -5px -3px 0 0;
+    border-bottom-left-radius: 10px;
+    box-shadow:  2px -2px #0002 inset;
+}
+.wo-card-content {
+    display: flex;
+    justify-content: space-between;
+}
+.wo-information {
+    display: flex;
+    justify-content: flex-start;
+    width: 80%;
+}
+.wo-information>div {
+    margin: 5px
+}
+mat-card {
+    margin: 5px 0;
+}
+mat-card-header {
+    padding: 5px 3px 5px 5px;
+}
+mat-card-content {
+    padding: 5px 0px 5px 8px;
+}
+.mat-mdc-card-content:last-child {
+    padding-bottom: 0px;
+}
+
+.wo-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+button {
+    max-height: 40px;
+    margin-right: 0 !important; 
+    margin: 5px !important;
+    text-transform: lowercase;
+    /* blame nextpage for the use of important */
+}
+.wo-prop > span {
+    margin: 0px 2px;
+}  
+
+@media screen and (max-width: 768px) {
+    .wo-information, .wo-card-content {
+        flex-wrap: wrap;
+    }
+}
+
+mat-icon{
+    vertical-align: top;
+    margin-left: 5px;
+    color: gray;
+}
+
+.ep-filter-label-box {
+    background-color: #EFF6FC;
+    padding: 1%;
+    align-self: center;
+    justify-self: center;
+    max-width: fit-content;
+  }
+  
+  .bold {
+    font-weight: bold;
+  }

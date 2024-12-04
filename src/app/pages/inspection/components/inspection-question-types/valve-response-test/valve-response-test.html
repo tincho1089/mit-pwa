@@ -1,0 +1,99 @@
+<div *ngIf="showControl" [formGroup]="form">
+  <div [formGroup]="form">
+    <div [formGroupName]="section">
+      <div [formGroup]="formGroup" *ngIf="formGroup && editable">
+        <div formGroupName="details">
+          <div class="row pt-3">
+            <div class="col-6">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'valve.Min Response Time' | translate }}</mat-label>
+                <input title="Minimum Response Time" matInput type="number" formControlName="Minimum Response Time"
+                  [id]="'input-' + response.questionId +'-MinimumResponseTime'" />
+                <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                  {{ 'valve.seconds' | translate }}
+                </span>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row" *ngIf="maxResponseTime">
+            <div class="col-3">
+              <mat-label>
+                {{ 'valve.Max Response Time' | translate }}
+              </mat-label>
+            </div>
+            <div class="col-6">
+              <span class="config-value">{{ formGroup?.get('details.Maximum Response Time')?.value }} {{ 'valve.seconds'
+                |
+                translate }}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'valve.Actual Response Time' | translate }}</mat-label>
+                <input title="Actual Response Time" matInput type="number" formControlName="Actual Response Time"
+                  [id]="'input-' + response.questionId +'-ActualResponseTime'" />
+                <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                  {{ 'valve.seconds' | translate }}
+                </span>
+              </mat-form-field>
+            </div>
+
+          </div>
+        </div>
+        <div formGroupName="passFail">
+          <div class="row">
+            <div class="col-3 pb-3">
+              <mat-label [ngClass]="formGroup.get('passFail.PassFail').value === 'Fail' ? 'fail':'pass'">
+                {{ 'commons.' + formGroup.get('passFail.PassFail').value |
+                translate }}
+              </mat-label>
+            </div>
+            <div class="col-6" *ngIf="formGroup.get('passFail.PassFail').value === 'Fail'">
+
+              <app-dropdown-search
+              [appearance]="'outline'"
+              [sectionArray]="sectionArray"
+              [response]="response"
+              [idSelect]="'select-' + response.questionId + '-FailureCode'"
+              [parentParentForm]="form"
+              [label]="'commons.Failure Code' | translate"
+              [controlName]="'FailureCode'"
+              [options]="failOptions"
+              [detailsGroup]="true"
+              [detailsGroupName]="'passFail'">
+            </app-dropdown-search>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!editable">
+        <div *ngFor="let entry of formGroup.get('details')['controls'] | keys">    
+        <table class="summary-responses">
+          <tr class="divider">
+            <th class="summary-responses">
+              {{ entry.key | translate }}
+            </th>
+            <td class="summary-responses">
+              {{ formGroup.get('details.' + entry.key).value }}
+                {{ entry.key === 'Valve Response' ? ('valve.inches' | translate) : ('valve.seconds' |
+                translate) }}
+            </td>
+          </tr>
+      </table>
+        </div>
+        <table class="summary-responses">
+          <tr class="divider">
+            <th class="summary-responses">
+              {{ formGroup.get('passFail.PassFail').value }}
+            </th>
+            <td class="summary-responses" *ngIf="formGroup.get('passFail.PassFail').value === 'Fail'">
+              {{ formGroup.get('passFail.FailureCode').value }}
+            </td>
+          </tr>
+      </table>
+      </div>
+
+    </div>
+  </div>

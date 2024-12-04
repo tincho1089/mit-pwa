@@ -1,0 +1,266 @@
+<div class="row wo-equipment">
+    <div class="col-4 equipment-col">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title-group>
+                    <mat-card-title>
+                        <h4>{{'inspection.workorder' | translate}}</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle></mat-card-subtitle>
+                </mat-card-title-group>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list *ngIf="inspection">
+                    <mat-list-item lines="2">
+                        <span matListItemTitle class="text-dark bold">{{ 'inspection.workorderCode' | translate
+                            }}:</span>
+                        <span class="strong">{{inspection.code}}<mat-icon (click)="openWeb()" matTooltip="{{ 'inspection.openWeb' | translate }}">open_in_new</mat-icon></span>
+                    </mat-list-item>
+                    <mat-list-item lines="2">
+                        <span matListItemTitle class="text-dark bold">{{ 'inspection.workorderDesc' | translate
+                            }}:</span>
+                        <span class="strong">{{inspection.description}}</span>
+                    </mat-list-item>
+                    <mat-list-item lines="2">
+                        <span matListItemTitle class="text-dark bold">{{ 'commons.assignedTo' | translate }}:</span>
+                        <span class="strong">{{inspection.userName}}</span>
+                    </mat-list-item>
+                    <mat-list-item lines="2">
+                        <span matListItemTitle class="text-dark bold">{{ 'commons.status' | translate }}:</span>
+                        <ng-container [ngSwitch]="inspection.aiInternalStatus">
+                            <ng-container *ngSwitchCase="0">
+                                <span class="strong">{{ 'status.not started' | translate }}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="1">
+                                <span class="strong">{{ 'status.in progress' | translate }}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="2">
+                                <span class="strong">{{ 'status.completed' | translate }}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="3">
+                                <span class="strong">{{ 'status.returned' | translate }}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="99">
+                                <span class="strong">{{ 'status.submitted' | translate }}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="100">
+                                <span class="strong">{{ 'status.unassigned' | translate }}</span>
+                            </ng-container>
+                        </ng-container>
+                    </mat-list-item>
+                    <mat-list-item lines="2">
+                        <span *ngIf="inspection.aiInternalStatus === 3" matListItemTitle class="text-dark bold">{{
+                            'answer.comments' | translate }}:</span>
+                        <span *ngIf="inspection.aiInternalStatus === 3"
+                            class="text-light-red">{{inspection.returnComment}}</span>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col-4 equipment-col">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title-group>
+                    <mat-card-title>
+                        <h4>{{'inspection.equipment' | translate}}</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle></mat-card-subtitle>
+                </mat-card-title-group>
+            </mat-card-header>
+            <mat-card-content *ngIf="inspection">
+                <mat-list>
+                    <mat-list-item lines="2">
+                        <span matListItemTitle class="text-dark bold">{{'inspection.equipmentNumber' |
+                            translate}}:</span>
+                        <span class="strong">{{inspection.equipmentCode}}</span>
+                    </mat-list-item>
+                    <mat-list-item lines="2">
+                        <span matListItemTitle class="text-dark bold">{{'inspection.equipmentDescription' |
+                            translate}}:</span>
+                        <span class="strong">{{inspection.equipmentDescription}}</span>
+                    </mat-list-item>
+                    <mat-list-item lines="2">
+                        <span matListItemTitle class="text-dark bold">{{'inspection.equipmentClass' |
+                            translate}}:</span>
+                        <span class="strong">{{inspection.equipmentClassDesc}}</span>
+                    </mat-list-item>
+                    <mat-list-item lines="2">
+                        <span matListItemTitle class="text-dark bold">{{'filters.area' | translate}}:</span>
+                        <span class="strong">{{inspection.area}}</span>
+                    </mat-list-item>
+                    <mat-list-item lines="2">
+                        <span matListItemTitle class="text-dark bold">{{'filters.subArea' | translate}}:</span>
+                        <span class="strong">{{inspection.department}}</span>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col-4 equipment-col file-table">
+        <mat-card class="files-card">
+            <mat-card-header>
+                <mat-card-title-group>
+                    <mat-card-title>
+                        <h4>{{ 'files.files' | translate }}</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle></mat-card-subtitle>
+                </mat-card-title-group>
+            </mat-card-header>
+            <mat-card-content class="filesTable">
+                <ng-container *ngIf="filesDataSource == null">
+                    <p class="text-center">{{ 'files.none' | translate }}</p>
+                </ng-container>
+                <mat-table *ngIf="filesDataSource != null" mat-table [dataSource]="filesDataSource">
+                    <ng-container matColumnDef="fileName">
+                        <mat-header-cell *matHeaderCellDef>{{ 'files.name' | translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let file">{{file.docName}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef>{{ 'commons.actions' | translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let file; let i = index">
+                            <a class="downloadlink ml-3" [download]="file.docName" [href]="file.fileURI">
+                                <mat-icon class="hover">vertical_align_bottom</mat-icon>
+                            </a>
+                            <span *ngIf="file.docName?.toLowerCase().includes('.png')
+                            || file.docName?.toLowerCase().includes('.webp')
+                            || file.docName?.toLowerCase().includes('.gif')
+                            || file.docName?.toLowerCase().includes('.svg+xml')
+                            || file.docName?.toLowerCase().includes('.jpeg')
+                            || file.docName?.toLowerCase().includes('.jpg')"
+                            (click)="previewImage(file, i)">
+                                <mat-icon>zoom_out_map</mat-icon>
+                        </span>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="['fileName', 'actions']"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: ['fileName', 'actions']; let i = index"></mat-row>
+                </mat-table>
+            </mat-card-content>
+            <mat-card-actions>
+                <div class="col-12">
+                    <input type="file" (click)="clearFile($event)" id="fileSelect" (change)="fileUploaded($event)"
+                        multiple>
+                    <a class="button btn btn-primary text-white"
+                        onclick="document.getElementById('fileSelect').click();">{{ 'files.upload' | translate }}</a>
+                </div>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
+
+<div class="row wo-equipment" *ngIf="equipmentDetails">
+    <div class="col-12">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title-group>
+                    <mat-card-title>
+                        <h4 class="equip-details">{{ 'equipment.equipmentDetails' | translate }}</h4>
+                    </mat-card-title>
+                    <mat-card-subtitle></mat-card-subtitle>
+                </mat-card-title-group>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="row hidden-sm-down">
+                    <div class="col-4">
+                        <mat-label><b>{{ 'equipment.fieldName' | translate | lowercase }}</b></mat-label>
+                    </div>
+                    <div class="col-4">
+                        <mat-label><b>{{ 'equipment.currentValue' | translate | lowercase }}</b></mat-label>
+                    </div>
+                    <div class="col-4">
+                        <mat-label><b>{{ 'equipment.updatedValue' | translate | lowercase }}</b></mat-label>
+                    </div>
+                </div>
+                <form [formGroup]="equipmentDetailsForm">
+                    <div formArrayName="visionDetails" *ngIf="grouping.length > 0">
+                        <div *ngFor="let group of grouping; let j = index" [formGroupName]="j">
+                            <div class="row" *ngIf="group.sectionName">
+                                <div class="col-12">{{group.sectionName}}</div>
+                            </div>
+                            <div formArrayName="visions">
+                                <div class="row" *ngFor="let vision of group.visions;let i = index" [formGroupName]="i">
+                                    <div class="col-4">
+                                        <mat-label>
+                                            <span>{{ vision.fieldName }}</span>
+                                            <span class="current" *ngIf="vision.units">
+                                                - ({{ vision.units | uppercase }})
+                                            </span>
+                                        </mat-label>
+                                    </div>
+                                    <div class="col-9" *ngIf="vision.fieldType === 'Link'">
+                                        <mat-label>{{ vision.currVal }}</mat-label>
+                                    </div>
+                                    <div class="col-4" *ngIf="vision.fieldType !== 'Link'">
+                                        <mat-label>{{ vision.currVal }}</mat-label>
+                                    </div>
+                                    <div class="col-4" *ngIf="vision.fieldType !== 'Not Editable'">
+                                        <mat-form-field appearance="outline">
+                                            <ng-container
+                                                *ngIf="vision.fieldType === 'Text' || vision.fieldType === 'GPS'; else stringNumberDropdown">
+                                                <input type="text" matInput formControlName="updatedVal"
+                                                    [id]="'input-' + vision.fieldName" placeholder="...">
+                                            </ng-container>
+                                            <ng-template #stringNumberDropdown>
+                                                <ng-container *ngIf="vision.fieldType === 'String'">
+                                                    <input type="text" matInput formControlName="updatedVal"
+                                                        [id]="'input-' + vision.fieldName" placeholder="...">
+                                                </ng-container>
+                                                <ng-container *ngIf="vision.fieldType === 'Number'">
+                                                    <input type="number" matInput formControlName="updatedVal"
+                                                        placeholder="0.0">
+                                                </ng-container>
+                                                <ng-container *ngIf="vision.fieldType === 'Dropdown'">
+                                                    <mat-select matInput formControlName="updatedVal">
+                                                        <mat-option *ngFor="let option of vision.jsonOptions"
+                                                            [value]="option.Value">{{option.Name}}</mat-option>
+                                                    </mat-select>
+                                                </ng-container>
+                                            </ng-template>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4"
+                                        *ngIf="vision.fieldType === 'Not Editable' && ([null, undefined, ''].indexOf(vision.currVal) > -1)">
+                                        <mat-form-field appearance="outline">
+                                            <input type="text" matInput formControlName="updatedVal"
+                                                [id]="'input-updatedVal-'+vision.fieldName" placeholder="...">
+                                        </mat-form-field>
+                                    </div>
+
+                                    <hr style="width:100%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<!--Meridium Details-->
+<ng-container *ngIf="meridiumDetails && inspection.meridiumData">
+    <app-meridium-details [meridiumDetails]="meridiumDetails"></app-meridium-details>
+</ng-container>
+<!--Meridium Details-->
+
+<!--Meridium TML-->
+<ng-container *ngIf="tmlDetails && showMeridiumTml">
+    <app-tml-detail-meridium [tmlDetails]="tmlDetails"></app-tml-detail-meridium>
+</ng-container>
+<!--Meridium TML-->
+
+<!--TML Component-->
+<ng-container *ngIf="tmlDetails && !showMeridiumTml">
+        <app-tml-detail [tmlDetails]="tmlDetails"></app-tml-detail>
+</ng-container>
+<!--TML Component-->
+
+<div class="row wo-equipment col-12">
+
+    <a class="button btn btn-primary text-white" (click)="resetInspection()">{{ 'inspection.reset' | translate }}</a>
+    <a class="button btn bg-dark-orange text-white" (click)="exportInspection()">{{ 'inspection.export' | translate
+        }}</a>
+    <a class="button btn bg-secondary text-white" (click)="openWeb()">{{ 'inspection.openWeb' | translate }}</a>
+    <a class="button btn bg-medium-teal text-white" (click)="exportImages()">{{ 'inspection.exportImages' | translate }}</a>
+</div>

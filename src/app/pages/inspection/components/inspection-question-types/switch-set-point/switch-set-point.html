@@ -1,0 +1,267 @@
+<div class="controls" *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section">
+    <div [formGroup]="formGroup" *ngIf="editable && formGroup">
+      <div formGroupName="details" *ngIf="editable" fxLayout="row" fxLayoutAlign="space-between center" class="row-gap">
+        <div fxFlex="45" fxFlex.sm="100">
+          <mat-form-field appearance="outline" class="mat-form-field-full-width">
+            <mat-label>{{ 'switchSetPoint.Switch Set Point' | translate}}</mat-label>
+            <input matInput type="text" formControlName="Switch Set Point" />
+            <mat-icon matSuffix>percent</mat-icon>
+          </mat-form-field>
+        </div>
+        <div fxFlex="45" fxFlex.sm="100">
+          <mat-form-field appearance="outline" class="mat-form-field-full-width">
+            <mat-label>{{ 'switchSetPoint.Accuracy' | translate}}</mat-label>
+            <input matInput type="text" formControlName="Accuracy" />
+            <mat-icon matSuffix>percent</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div formGroupName="details" *ngIf="editable" fxLayout="row" fxLayoutAlign="space-between center" class="row-gap">
+        <div fxFlex="45" fxFlex.sm="100">
+
+          <mat-form-field appearance="outline" class="mat-form-field-full-width">
+            <mat-label>{{ 'switchSetPoint.As Found Switch Trip Point' | translate}}</mat-label>
+            <input matInput type="text" formControlName="As Found Switch Trip Point" />
+            <mat-icon matSuffix>percent</mat-icon>
+          </mat-form-field>
+        </div>
+        <div fxFlex="45" fxFlex.sm="100">
+          <div class="mat-form-field-full-width" style="padding-bottom: 35px;">
+            <mat-label class="errorLabel">
+              <b>{{ 'commons.percentError' | translate }}: <span [ngClass]="{'percentError': !isValidError(formGroup.get('details.' + 'As Found Error').value), 
+                'percentValid': isValidError(formGroup.get('details.' +'As Found Error').value) &&
+                 (!!formGroup.get('details.' + 'As Found Error').value || formGroup.get('details.'+ 'As Found Error').value == '0')}">{{ formGroup.get('details.As Found Error').value}}%</span></b>
+            </mat-label>
+          </div>
+
+        </div>
+      </div>
+      <div formGroupName="asFoundResult" *ngIf="editable" fxLayout="row" fxLayoutAlign="space-between center"
+        class="row-gap">
+        <div fxFlex="45" fxFlex.sm="100">
+          <div class="mat-form-field-full-width" style="padding-bottom: 35px;" *ngIf="formGroup.get('asFoundResult.PassFail')?.value?.length > 0">
+            <mat-label>{{ 'switchSetPoint.As Found Result' | translate}}</mat-label>
+            <mat-label [ngClass]="formGroup.get('asFoundResult.PassFail').value === 'Fail' ? 'fail':'pass'">
+              {{'commons.' + formGroup.get('asFoundResult.PassFail').value | translate}}
+            </mat-label>
+          </div>
+
+        </div>
+        <div fxFlex="45" fxFlex.sm="100" *ngIf="formGroup.get('asFoundResult.PassFail').value === 'Fail'">
+          
+          <app-dropdown-search
+            [appearance]="'outline'"
+            [parentParentForm]="form"
+            [sectionArray]="sectionArray"
+            [label]="'commons.Failure Code' | translate"
+            [controlName]="'FailureCode'"
+            [idSelect]="'select-' + response.questionId"
+            [options]="failOptions"
+            [detailsGroup]="true"
+            [detailsGroupName]="'asFoundResult'">
+          </app-dropdown-search>
+
+        </div>
+      </div>
+      <div formGroupName="details" *ngIf="formGroup.get('asFoundResult.PassFail').value === 'Fail'" fxLayout="row"
+        fxLayoutAlign="space-between center" class="row-gap">
+        <div fxFlex="45" fxFlex.sm="100">
+
+          <mat-form-field appearance="outline" class="mat-form-field-full-width">
+            <mat-label>{{ 'switchSetPoint.As Left Switch Trip Point' | translate}}</mat-label>
+            <input matInput type="text" formControlName="As Left Switch Trip Point" />
+            <mat-icon matSuffix>percent</mat-icon>
+          </mat-form-field>
+        </div>
+        <div fxFlex="45" fxFlex.sm="100">
+          <div class="mat-form-field-full-width" style="padding-bottom: 35px;">
+            <mat-label class="errorLabel">
+              <b>{{ 'commons.percentError' | translate }}: <span [ngClass]="{'percentError': !isValidError(formGroup.get('details.' + 'As Left Error').value), 
+                'percentValid': isValidError(formGroup.get('details.' +'As Left Error').value) &&
+                 (!!formGroup.get('details.' + 'As Left Error').value || formGroup.get('details.'+ 'As Left Error').value == '0')}">{{ formGroup.get('details.As Left Error').value}}%</span></b>
+            </mat-label>
+          </div>
+        </div>
+      </div>
+      <div formGroupName="asLeftResult" *ngIf="formGroup.get('asFoundResult.PassFail')?.value  === 'Fail'"
+        fxLayout="row" fxLayoutAlign="space-between center" class="row-gap">
+        <div fxFlex="45" fxFlex.sm="100">
+          <div class="mat-form-field-full-width" style="padding-bottom: 35px;" *ngIf="formGroup.get('asLeftResult.PassFail')?.value?.length > 0">
+            <mat-label>{{ 'switchSetPoint.As Left Result' | translate}}</mat-label>
+            <mat-label [ngClass]="formGroup.get('asLeftResult.PassFail').value === 'Fail' ? 'fail':'pass'">
+              {{'commons.' + formGroup.get('asLeftResult.PassFail').value | translate}}
+            </mat-label>
+          </div>
+
+        </div>
+        <div fxFlex="45" fxFlex.sm="100" *ngIf="formGroup.get('asLeftResult.PassFail').value === 'Fail'">
+
+          <app-dropdown-search
+            [appearance]="'outline'"
+            [parentParentForm]="form"
+            [sectionArray]="sectionArray"
+            [label]="'commons.Failure Code' | translate"
+            [controlName]="'FailureCode'"
+            [idSelect]="'select-' + response.questionId"
+            [options]="failOptions"
+            [detailsGroup]="true"
+            [detailsGroupName]="'asLeftResult'">
+          </app-dropdown-search>
+
+        </div>
+      </div>
+      <div *ngIf="!editable" fxLayout="row" fxLayoutAlign="space-between start" class="row-gap">
+        <div fxFlex="45" fxFlex.sm="100" *ngFor="let controlName of formGroup.get('details').value | keys">
+          <ng-container *ngIf="controlName !== 'Span Unit' && !controlName.includes('Error')">
+            <mat-label>{{ 'switchSetPoint.' + controlName | translate}}</mat-label>
+            <span>{{ formGroup.get('details').get(controlName).value }}</span>
+            <span class="text info" *ngIf="controlName !== 'Accuracy'">{{ formGroup.get('details.Span Unit').value
+              }}</span>
+            <span class="text info" *ngIf="controlName === 'Accuracy'">%</span>
+          </ng-container>
+        </div>
+      </div>
+      <div *ngIf="!editable" fxLayout="row" fxLayoutAlign="center center" class="row-gap">
+        <div fxFlex="45" fxFlex.sm="100">
+          <b> {{ 'switchSetPoint.As Found Result' | translate}}</b>
+          <span *ngIf="!!formGroup.get('asFoundResult.PassFail').value" class="text rounded" [attr.data-is-valid]="
+                formGroup.get('asFoundResult.PassFail').value === 'Pass'
+              ">
+            {{ 'commons.' + formGroup.get('asFoundResult.PassFail').value | translate }}
+          </span>
+        </div>
+        <div fxFlex="45" fxFlex.sm="100" *ngIf="formGroup.get('asFoundResult.PassFail').value === 'Fail'">
+          <b>{{'commons.Failure Code' | translate}}</b>
+          <span class="text">{{ formGroup.get('asFoundResult.FailureCode').value }}</span>
+        </div>
+      </div>
+      <div *ngIf="!editable && formGroup.get('asFoundResult.PassFail').value === 'Fail'" fxLayout="row"
+        fxLayoutAlign="center center" class="row-gap">
+        <div fxFlex="45" fxFlex.sm="100">
+          <b> {{ 'switchSetPoint.As Left Result' | translate}}</b>
+          <span *ngIf="!!formGroup.get('asLeftResult.PassFail').value" class="text rounded" [attr.data-is-valid]="
+                formGroup.get('asLeftResult.PassFail').value === 'Pass'
+              ">
+            {{ 'commons.' + formGroup.get('asLeftResult.PassFail').value | translate }}
+          </span>
+        </div>
+        <div fxFlex="45" fxFlex.sm="100" *ngIf="formGroup.get('asLeftResult.PassFail').value === 'Fail'">
+          <b>{{'commons.Failure Code' | translate}}</b>
+          <span class="text">{{ formGroup.get('asLeftResult.FailureCode').value }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!editable">
+
+      <table class="summary-responses">
+        <tbody *ngIf="formGroup.get('details')">
+
+          <tr *ngFor="let entry of formGroup.get('details')['controls'] | keys">
+
+            <td style="margin-bottom: 0px;padding-bottom: 0px;padding-top: 0%;">
+              <div class="row" *ngIf="entry.key !== 'Span Unit' && !entry.key.includes('Error')">
+                <div class="col-6">
+                  <mat-label><b>{{ 'switchSetPoint.' + entry.key | translate}}</b></mat-label>
+                </div>
+                <div class="col-6">
+                  <span>{{ formGroup?.get('details.' + entry.key)?.value }}</span>
+                  <span *ngIf="entry.key !== 'Accuracy'"><b> {{ formGroup?.get('details.Span Unit').value }}</b></span>
+                  <span *ngIf="entry.key === 'Accuracy'"><b> %</b></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="formGroup.get('asFoundResult.PassFail')?.value?.length > 0">
+            <td style="margin-bottom: 0px;padding-bottom: 0px;">
+              <div class="row">
+                <div class="col-6">
+                  <mat-label><b>{{ 'switchSetPoint.' + 'As Found Error' | translate}}</b></mat-label>
+                </div>
+                <div class="col-6">
+                  <mat-label style="padding: 6px;" [ngClass]="formGroup.get('asFoundResult.PassFail').value === 'Fail' ? 
+                              'percentError':'percentValid'">
+                    {{ formGroup?.get('details.' + 'As Found Error')?.value }} %</mat-label>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="formGroup.get('asFoundResult.PassFail')?.value  === 'Fail' && 
+                      formGroup.get('asLeftResult.PassFail')?.value?.length > 0">
+            <td style="margin-bottom: 0px;padding-bottom: 0px;">
+              <div class="row">
+                <div class="col-6">
+                  <mat-label><b>{{ 'switchSetPoint.' + 'As Left Error' | translate}}</b></mat-label>
+                </div>
+                <div class="col-6">
+                  <mat-label style="padding: 6px;"
+                    [ngClass]="formGroup.get('asLeftResult.PassFail')?.value === 'Fail' ? 'percentError':'percentValid'">
+                    {{ formGroup?.get('details.' + 'As Left Error' )?.value }} %</mat-label>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="margin-bottom: 0px;padding-bottom: 0px;">
+              <div class="row">
+                <div class="col-12">
+                  <mat-label><b>{{ 'switchSetPoint.As Found Result' | translate}}</b></mat-label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <mat-label *ngIf="!!formGroup.get('asFoundResult.PassFail').value"
+                    [ngClass]="formGroup.get('asFoundResult.PassFail').value === 'Fail' ? 'fail':'pass'">
+                    {{ 'commons.' + formGroup.get('asFoundResult.PassFail').value |
+                    translate }}
+                  </mat-label>
+
+                </div>
+                <div class="col-6" *ngIf="formGroup.get('asFoundResult.PassFail').value === 'Fail'">
+                  <b>{{'commons.Failure Code' | translate}}</b>
+                  <mat-label class="text">
+                    {{ formGroup.get('asFoundResult.FailureCode').value }}
+                  </mat-label>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="!editable && formGroup.get('asFoundResult.PassFail').value === 'Fail'" justify-content-center>
+
+
+            <td style="margin-bottom: 0px;padding-bottom: 0px;">
+              <div class="row">
+                <div class="col-12">
+                  <strong> {{ 'switchSetPoint.As Left Result' | translate}}</strong>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <mat-label *ngIf="!!formGroup.get('asLeftResult.PassFail').value"
+                    [ngClass]="formGroup.get('asLeftResult.PassFail').value === 'Fail' ? 'fail':'pass'"
+                    [attr.data-is-valid]="
+                    formGroup.get('asLeftResult.PassFail').value === 'Pass'
+                    ">
+                    {{ 'commons.' + formGroup.get('asLeftResult.PassFail').value |
+                    translate }}
+                  </mat-label>
+                </div>
+                <div class="col-6" *ngIf="formGroup.get('asLeftResult.PassFail').value === 'Fail'">
+                  <b>{{'commons.Failure Code' | translate}}</b>
+                  <mat-label class="text">
+                    {{ formGroup.get('asLeftResult.FailureCode').value }}
+                  </mat-label>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

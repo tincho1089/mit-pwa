@@ -1,0 +1,75 @@
+:host {
+    .mat-mdc-dialog-actions {
+        justify-content: center;
+        .button{
+            margin: 5px !important;
+            margin-top: 0px !important;
+            margin-bottom: 0px !important;
+        }
+    }
+    .photo-btn {
+        .mat-icon {
+            margin-bottom:-7px;
+            margin-right: 5px;
+        }
+        span {
+            display: inline-block;
+        }
+    }
+}
+.canvas-nav {
+  justify-content: center;
+}
+
+
+  .brush-button, .text-button {
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-family: 'Material Icons' !important;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px !important;
+    width: 20px;
+    height: 20px;
+  }
+
+  .icon-button {
+    margin-left: auto;
+    margin-right: auto;
+    display: block !important;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-family: 'Material Icons' !important;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px !important;
+    width: 20px;
+    height: 20px;
+  }
+
+
+
+  #copy-icon {
+    font-size: 24px;
+    color: #0b2d71;
+    font-family: "Chevron";
+    cursor: pointer;
+  }
+
+  .button-flex{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .mat-mdc-dialog-content {
+     max-height: 75vh;
+}

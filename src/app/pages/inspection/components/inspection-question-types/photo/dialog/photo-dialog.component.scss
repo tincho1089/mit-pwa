@@ -1,0 +1,48 @@
+:host {
+    button {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        mat-icon {
+            font-size: 2em;
+            font-weight: bold;
+            height: auto;
+            width: auto;
+            cursor: pointer;
+            transition: color ease-in-out .2s, transform linear .2s;
+            color: #0b2d71;
+        }
+    }
+    button:disabled {
+        mat-icon {
+            color: #666;
+            cursor: default;
+        }
+    }
+
+    .flex-center {
+        display: flex;
+        justify-content: center;
+    }
+
+    .web-cam-container {
+        @extend .flex-center;
+    }
+
+    .card-column-buttons {
+        @extend .flex-center;
+
+        .button {
+            margin: 15px !important;
+        }
+    }
+    .photo-btn {
+        .mat-icon {
+            margin-bottom:-7px;
+            margin-right: 5px;
+        }
+        span {
+            display: inline-block;
+        }
+    }
+}

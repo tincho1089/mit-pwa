@@ -1,0 +1,41 @@
+<h3 mat-dialog-title class="pt-3 pb-3">{{ 'filters.deleteInspection' | translate }}</h3>
+<div mat-dialog-content>
+    <div class="row warn text-danger">
+        {{ 'filters.deleteInspectionWarn' | translate }}
+    </div>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <mat-form-field appearance="outline">
+                <mat-label>{{ 'filters.deleteInspection2' | translate }}</mat-label>
+                <mat-select [formControl]="inspectionList" multiple>
+                    <mat-select-trigger>
+                        <ul class="pt-2 nolist" *ngIf="inspectionList.value">
+                            <li *ngFor="let value of inspectionList.value">
+                                {{ value }}
+                            </li>
+                        </ul>
+                    </mat-select-trigger>
+                    <mat-option *ngFor="let workorder of workorders" [value]="workorder.code">
+                        {{ workorder.code }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-1"></div>
+    </div>
+    <div class="row flex-around">
+        <div>
+            <button mat-button class="button btn btn-primary text-white" [disabled]="inspectionList.value.length > 0 ? false : true" cdkFocusInitial
+            (click)="onDelete(inspectionList.value)">
+                {{ 'commons.delete' | translate }}
+            </button>
+        </div>
+        <div>
+            <button mat-button class="button btn btn-primary text-white " [mat-dialog-close]="true" cdkFocusInitial>
+                {{ 'commons.cancel' | translate }}
+            </button>
+        </div>
+        
+    </div>
+</div>

@@ -1,0 +1,92 @@
+.wo-equipment {
+  .equipment-col {
+    margin-bottom: inherit !important;
+  }
+  margin: 11px 0 11px !important;
+
+  .mat-mdc-card-title-group {
+    display: block !important;
+  }
+
+  caption {
+    display: none;
+  }
+
+  .mat-elevation-z8 {
+    box-shadow: none;
+  }
+
+  h3 {
+    text-align: left;
+    text-transform: lowercase;
+  }
+  h4 {
+    text-transform: lowercase;
+  }
+
+  .custom-list {
+    .mdc-list-item.mdc-list-item--with-three-lines {
+      height: 110px;
+    }
+  }
+
+  .mat-column-actions {
+    flex: 0 0 30%;
+  }
+
+  .btn {
+    margin-bottom: 5px !important;
+  }
+
+  mat-header-cell {
+    font-family: "GothamBold", Arial, sans-serif;
+    font-size: 14px;
+    text-transform: lowercase;
+    padding: 2px;
+  }
+
+  mat-cell {
+    font-family: "GothamNarrowBook", Arial, sans-serif;
+    font-size: 14px;
+    padding: 0px;
+  }
+
+  ::ng-deep .mat-mdc-list-item-title {
+    text-transform: lowercase;
+  }
+
+  .equip-details {
+    padding-bottom: 30px;
+    text-transform: lowercase;
+  }
+
+  .files-card {
+    height: 100%;
+  }
+
+  .mat-mdc-form-field {
+    padding-top: 2% !important;
+  }
+
+  .downloadlink {
+    font-size: 24px;
+    line-height: 24px;
+    color: rgba(0, 0, 0, 0.87);
+    border-bottom: none;
+    margin: 0px;
+  }
+  #fileSelect {
+    display: none;
+  }
+  .filesTable{
+    max-height: 280px;
+    overflow-y: auto;
+  }
+  mat-icon{
+    font-size: 17px;
+    vertical-align: middle;
+    margin-top: 2px;
+    margin-left: 4px;
+    cursor: pointer;
+  }
+}

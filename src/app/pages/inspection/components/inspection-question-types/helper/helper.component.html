@@ -1,0 +1,175 @@
+<div class="helper">
+    <!-- Left Green/Red input validation bar -->
+    <div class="question-status" [ngClass]="validateCompletedSectionClass()">
+    </div>
+     
+    <div class="helper-accordion">
+        <!-- Content that always shows -->
+        <div class="accordion-header">
+            <div class="content">
+                <!-- Inspection title and description -->
+                <div class="inspection-header">
+                    <h4 class="title" text-wrap>
+                        <!-- Debug mode, show question id -->
+                        <span class="text-light-purple" *ngIf="settingsService.get('debugMode')">
+                            {{response.questionId}} - 
+                        </span>
+                        <!-- HTML like br & links used in several questions - tested and it will filter scripts! -->
+                        <span [innerHTML]="response.question"></span>
+                    </h4>
+                    <p class="description" *ngIf="response.conditionComment">{{response.conditionComment}}</p>
+                    <p class="description text-light-red" *ngIf="response.dependencyError">{{'helper.dependencyError' | translate}}</p>
+                </div>
+                <div *ngIf="!response.isNA">
+                    <!-- Inspection Question -->
+                    <app-question-wrapper 
+                        [form]="form" 
+                        [response]="response" 
+                        [section]="response.inspectionSection"
+                        [showQuestionTitle]="!(expanded || localComment)" 
+                        [editable]="true"
+                        [helperTrigger]="helperTrigger" 
+                        [equipDetails]="equipDetails">
+                    </app-question-wrapper>
+
+                    <!-- Reference Image  -->
+                    <div class="row" *ngIf="isShowReferenceImage">
+                        <div class="col-12">
+                            <img [id]="'image-reference-'+  response.questionId" alt="Reference Image"
+                            [src]="referenceImage" [title]="'image-reference-'+  response.questionId" class="image-reference"
+                            (click)="onClick()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <!-- Expansion toggle -->
+            <div class="accordion-toggle">
+                <i *ngIf="isAccordionEnabled() && !expanded" class="material-icons app-toolbar-menu align-right"
+                    (click)="togglePanel(true)">add_circle</i>
+                <i *ngIf="isAccordionEnabled() && expanded" class="material-icons app-toolbar-menu align-right"
+                    (click)="togglePanel(false)">do_not_disturb_on</i>
+            </div>
+
+        </div>
+
+        <!-- NA section -->
+        <div class="row" *ngIf="response.displayNA">
+            <mat-checkbox 
+                    [id]="'checkbox-na-' + response.id" 
+                    class="checkbox-na"
+                    [(ngModel)]="isNA_proxy"
+                    
+                    (change)="onNAChange($event)"
+        
+                >
+                <b>{{'helper.notApply' | translate}}</b>
+                </mat-checkbox>
+        </div>
+
+        <!-- Content that only shows if accordion expanded -->
+        <div class="accordion-body" [ngClass]="{'expanded': expanded}" *ngIf="expanded">
+
+            <!-- Immediate action and follow up checkboxes -->
+            <div class="row wo-attention-checkboxes" *ngIf="showHelper || localComment || localCommentRequired">
+
+                <div col-12 col-md-6 *ngIf="response.displayFollowUpWorkOrder">
+                    <mat-checkbox 
+                        [id]="'checkbox-wor-' + response.id" 
+                        [(ngModel)]="response.followUpWO"
+                        (ngModelChange)="onChange()"
+                        [disabled]="response.isNA ?? false"
+                    >
+                        <b>{{'helper.workOrderRecommended' | translate}}</b>
+                    </mat-checkbox>
+
+                </div>
+                <div col-12 col-md-6 *ngIf="response.displayImmediateAttentionRequired">
+                    <mat-checkbox 
+                        [id]="'checkbox-ia-' + response.id" 
+                        [(ngModel)]="response.attention"
+                        (ngModelChange)="onChange()"
+                        [disabled]="response.isNA ?? false"
+                    >
+                        <b>{{'helper.immediateAttention' | translate}}</b>
+                    </mat-checkbox>
+                </div>
+            </div>
+
+            <div class="row">
+                <div col-12 col-md-6 *ngIf="response.displayCopy">
+                    <a class="button btn text-white" (click)="copyQuestion()" [id]="'btn-copy-question-' + response.id">
+                        {{'helper.copyQuestion' | translate}}
+                    </a>
+                </div>
+                <div col-12 col-md-6 *ngIf="!response.id && !response.subCopy">
+                    <a class="button btn text-white" (click)="removeCopiedQuestion()" [id]="'btn-remove-question-' + response.id">
+                        {{'helper.removeItem' | translate}}
+                    </a>
+                </div>
+            
+                <div col-12 col-md-6 *ngIf="response.followUpWO" class="button-margin">
+                    <a class="button btn btn-primary text-white" (click)="openWO()" [id]="'btn-open-wo-' + response.id">
+                        {{'helper.openWO' | translate}}
+                    </a>
+                </div>
+            </div>
+
+            <!-- Comment section -->
+            <div class="row" *ngIf="showHelper || response.showComment || localComment || localCommentRequired">
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label [for]="'textarea-comments-' + response.questionId">{{ 'helper.comments' | translate }}</mat-label>
+                    <textarea matInput [(ngModel)]="response.comments" (ngModelChange)="onChange(true)" rows="3"
+                        [id]="'textarea-comments-' + response.questionId" autocorrect="on" autocomplete="on"
+                        spellcheck="on"
+                        [title]="'textarea-comments-'+ response.questionId"
+                        placeholder="{{ 'helper.comments' | translate }}"></textarea>
+                </mat-form-field>
+                <span
+                class="required"
+                *ngIf="localCommentRequired && !response.comments"
+                >
+                {{'helper.commentsRequired' | translate}}
+                </span>
+            </div>
+
+            <!-- Recommendation Section -->
+            <div class="row" *ngIf="response.showRecommendation">
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label for="'textarea-recommendations-'+ response.questionId">{{ 'helper.recommendations' | translate }}</mat-label>
+                    <textarea 
+                        matInput 
+                        [(ngModel)]="response.recommendation" 
+                        (ngModelChange)="onChange()"
+                        [id]="'textarea-recommendations-'+ response.questionId"
+                        placeholder="{{ 'helper.recommendations' | translate }}"
+                    ></textarea>
+                </mat-form-field>
+            </div>
+
+            <!-- Photo Section -->
+            <div class="row" *ngIf="response.showPhoto || localComment">
+                <photo 
+                    [form]="form" 
+                    [response]="response" 
+                    [section]="response.inspectionSection" 
+                    [isHelper]="true"
+                    [editable]="true" 
+                    [isChildren]="true"
+                    [equipDetails]="[]"
+                ></photo>
+            </div>
+
+            <!-- debug json viewer -->
+            <div class="row" *ngIf="settingsService.get('debugMode')">
+                <inspection-json-viewer 
+                    [jsonObj]="response"
+                    height="300px"
+                    *ngIf="expanded"
+                ></inspection-json-viewer>
+            </div>
+        </div>
+    </div>
+</div>

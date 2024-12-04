@@ -1,0 +1,16 @@
+<div class="controls">
+    <div [formGroup]="form">
+        <div [formGroupName]="section">
+            <mat-form-field *ngIf="editable" appearance="outline"
+                [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                <!-- (keydown) - matInput isn't allowing spaces/enters to be added because the mat-tab is propagating the keyboard events to all the elements that are within it-->
+                <textarea (keydown)="$event.stopPropagation()" rows="3" matInput [id]="'textarea-' + response.questionId" [formControlName]="response.questionId"></textarea>
+                <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">You must enter a value.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="!editable" class="label-control-form">
+            <label [id]="'label-' + response.questionId"> {{response.answer}}</label>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<mat-list>
+    <div>
+        <h3 *ngIf="displayOnlineSearchMaxRecordWarning" >
+            <span class="warning">{{ 'home.onlineSearchResultMaxRecordsWarning' | translate }}</span>
+        </h3>
+        <div class="selectAll-checkbox">
+            <mat-checkbox matTooltip="Select All" [(ngModel)]="selectAll" *ngIf="hasDownloadableSearchResults"
+                (click)="onSelectAllClick($event)"></mat-checkbox>
+        </div>
+    </div>
+    <ng-container *ngIf="hasSearchResults">
+        <div *ngFor="let wo of workorders">
+            <app-online-search-inspection-list-item 
+                [wo]="wo" 
+                (valueChanged)="onValueChange($event)">
+            </app-online-search-inspection-list-item>
+        </div>
+    </ng-container>
+
+    <div class="empty-wos" *ngIf="!hasSearchResults">
+        <h4>{{ 'inspection.noResultsFound' | translate }}</h4>
+    </div>
+
+</mat-list>

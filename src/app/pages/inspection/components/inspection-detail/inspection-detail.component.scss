@@ -1,0 +1,53 @@
+.inspection-detail {
+  background-color: #f3f3f3 !important;
+
+  ::ng-deep .mdc-tab--active {
+    border-bottom: 4px solid #0b2d71;
+    .mdc-tab__text-label {
+      color: #0b2d71;
+    }
+  }
+  ::ng-deep .mdc-tab__text-label {
+    font-family: "GothamBold", Arial, sans-serif;
+    color: #0056b3;
+    text-transform: lowercase;
+  }
+
+  .card {
+    box-shadow: none;
+  }
+
+  ::ng-deep .mat-mdc-tab-header {
+    background-color: white !important;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  .title-row {
+    margin: 0, 0, 0px;
+  }
+  
+
+  ::ng-deep
+    .mat-mdc-tab-header-pagination-controls-enabled
+    .mat-mdc-tab-header-pagination {
+      padding: 4% 0;
+    }
+
+  .wo-code-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span{
+      margin-left: 26px;
+    }
+    mat-icon{
+      font-size: 17px;
+      vertical-align: middle;
+      margin-top: 8px;
+      margin-left: 2px;
+      cursor: pointer;
+    }
+  }
+}

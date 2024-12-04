@@ -1,0 +1,57 @@
+<div [formGroup]="parent">
+    <div [formGroupName]="section" *ngIf="form">
+      <div [formGroup]="form" *ngIf="editable">
+        <div formGroupName="passFail">
+          <div class="row" *ngIf="form.get('passFail.PassFail').value">
+            <div class="col-6 col-md-4">
+                <mat-label
+                *ngIf="form.get('As Found Pass/Fail').value"
+                [ngClass]="form.get('As Found Pass/Fail').value === 'Fail' ? 'fail':'pass'">
+                    {{'commons.' + form.get('As Found Pass/Fail').value | translate}}
+                </mat-label>
+            </div>
+            <div class="col-6 col-md-8">
+              <div *ngIf="form.get('passFail.PassFail').value === 'Fail'">
+                <mat-label class="hidden-sm-up" stacked>
+                  {{'commons.Failure Code' | translate}}
+                </mat-label>
+                  <mat-select
+                    formControlName="FailureCode"
+                    [id]="'select-'+ response.question +'-failure-code'"
+                  >
+                    <mat-option *ngFor="let fo of failOptions" [value]="fo.value">
+                      {{ fo.description }}
+                    </mat-option>
+                  </mat-select>
+              </div>
+            </div>
+        </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="!editable" justify-content-center>
+        <div class="col">
+          <div class="row">
+                <div class="col-3">
+                    <b> {{ 'commons.Pass/Fail' | translate}}</b>
+                    <mat-label
+                        *ngIf="!!form.get('passFail.PassFail').value"
+                        class="text rounded"
+                        [attr.data-is-valid]="
+                        form.get('passFail.PassFail').value === 'Pass'
+                        "
+                    >
+                        {{ 'commons.' + form.get('passFail.PassFail').value | translate }}
+                    </mat-label>
+                </div>
+                <div class="col" *ngIf="form.get('passFail.PassFail').value === 'Fail'">
+                    <b>{{'commons.Failure Code' | translate}}</b>
+                    <mat-label class="text">
+                        {{ form.get('passFail.FailureCode').value }}
+                    </mat-label>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+  

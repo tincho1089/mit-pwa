@@ -1,0 +1,35 @@
+<mat-stepper class="general" orientation="vertical" labelPosition="end" #stepper>
+    <mat-step *ngIf="sections && sections.length === 0">
+        <ng-template matStepLabel>
+            <h2 class="text-medium-blue stepper-title">
+                {{ 'general.noQuestion' | translate | lowercase }}
+            </h2>
+        </ng-template>
+    </mat-step>
+    <mat-step errorMessage="Required questions need to be completed before submitting."
+        *ngFor="let indexSection of sections; let i = index; let h = count"
+        [stepControl]="generalForm.get([indexSection.title])">
+        <div *ngFor="let subSection of indexSection.subSections; let j = index; let k = count">
+            <ng-template matStepLabel>
+                <h4 class="text-medium-blue stepper-title">{{indexSection.title | lowercase}}
+                    <i *ngIf="generalForm?.get([indexSection.title]).status === 'VALID' || generalForm?.get([indexSection.title]).status === 'DISABLED'"
+                        class="material-icons app-toolbar-menu text-light-green">check_circle</i>
+                    <i *ngIf="generalForm?.get([indexSection.title]).status !== 'VALID'"
+                        class="material-icons app-toolbar-menu align-right text-light-red">unpublished</i>
+                </h4>
+            </ng-template>
+            <h3>
+                {{ subSection.title }}
+            </h3>
+            <div class="question" *ngFor="let response of subSection.responses">
+                <helper 
+                    [form]="generalForm" 
+                    *ngIf="response.isShow"
+                    [response]="response" 
+                    [section]="response.inspectionSection"
+                    [equipDetails]="equipDetails">
+                </helper>
+            </div>
+        </div>
+    </mat-step>
+</mat-stepper>

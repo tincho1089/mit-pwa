@@ -1,0 +1,170 @@
+<div *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section">
+    <div [formGroup]="formGroup">
+      <div formGroupName="details">
+        <div *ngIf="formGroup && editable">
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field appearance="outline">
+                <mat-label> {{ 'valve.Valve Size' | translate }} </mat-label>
+                <input matInput formControlName="Valve Size" />
+                <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                  {{ 'valve.inches' | translate }}
+                </span>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'valve.Design Closing Time' | translate }}</mat-label>
+                <input matInput formControlName="Design Closing Time" />
+                <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                  {{ 'valve.seconds' | translate }}
+                </span>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'valve.As Found Closing Time' | translate }}</mat-label>
+                <input matInput type="string" formControlName="As Found Closing Time" />
+                <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                  {{ 'valve.seconds' | translate }}
+                </span>
+              </mat-form-field>
+            </div>
+          </div>
+          <div *ngIf="editable && formGroup.get('passFailFound.PassFail').value === 'Fail'">
+            <div class="row">
+              <div class="col-6">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'valve.As Left Closing Time' | translate }}</mat-label>
+                  <input matInput type="string" formControlName="As Left Closing Time" />
+                  <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                    {{ 'valve.seconds' | translate }}
+                  </span>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div formGroupName="passFailFound" *ngIf="editable">
+        <div class="row" *ngIf="formGroup.get('passFailFound.PassFail').value">
+          <div class="col-3">
+            <mat-label>{{ 'valve.As Found Result' | translate}}</mat-label>
+          </div>
+          <div class="col-3">
+            <mat-label [ngClass]="formGroup.get('passFailFound.PassFail').value === 'Fail' ? 'fail':'pass'">{{
+              'commons.' + formGroup.get('passFailFound.PassFail').value |
+              translate }}</mat-label>
+          </div>
+          <div class="col-6" *ngIf="formGroup.get('passFailFound.PassFail').value === 'Fail'">
+
+            <app-dropdown-search
+              [appearance]="'outline'"
+              [sectionArray]="sectionArray"
+              [response]="response"
+              [idSelect]="'select-' + response.questionId + '-FailureCode'"
+              [parentParentForm]="form"
+              [label]="'commons.Failure Code' | translate"
+              [controlName]="'FailureCode'"
+              [options]="failOptions"
+              [detailsGroup]="true"
+              [detailsGroupName]="'passFailFound'">
+            </app-dropdown-search>
+
+          </div>
+        </div>
+      </div>
+      <div formGroupName="passFailLeft" *ngIf="editable && formGroup.get('passFailFound.PassFail').value">
+        <div class="row" *ngIf="formGroup.get('passFailLeft.PassFail').value">
+          <div class="col-3">
+            <mat-label> {{ 'valve.As Left Result' | translate}}</mat-label>
+          </div>
+          <div class="col-3">
+            <mat-label [ngClass]="formGroup.get('passFailLeft.PassFail').value === 'Fail' ? 'fail':'pass'">{{
+              'commons.'
+              + formGroup.get('passFailLeft.PassFail').value |
+              translate }}</mat-label>
+          </div>
+          <div class="col-6" *ngIf="formGroup.get('passFailLeft.PassFail').value === 'Fail'">
+
+            <app-dropdown-search
+              [appearance]="'outline'"
+              [sectionArray]="sectionArray"
+              [response]="response"
+              [idSelect]="'select-' + response.questionId + '-FailureCode'"
+              [parentParentForm]="form"
+              [label]="'commons.Failure Code' | translate"
+              [controlName]="'FailureCode'"
+              [options]="failOptions"
+              [detailsGroup]="true"
+              [detailsGroupName]="'passFailLeft'">
+            </app-dropdown-search>
+
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!editable">
+        <div class="form-field" *ngFor="let entry of formGroup.get('details')['controls'] | keys">
+         
+          <table class="summary-responses">
+            <tr class="divider">
+              <th class="summary-responses">
+                {{ 'valve.' + entry.key | translate }}
+              </th>
+              <td class="summary-responses">
+                {{ formGroup.get('details.' + entry.key).value }}
+                {{ entry.key === 'Valve Size' ? ('valve.inches' | translate) : ('valve.seconds' |
+                translate) }}
+              </td>
+            </tr>
+        </table>
+        </div>
+
+        <table class="summary-responses">
+          <tr class="divider">
+            <th class="summary-responses">
+              {{ 'valve.As Found Result' | translate}}
+            </th>
+            <td class="summary-responses" *ngIf="!!formGroup.get('passFailFound.PassFail').value">
+              {{ 'commons.' + formGroup.get('passFailFound.PassFail').value |
+              translate }}
+            </td>
+          </tr>
+
+          <tr class="divider" *ngIf="formGroup.get('passFailFound.PassFail').value === 'Fail'">
+            <th class="summary-responses">
+              {{'commons.Failure Code' | translate}}
+            </th>
+            <td class="summary-responses" >
+              {{ formGroup.get('passFailFound.FailureCode').value }}
+            </td>
+          </tr>
+
+          <tr class="divider" *ngIf="formGroup.get('passFailFound.PassFail').value === 'Fail'">
+            <th class="summary-responses">
+              {{ 'valve.As Left Result' | translate}}
+            </th>
+            <td class="summary-responses" *ngIf="!!formGroup.get('passFailLeft.PassFail').value">
+              {{ 'commons.' + formGroup.get('passFailLeft.PassFail').value |
+              translate }}
+            </td>
+          </tr>
+
+          <tr class="divider" *ngIf="formGroup.get('passFailLeft.PassFail').value === 'Fail'">
+            <th class="summary-responses">
+              {{'commons.Failure Code' | translate}}
+            </th>
+            <td class="summary-responses" >
+              {{ formGroup.get('passFailLeft.FailureCode').value }}
+            </td>
+          </tr>
+      </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+
+<div class="controls" [formGroup]="form">
+        <div [formGroupName]="section">
+            <div  [formGroup]="formGroup" *ngIf="editable">
+                <div class="row pt-3" formGroupName="details" *ngIf="formGroup && editable">
+                    <div class="col-5">
+                        <div class="formfield">
+                            <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                                <mat-label>{{ 'KnownReference' }}</mat-label>
+                                <input 
+                                matInput 
+                                type="text" 
+                                [id]="response.questionId +'-'+ 'knownreference'"
+                                (change)="onChange('KnownReference')" 
+                                formControlName="KnownReference"
+                                maxlength="8">
+                                <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                            </mat-form-field>
+                        </div>               
+                    </div>
+                    <div class="col-5"  >
+                        <div class="formfield">
+                            <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                                <mat-label>{{ 'ActualReference1' }}</mat-label>
+                                <input matInput type="text" 
+                                [id]="response.questionId +'-'+ 'actualreference1'" 
+                                formControlName="ActualReference1"
+                                (change)="onChange('ActualReference1')"
+                                maxlength="8">
+                                <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="formfield">
+                            <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                                <mat-label>{{ 'ActualReference2' }}</mat-label>
+                                <input matInput type="text" 
+                                [id]="response.questionId +'-'+ 'actualreference2'"  
+                                formControlName="ActualReference2"
+                                (change)="onChange('ActualReference2')"
+                                maxlength="8">
+                                <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="formfield">
+                            <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                                <mat-label>{{ 'ActualReference3' }}</mat-label>
+                                <input matInput type="text" 
+                                [id]="response.questionId +'-'+ 'actualreference3'" 
+                                formControlName="ActualReference3"
+                                (change)="onChange('ActualReference3')"
+                                maxlength="8">
+                                <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                            </mat-form-field>
+                        </div>
+              
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <div  formArrayName="MoreDetails" *ngIf="moreDetails">
+                        <div *ngFor="let item of moreDetails.controls; let referenceIndex=index" 
+                            [formGroupName]="referenceIndex">
+                            <div class="row">
+                                <div class="col-5"></div>
+                                <div class="col-5">
+                                    <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                                        <mat-label>{{ 'Reference' }}</mat-label>
+                                        <input matInput type="text" 
+                                            [id]="response.questionId +'-'+ referenceIndex + 'actualreference'" 
+                                            (change)="onChange(referenceIndex+'')"
+                                            formControlName="reference"
+                                            maxlength="8">
+                                        <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-2">
+                                        <button (click)="eraseRow(item)" mat-icon-button>
+                                            <mat-icon class="delete">delete</mat-icon>
+                                        </button>
+                                </div>
+                           </div>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-12 no-gutters">
+                        <div class="pb-3">
+                            <b>For average reference height, obtain three (3) consecutive readings within a range 1/16th inch, of five (5) consecutive readings within a range of 1/8th inch.</b>
+                        </div>
+                        <div class="pb-3 atg-average">
+                            <b>Average:</b> {{ formGroup.get('details.Avg').value }}
+                        </div>
+                        <div *ngIf="editable && columns != 2">
+                            <a matStepperNext class="button btn btn-primary text-white" (click)="addNewRow()">Add Value</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!editable" class="label-control-form">
+                <table *ngIf="isNotNull(getDetailsForSummary(response)) ">
+                    <thead>
+                      <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of getDetailsForSummary(response) | keyvalue ">
+                            <td>{{ item.key }}</td>
+                            <td>{{ item.value }}</td>
+                          </tr>
+                    </tbody>
+                  </table>
+
+                  <table *ngIf="isArrayWithItems(getMoreDetailsForSummary(response))">
+                    <thead>
+                      <tr>
+                        <th>Other Properties</th>
+                        <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of getMoreDetailsForSummary(response) ">
+                            <td>Reference</td>
+                            <td>{{ item.reference }}</td>
+                          </tr>
+                    </tbody>
+                  </table>
+                <!-- <label  [id]="'label-' + response.questionId"> {{response.answer}}</label> -->
+            </div>
+
+            <!-- <table class="summary-responses" *ngIf="!editable">
+                <ng-container *ngFor="let detail of (response.answer | json) | keyvalue">
+                  <tr>
+                    <td>{{ detail.key }}</td>
+                    <td>{{ detail.value }}</td>
+                  </tr>
+                </ng-container>
+            </table> -->
+        </div>
+</div>

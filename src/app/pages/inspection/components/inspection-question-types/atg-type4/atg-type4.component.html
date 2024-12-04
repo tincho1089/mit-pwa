@@ -1,0 +1,172 @@
+<div class="controls" [formGroup]="form">
+  <div [formGroupName]="section">
+      <div  [formGroup]="formGroup" *ngIf="formGroup && editable">
+          <div class="pt-3" formGroupName="details" >
+              <div class="row">
+                  <div class="col-5">
+                      <div class="formfield">
+                          <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                              <mat-label>{{ 'ATG Beginning (in mm)' }}</mat-label>
+                              <input
+                              matInput
+                              type="text"
+                              [id]="response.questionId +'-'+ 'ATGBeginning'"
+                              (change)="onChange('ATGBeginning')"
+                              formControlName="ATGBeginning"
+                              maxlength="8">
+                              <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">
+                                  {{ 'helper.inputRequired' | translate}}</mat-error>
+                          </mat-form-field>
+                      </div>
+                  </div>
+                  <div class="col-5"  >
+                      <div class="formfield">
+                          <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                              <mat-label>{{ 'Manual (in mm)' }}</mat-label>
+                              <input matInput type="text"
+                              [id]="response.questionId +'-'+ 'Manual1'"
+                              formControlName="Manual1"
+                              (change)="onChange('Manual1')"
+                              maxlength="8">
+                              <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                          </mat-form-field>
+                      </div>
+                      <div class="formfield">
+                          <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                              <mat-label>{{ 'Manual2 (in mm)' }}</mat-label>
+                              <input matInput type="text"
+                              [id]="response.questionId +'-'+ 'Manual2'"
+                              formControlName="Manual2"
+                              (change)="onChange('Manual2')"
+                              maxlength="8">
+                              <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                          </mat-form-field>
+                      </div>
+                  </div>
+                  <div class="col-2"></div>
+              </div>
+              <div class="row">
+                  <div class="col-5">
+                      <div class="formfield">
+                          <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                              <mat-label>{{ 'ATGEnd (in mm)' }}</mat-label>
+                              <input
+                              matInput
+                              type="text"
+                              [id]="response.questionId +'-'+ 'ATGEnd'"
+                              (change)="onChange('ATGEnd')"
+                              formControlName="ATGEnd"
+                              maxlength="8">
+                              <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                          </mat-form-field>
+                      </div>
+                  </div>
+                  <div class="col-5"  >
+                      <div class="formfield">
+                          <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                              <mat-label>{{ 'Manual3 (in mm)' }}</mat-label>
+                              <input matInput type="text"
+                              [id]="response.questionId +'-'+ 'Manual3'"
+                              formControlName="Manual3"
+                              (change)="onChange('Manual3')"
+                              maxlength="8">
+                              <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                          </mat-form-field>
+                      </div>
+                  </div>
+                  <div class="col-2"></div>
+              </div>
+          </div>
+          <div  formArrayName="MoreDetails" *ngIf="moreDetails">
+                  <div *ngFor="let item of moreDetails.controls; let pointIndex=index"
+                      [formGroupName]="pointIndex">
+                      <div class="row">
+                          <div class="col-5"></div>
+                          <div class="col-5">
+                              <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                                  <mat-label>{{ 'Reference (in mm)' }}</mat-label>
+                                  <input matInput type="text"
+                                      [id]="response.questionId +'-'+ pointIndex + 'manual4'"
+                                      (change)="onChange(pointIndex+'')"
+                                      formControlName="point"
+                                      maxlength="8">
+                                  <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                              </mat-form-field>
+                          </div>
+                          <div class="col-2">
+                                  <button (click)="eraseRow(item)" mat-icon-button>
+                                      <mat-icon class="delete">delete</mat-icon>
+                                  </button>
+                          </div>
+                     </div>
+              </div>
+          </div>
+          <div class="row text-center">
+              <div class="col-12 no-gutters">
+                  <div class="pb-3">
+                      <!-- <b>For average manual gauge reading, obtain three (3) consecutive readings within a range 1/16th inch, of five (5) consecutive readings within a range of 1/8th inch.</b> -->
+                      <b>For average reference height, obtain three (3) consecutive readings within a range 1mm, or five (5) consecutive readings within a range of 3mm.</b>
+                  </div>
+              </div>
+          </div>
+          <div class="row text-center">
+                  <!-- <div class="col-4 atg-average">
+                      <b>ATG Average:</b> {{ formGroup.get('details.Avg1').value }}
+                  </div> -->
+                  <div class="col-4 atg-average">
+                      <b>Manual Average:</b> {{ formGroup.get('details.Avg2').value }}
+                  </div>
+                  <div class="col-4 atg-average">
+                      <b>Difference:</b> {{ formGroup.get('details.Diff').value }}
+                  </div>
+          </div>
+          <div class="row">
+              <div class="col-12 pl-2 pb-3 pt-3 warn">
+                  <b class="warn">{{ formGroup.get('details.Msg').value }}</b>
+              </div>
+          </div>
+          <div class="row text-center">
+              <div class="col-12">
+                  <div *ngIf="editable && columns != 2">
+                      <a matStepperNext class="button btn btn-primary text-white" (click)="addNewRow()">Add Value</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- <div *ngIf="!editable" class="label-control-form">
+          <label  [id]="'label-' + response.questionId"> {{response.answer}}</label>
+      </div> -->
+      <div *ngIf="!editable" class="label-control-form">
+          <table *ngIf="isNotNull(getDetailsForSummary(response)) ">
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let item of getDetailsForSummary(response) | keyvalue ">
+                  <tr *ngIf="(item.key != 'Msg') || (item.value ?? false)">
+                      <td>{{ item.key }}</td>
+                      <td>{{ item.value }}</td>
+                    </tr>
+              </tbody>
+            </table>
+
+            <table *ngIf="isArrayWithItems(getMoreDetailsForSummary(response))">
+              <thead>
+                <tr>
+                  <th>Other Properties</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let item of getMoreDetailsForSummary(response) ">
+                      <td>Reference</td>
+                      <td>{{ item.reference }}</td>
+                    </tr>
+              </tbody>
+            </table>
+          <!-- <label  [id]="'label-' + response.questionId"> {{response.answer}}</label> -->
+      </div>
+  </div>
+</div>

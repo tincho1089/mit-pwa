@@ -1,0 +1,25 @@
+.ngx-scanner-qrcode {
+    position: absolute;
+    top: 260px;
+    width: 95%;
+}
+
+.loading-qr-code {
+    position: absolute;
+    top: 260px;
+    right: 45%;
+}
+.qr-scanner {
+    width: 80%;
+}
+.qr-starts span {
+    color: #faab18 !important;
+}
+
+.origin-overlay {
+    .qrcode-tooltip {
+        .qrcode-tooltip-temp {
+            padding: min(5px) !important;
+        }
+    }
+}

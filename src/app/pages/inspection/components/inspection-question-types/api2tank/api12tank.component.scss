@@ -1,0 +1,35 @@
+
+.table-container{
+    width: 75vw;
+    overflow-x: auto;
+}
+
+.table-container-summary{
+    width: screen;
+    overflow-x: auto;
+}
+.table-row {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+
+  .table-item-cell{
+    display: flex;
+    margin:4px;
+    width: calc(75vw / 12);
+   }
+
+   .table-item-cell-summary{
+    display: flex;
+    margin:4px;
+    width: calc(100vw / 4);
+   }
+}
+
+.table-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+

@@ -1,0 +1,13 @@
+.content{
+    display:flex;
+    flex-wrap: wrap;
+    mat-label{
+        word-wrap: break-word;
+        align-items: baseline;
+        flex: 1 1 10%;
+    }
+    mat-form-field{
+        width: inherit;
+        flex: 1 1 auto;
+    }
+}

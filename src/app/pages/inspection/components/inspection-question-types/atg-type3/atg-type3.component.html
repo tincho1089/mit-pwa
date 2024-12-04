@@ -1,0 +1,93 @@
+    <div class="controls" [formGroup]="form">
+        <div [formGroupName]="section">
+            <div [formGroup]="formGroup">
+                <div class="pt-3" formGroupName="details" *ngIf="formGroup && editable">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="formfield">
+                                <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                                    <mat-label>{{ 'CPL' }}</mat-label>
+                                    <input 
+                                    matInput 
+                                    type="text" 
+                                    [id]="response.questionId +'-'+ 'cpl'"
+                                    (change)="onChange('CPL')" 
+                                    formControlName="CPL"
+                                    maxlength="8">
+                                    <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="formfield">
+                                <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                                    <mat-label>{{ 'Terminal' | translate }}</mat-label>
+                                    <input 
+                                    matInput 
+                                    type="text" 
+                                    [id]="response.questionId +'-'+ 'terminal'"
+                                    (change)="onChange('Terminal')" 
+                                    formControlName="Terminal"
+                                    maxlength="8">
+                                    <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">{{ 'helper.inputRequired' | translate}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <b>Note: Difference cannot be greater than +/- 00-00-06.</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"></div>
+                        <div class="col-4"></div>
+                        <div class="col-4">
+                            <b>Difference: {{ formGroup.get('details.Diff').value }} </b>
+                        </div>
+                    </div>
+                    <div class="row no-gutters" *ngIf="!showMsg">
+                        <div class="col-12">
+                            <b class="warn">{{ formGroup.get('details.Msg').value }}</b>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div *ngIf="!editable" class="label-control-form">
+                    <table *ngIf="isNotNull(getDetailsForSummary(response)) ">
+                        <thead>
+                          <tr>
+                            <th>Property</th>
+                            <th>Value</th>
+                          </tr>
+                        </thead>
+                        <tbody *ngFor="let item of getDetailsForSummary(response) | keyvalue ">
+                            <tr *ngIf="(item.key != 'Msg') || (item.value ?? false)">
+                                <td>{{ item.key }}</td>
+                                <td>{{ item.value }}</td>
+                              </tr>
+                        </tbody>
+                      </table>
+    
+                      <table *ngIf="isArrayWithItems(getMoreDetailsForSummary(response))">
+                        <thead>
+                          <tr>
+                            <th>Other Properties</th>
+                            <th>Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of getMoreDetailsForSummary(response) ">
+                                <td>Reference</td>
+                                <td>{{ item.reference }}</td>
+                              </tr>
+                        </tbody>
+                      </table>
+                    <!-- <label  [id]="'label-' + response.questionId"> {{response.answer}}</label> -->
+                </div>
+            </div>
+        </div>
+    </div>

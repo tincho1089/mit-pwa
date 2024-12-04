@@ -1,0 +1,183 @@
+<div *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section" *ngIf="formGroup">
+    <div [formGroup]="formGroup" *ngIf="formGroup && editable">
+      <div formGroupName="details">
+        <div class="row">
+          <div class="col-sm-2 col-md-4 col-lg-4">
+            <mat-label class="item-label">
+              <b>{{'percentSpan.spanUnit' | translate}}: {{ setPoint }} {{ units }}</b>
+              <b *ngIf="!setPoint" class="text-danger">no set point data found</b>
+            </mat-label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2 col-md-4 col-lg-6">
+            <mat-form-field *ngIf="editable" appearance="outline">
+              <mat-label>{{'percentSpan.setting' | translate}}</mat-label>
+              <mat-select formControlName="Setting" [id]="'select-' + response.questionId">
+                <mat-option>
+                  <ngx-mat-select-search [formControl]="filterControl" 
+                      placeholderLabel="{{ 'home.searchHere' | translate }}" 
+                      noEntriesFoundLabel="{{ 'inspection.noResultsFound' | translate }}">
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let o of filteredSetPointOptions | async" [value]="o.fieldName">
+                  {{o.fieldName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2 col-md-4 col-lg-6">
+            <div class="formfield">
+              <mat-form-field appearance="outline">
+                <mat-label stacked>
+                  {{'percentSpan.asFoundMeasured' | translate}}
+                </mat-label>
+                <input matInput type="string" formControlName="AsFound" clearInput
+                  [disabled]="form.get(sectionArray) && form.get(sectionArray).status === 'DISABLED'"
+                  [id]="'input-' + response.questionId + '-as-found'">
+
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-2 col-md-4 col-lg-6">
+
+            <mat-form-field appearance="outline">
+              <mat-label stacked>
+                {{'commons.percentError' | translate}}
+              </mat-label>
+              <input matInput type="number" inputmode="decimal" formControlName="ErrorF"
+                [disabled]="form.get(sectionArray) && form.get(sectionArray).status !== 'DISABLED'"
+                [id]="'input-' + response.questionId + '-error-f'">
+                <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                  <b>%</b>
+                </span>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-sm-2 col-md-4 col-lg-6">
+            <mat-form-field *ngIf="editable" appearance="outline">
+              <mat-label stacked>
+                {{'percentSpan.asLeftMeasured' | translate}}
+              </mat-label>
+              <input matInput type="string" formControlName="AsLeft" 
+                [id]="'input-' + response.questionId + '-as-left'" clearInput>
+            </mat-form-field>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-sm-2 col-md-4 col-lg-6 formfield">
+
+            <mat-form-field *ngIf="editable" appearance="outline">
+              <mat-label stacked>
+                {{'commons.percentError' | translate}}
+              </mat-label>
+              <input matInput type="number" inputmode="decimal" formControlName="ErrorL"
+                [id]="'input-' + response.questionId + '-error-l'" />
+                <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                  <b>%</b>
+                </span>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+
+      </div>
+      <div formGroupName="passFail">
+        <div class="row" *ngIf="formGroup?.get('passFail.PassFail').value">
+          <div class="col-sm-2 col-md-4 col-lg-4"> 
+            <mat-label [ngClass]="formGroup?.get('passFail.PassFail').value === 'Fail' ? 'fail':'pass'">
+              {{'commons.' + formGroup.get('passFail.PassFail').value | translate}}
+            </mat-label>
+          </div>
+          <div class="col-sm-2 col-md-4 col-lg-6">
+            <div *ngIf="formGroup.get('passFail.PassFail').value === 'Fail'">
+              
+              <app-dropdown-search *ngIf="showControl" [appearance]="'outline'" [label]="'commons.Failure Code' | translate" [parentParentForm]="form" 
+              [sectionArray]="sectionArray" [controlName]="'FailureCode'" [idSelect]="'select-'+ response.question +'-failure-code'" 
+              [passFailCode]="true" [options]="failOptions">
+              </app-dropdown-search>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!editable" justify-content-center>
+      <table class="summary-responses">
+        <tr class="divider">
+          <th class="summary-responses">
+            {{'percentSpan.spanUnit' | translate}}
+          </th>
+          <td class="summary-responses">
+            {{ setPoint }} {{ units }}
+          </td>
+        </tr>
+
+        <tr class="divider">
+          <th class="summary-responses">
+            {{'percentSpan.setting' | translate}}
+          </th>
+          <td class="summary-responses">
+            {{formGroup.get('details.Setting').value}}
+          </td>
+        </tr>
+
+        <tr class="divider">
+          <th class="summary-responses">
+            {{'percentSpan.asFoundMeasured' | translate}}
+          </th>
+          <td class="summary-responses">
+            {{formGroup.get('details.AsFound').value}}
+          </td>
+        </tr>
+
+        <tr class="divider">
+          <th class="summary-responses">
+            {{'commons.percentError' | translate}}
+          </th>
+          <td class="summary-responses">
+            {{formGroup.get('details.ErrorF').value}}
+          </td>
+        </tr>
+
+        <tr class="divider">
+          <th class="summary-responses">
+            {{'percentSpan.asLeftMeasured' | translate}}
+          </th>
+          <td class="summary-responses">
+            {{formGroup.get('details.AsLeft').value}}
+          </td>
+        </tr>
+
+        <tr class="divider">
+          <th class="summary-responses">
+            {{'commons.percentError' | translate}}
+          </th>
+          <td class="summary-responses">
+            {{formGroup.get('details.ErrorL').value}}
+          </td>
+        </tr>
+
+        <tr class="divider">
+          <th class="summary-responses">
+            {{'commons.Failure Code' | translate}}
+          </th>
+          <td class="summary-responses">
+            {{formGroup?.get('passFail.PassFail').value}}
+          </td>
+        </tr>
+    </table>
+    </div>
+  </div>
+</div>

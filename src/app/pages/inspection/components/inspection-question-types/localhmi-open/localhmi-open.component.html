@@ -1,0 +1,87 @@
+<div class="controls" *ngIf="showControl" [formGroup]="form">
+        <div [formGroupName]="section">
+            <div [formGroup]="formGroup" *ngIf="!editable">
+                <!-- Read-only table for 'details' form group -->
+                <table class="summary-response">
+                    <tbody *ngIf="formGroup?.get('details')">
+                      <tr class="summary-response" *ngFor="let entry of formGroup.get('details')['controls'] | keys">
+                        <td>
+                          <span><b>{{ 'localhmi.' + entry.key | translate }}:</b></span>
+                        </td>
+                        <td >
+                            <span>{{ entry.value.value }}</span>
+                        </td>
+                      </tr>
+    
+                      <tr class="summary-response" *ngIf="formGroup?.get('passFail.PassFail').value">
+                        <td>
+                            <span>
+                                <b> {{ formGroup.get('passFail.PassFail').value === 'Fail' ? 'Fail':'Pass' }} </b>
+                            </span>
+                          </td>
+                      </tr>
+    
+                      <tr class="summary-response" *ngIf="formGroup.get('passFail.PassFail').value === 'Fail'">
+                        <td>
+                            <span>
+                                <b>
+                                    {{ formGroup.get('passFail.FailureCode').value}}
+                                </b>
+                            </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+
+            <div [formGroup]="formGroup" *ngIf="formGroup && editable">
+                <div formGroupName="details">
+                    <div class="row" *ngFor="let entry of formGroup?.get('details')['controls'] | keys"
+                    [formControlName]="entry.key">
+                        <div class="col-12">
+                            <mat-label>
+                                {{ 'localhmi.' + entry.key | translate }}
+                            </mat-label>
+                        </div>
+                        <div  class="col-5" *ngFor="let o of options;  let i = index">
+                            <mat-checkbox
+                                #chkboxslcmiopen
+                                [value]="o.value"
+                                [checked]="entry.value.value === o.value"
+                                (change)="onSelection($event,entry.key,i)"
+                                [id]="'chkboxslcmiopen-' + entry.key + '-' + i"
+                                >
+                                    {{ 'commons.' + o.value | translate }}
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                </div>
+                <div formGroupName="passFail">
+                    <div class="row" *ngIf="formGroup.get('passFail.PassFail').value">
+                      <div class="col-6 col-md-4">
+                          <mat-label
+                          [ngClass]="formGroup.get('passFail.PassFail').value === 'Fail' ? 'fail':'pass'">
+                              {{'commons.' + formGroup.get('passFail.PassFail').value | translate}}
+                          </mat-label>
+                      </div>
+                      <div class="col-6 col-md-8">
+                        <div *ngIf="formGroup.get('passFail.PassFail').value === 'Fail'">
+
+                            <app-dropdown-search *ngIf="showControl"
+                                    [appearance]="'outline'"
+                                    [parentParentForm]="form"
+                                    [sectionArray]="sectionArray"
+                                    [label]="'commons.Failure Code' | translate"
+                                    [controlName]="'FailureCode'"
+                                    [idSelect]="'select-'+ response.question +'-failure-code'"
+                                    [options]="failOptions"
+                                    [passFailCode]="true">
+                            </app-dropdown-search>
+                            
+                        </div>
+                      </div>
+                  </div>
+                  </div>
+            </div>
+        </div>
+  </div>

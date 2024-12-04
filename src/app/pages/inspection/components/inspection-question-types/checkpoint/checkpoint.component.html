@@ -1,0 +1,20 @@
+<div [formGroup]="form">
+    <div *ngIf="response.isShow" [formGroupName]="section">
+        <div class="content-1">
+            <div>
+                <img alt="checkpoint" src="assets/images/checkpoint.png" />
+            </div>
+        </div>
+        <div class="content-2">
+            <div *ngIf="editable">
+
+                <mat-checkbox [id]="'checkbox-'+response.questionId" [formControlName]="response.questionId"></mat-checkbox>
+                <!-- Needs translation -->
+                <label text-wrap>I acknowledge</label>
+            </div>
+            <div *ngIf="!editable" class="label-control-form">
+                <span>{{response.answer}}</span>
+            </div>
+        </div>
+    </div>
+</div>

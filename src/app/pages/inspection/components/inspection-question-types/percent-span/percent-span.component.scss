@@ -1,0 +1,54 @@
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .column-name {
+    flex-basis: 100%;
+  }
+  
+  .column-value {
+    flex-basis: 100%;
+  }
+
+  .pass {
+    background-color: lightgreen;
+    padding: 5px 50px;
+    margin-left: 10px;
+    align-items: center;
+    font-size: 26px;
+    border-radius: 1.5rem !important;
+}
+
+.fail {
+    background-color: red;
+    padding: 5px 50px;
+    margin-left: 10px;
+    align-items: center;
+    font-size: 26px;
+    border-radius: 1.5rem !important;
+}
+
+.percentError {
+    background-color: #e06666 !important;
+    border: 1px solid #9f4e4e !important;
+    color: white;
+
+    .text-input[disabled] {
+        opacity: 1;
+    }
+}
+
+.percentValid {
+    background-color: #90ee90 !important;
+    border: 1px solid #81bb81 !important;
+    color: white;
+
+    .text-input[disabled] {
+        opacity: 1;
+    }
+}
+  
+  /* Add your additional styling as needed */
+  

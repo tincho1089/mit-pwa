@@ -1,0 +1,22 @@
+mat-form-field {
+  width: 100%;
+  margin-top: 10px;
+
+  .mat-mdc-text-field-wrapper {
+    background-color: white;
+  }
+    mat-label {
+      font-size: 20px;
+    }
+}
+
+.mat-mdc-form-field-hint-wrapper {
+  padding: 0;
+}
+
+
+mat-form-field[readonly] {
+  .mat-mdc-text-field-wrapper {
+    background-color: #eff1f2;
+  }
+}

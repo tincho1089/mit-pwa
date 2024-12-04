@@ -1,0 +1,12 @@
+<div class="row" *ngIf="showControl" [formGroup]="form">
+    <div [formGroupName]="section">
+        <div class="col-12">
+            <mat-radio-group [formControlName]="response.questionId">
+                <mat-radio-button *ngFor="let o of options; let i = index" [value]="o.value"
+                    [id]="'radio-' + response.questionId +'-'+ o.value">{{o.description}}
+                    <br><img width="100px" [alt]="o.description" [src]="o.image"></mat-radio-button>
+                    
+            </mat-radio-group>
+        </div>
+    </div>
+</div>

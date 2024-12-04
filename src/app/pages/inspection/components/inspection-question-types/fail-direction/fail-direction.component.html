@@ -1,0 +1,111 @@
+<div class="controls" *ngIf="showControl" [formGroup]="form" >
+  <div [formGroupName]="section" *ngIf="!editable">
+    <!-- read-only view for the responses in the summary tab -->
+    <table class="summary-responses">
+      <tr class="summary-responses">
+        <td class="summary-responses">
+          <b>{{ 'failDirection.expectedFailDirection' | translate }}</b>
+        </td>
+        <td class="summary-responses">
+          <b>{{ 'failDirection.actualFailDirection' | translate }}</b>
+        </td>
+        <td class="summary-responses" *ngIf="formGroup.get('passFail.Pass Fail').value === 'Fail'">
+          <b>{{ 'commons.Pass/Fail' | translate }}</b>
+        </td>
+        <td class="summary-responses" *ngIf="formGroup.get('passFail.Pass Fail').value === 'Fail'">
+          <b>{{ 'commons.Failure Code' | translate }}</b>
+        </td>
+      </tr>
+    
+      <tr class="summary-responses" >
+        <td class="summary-responses" formGroupName="details">
+          {{ formGroup.get('details.Fail Direction').value }}
+        </td>
+        <td class="summary-responses" formGroupName="details">
+          {{ formGroup.get('details.Actual Fail Direction').value }}
+        </td>
+        <td class="summary-responses" formGroupName="passFail" *ngIf="formGroup.get('passFail.Pass Fail').value === 'Fail'">
+          {{ formGroup.get('passFail.Pass Fail').value }}
+        </td>
+        <td class="summary-responses" formGroupName="passFail" *ngIf="formGroup.get('passFail.Pass Fail').value === 'Fail'">
+          {{ formGroup.get('passFail.FailureCode').value }}
+        </td>
+      </tr>
+    </table>
+    
+  </div>
+    <div [formGroupName]="section" *ngIf="formGroup && editable">
+      <div [formGroup]="formGroup">
+        <div class="row">
+          <div class="col-12">
+            <div class="row" formGroupName="details">
+              <div class="col-6">
+                <mat-form-field *ngIf="editable" appearance="outline">
+                    <mat-label >
+                    {{'failDirection.expectedFailDirection' | translate}}
+                    </mat-label>
+                    <input matInput
+                    title="Fail Direction"
+                    type="string"
+                    formControlName="Fail Direction"
+                    [id]="'input-' + response.question +'-FailDirection'"
+                    />
+              </mat-form-field>
+              </div>
+            </div>
+            <div class="row" formGroupName="details">
+              <div class="col-6">
+                <mat-form-field *ngIf="editable" appearance="outline">
+                <mat-label>
+                  {{'failDirection.actualFailDirection' | translate}}
+                </mat-label>
+                  <mat-select
+                    [interface]="interface"
+                    [selectOptions]="{ title: 'Actual Fail Direction' }"
+                    formControlName="Actual Fail Direction"
+                  >
+                    <mat-option value="Low">
+                      {{'Low' | translate}}
+                    </mat-option>
+                    <mat-option value="High">
+                      {{'High' | translate}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+               </div>
+            </div>
+            <div class="row"
+              formGroupName="passFail"
+              *ngIf="formGroup.get('passFail.Pass Fail').value"
+            >
+            <div class="col-6 pb-3" >
+                <mat-label
+                [ngClass]="formGroup.get('passFail.Pass Fail').value === 'Fail' ? 'fail':'pass'"  
+                >
+                {{ 'commons.' + formGroup.get('passFail.Pass Fail').value |
+                translate }}
+                </mat-label>
+            </div>
+              <div
+                class="col-6"
+                *ngIf="formGroup.get('passFail.Pass Fail').value === 'Fail'"
+              >
+
+                <app-dropdown-search *ngIf="editable"
+                        [appearance]="'outline'"
+                        [parentParentForm]="form"
+                        [sectionArray]="sectionArray"
+                        [label]="'commons.Failure Code' | translate"
+                        [controlName]="'FailureCode'"
+                        [idSelect]="'select-'+ response.question +'-failure-code'"
+                        [options]="failOptions"
+                        [passFailCode]="true">
+                </app-dropdown-search>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

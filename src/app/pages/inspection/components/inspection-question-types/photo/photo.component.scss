@@ -1,0 +1,66 @@
+.camera {
+  .actionBtn {
+    margin-top: 5px;
+    margin-bottom: 2px;
+    font-size: 1.2em;
+  }
+
+  .snapshot {
+    text-align: center;
+    img {
+      max-width: 800px;
+      max-height: 800px;
+    }
+  }
+
+  ul.links {
+    padding-bottom: 20px;
+  }
+
+  input[type="file"]::file-selector-button {
+    margin-right: 20px;
+    border: none;
+    background: #6c757d;
+    padding: 10px 20px;
+    border-radius: 0px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+
+  input[type="file"]::file-selector-button:hover {
+    background: #343a40;
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .full-screen-modal .mat-dialog-container {
+    padding: 1em;
+    width: 100%;
+    height: 100%;
+  }
+
+  .button {
+    background: #0066b2 !important;
+    border-radius: 0px;
+  }
+
+  .card-column-buttons {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    flex-direction: column;
+  }
+
+  .dialog-title {
+    font-family: "GothamBold", Arial, sans-serif;
+    font-size: 25px;
+  }
+
+  .copy-button .copy-icon .download-button {
+    color: #0066b2;
+  }
+}

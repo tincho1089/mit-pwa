@@ -1,0 +1,173 @@
+@import './../../../../../../../styles/variables.scss';
+
+$qStatusWidth: 5px;
+$toggleBtnWidth: 25px;
+$toggleBtnPadding: 10px;
+$transTime: .5s;
+
+
+.wo-equipment {
+  .equipment-col {
+    margin-bottom: inherit !important;
+  }
+  margin: 11px 0 11px !important;
+
+  .mat-mdc-card-title-group {
+    display: block !important;
+  }
+
+  .mat-elevation-z8 {
+    box-shadow: none;
+  }
+
+  h3 {
+    text-align: left;
+    text-transform: lowercase;
+  }
+  h4 {
+    text-transform: lowercase;
+  }
+
+  .custom-list {
+    .mdc-list-item.mdc-list-item--with-three-lines {
+      height: 110px;
+    }
+  }
+
+  .mat-column-actions {
+    flex: 0 0 30%;
+  }
+
+  .btn {
+    margin-bottom: 5px !important;
+  }
+
+  mat-header-cell {
+    font-family: "GothamBold", Arial, sans-serif;
+    font-size: 14px;
+    text-transform: lowercase;
+  }
+
+  mat-cell {
+    font-family: "GothamNarrowBook", Arial, sans-serif;
+    font-size: 14px;
+  }
+
+  ::ng-deep .mat-mdc-list-item-title {
+    text-transform: lowercase;
+  }
+
+  .mat-mdc-form-field {
+    padding-top: 2% !important;
+  }
+
+  // TML Region
+  .wrap-content {
+    -ms-flex: 0 0 calc(100% - $qStatusWidth);
+    flex: 0 0 calc(100% - $qStatusWidth);
+    max-width: calc(100% - $qStatusWidth);
+    padding:10px;
+    
+    .content {
+      width: calc(100% - ($toggleBtnWidth + (2 * $toggleBtnPadding)));
+
+      .tmlContentColumn {
+        padding: 0 !important;
+      }
+      
+    }
+
+    .accordion-toggle {
+      width: $toggleBtnWidth;
+      align-items: center;
+      height: 100%;
+      padding: $toggleBtnPadding;
+  
+      .material-icons {
+        color: #0066b2;
+        font-size: 30px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .tml-details {
+    padding-bottom: 30px;
+    text-transform: lowercase;
+  }
+
+  .tmlIdLabel {
+    margin: 0;
+    text-decoration: underline;
+    color: #0066b2;
+    cursor: pointer;
+  }
+
+  .tml-card {
+    margin-bottom: 0px;
+  }
+  .tml-card:nth-child(even) {
+    background-color: transparent;  
+  }
+
+  .tml-card:nth-child(odd) {
+    background-color: #f3f4f8;
+  }
+
+  .tml-status {
+    width: $qStatusWidth;
+    transition: all $transTime;
+  }
+  .tml-status.green {
+    background-color: map-get($colors, ok);
+  }
+  .tml-status.red {
+    background-color: map-get($colors, error);
+  }
+  .tml-status.orange {
+    background-color: map-get($colors, followup);
+  }
+
+  .corrosion {
+    .text {
+      font-size: 22px !important;
+      padding: 5px 15px 5px 15px;
+    }
+
+    .corrosionRate {
+      padding: 0 10px 0 10px;
+      border-radius: 10px;
+      margin: 0 10px;
+      text-align: center;
+      &[data-is-valid="true"] {
+        background-color: map-get($colors, light-green);
+        border: 1px solid map-get($colors, dark-green);
+      }
+    
+      &[data-is-valid="false"] {
+        background-color: #e06666;
+        border: 1px solid #9f4e4e;
+        color: white;
+      }
+    }
+  }
+
+ 
+  .banner {
+    padding: 0 10px 0 10px;
+    border-radius: 10px;
+    margin: 0 10px;
+    text-align: center;
+    &.danger {
+      background-color: #e06666;
+      border: 2px solid #9f4e4e;
+      color: white;
+    }
+  }
+
+  .rounded {
+    border-radius: 25px;
+    text-align: center;
+    padding: 0 10px 0 10px;
+  }
+}

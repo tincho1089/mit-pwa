@@ -1,0 +1,15 @@
+<!-- Spinner -->
+<div class="overlay-content" *ngIf="isLoading">
+    <div class="loader-container">
+        <div class="spinner-container flex-center">
+            <mat-progress-spinner color="blue" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        
+        <div class="message-container flex-center">
+            <span class="message" *ngIf="loadingIndicatorService.message" [innerText]="loadingIndicatorService.message"></span>
+            <span class="message" *ngIf="!loadingIndicatorService.message">{{ 'home.loading' | translate }}</span>
+        </div>
+    </div>
+    
+</div>
+<!-- Spinner -->

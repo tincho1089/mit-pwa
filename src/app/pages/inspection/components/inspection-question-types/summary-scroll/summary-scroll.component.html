@@ -1,0 +1,19 @@
+<!-- No Load on Scrolling -->
+<div *ngIf="subSectionResponses.length <= batchSize">
+    <div *ngFor="let inspection of newSubSectionResponses; let i = index" class="question">
+        <answer [response]="inspection" *ngIf="inspection.isShow" [form]="summaryForm"
+            [section]="inspection.inspectionSection" [editable]="false" [equipDetails]="equipDetails" 
+            [responseImages]="responseImagesMap[inspection.id]">
+        </answer>
+    </div>
+</div>
+<!-- Load on Scrolling -->
+<div *ngIf="subSectionResponses.length > batchSize" class="scroll-box" infiniteScroll [scrollWindow]="true" [infiniteScrollDistance]="4"
+    [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
+    <div *ngFor="let inspection of newSubSectionResponses; let i = index" class="question">
+        <answer [response]="inspection" *ngIf="inspection.isShow" [form]="summaryForm" 
+            [section]="inspection.inspectionSection" [editable]="false" [equipDetails]="equipDetails" 
+            [responseImages]="responseImagesMap[inspection.id]">
+        </answer>
+    </div>
+</div>

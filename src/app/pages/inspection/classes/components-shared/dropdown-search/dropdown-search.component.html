@@ -1,0 +1,38 @@
+<mat-form-field *ngIf="controlName === ''" [appearance]="appearance" [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+
+    <mat-label *ngIf="label">{{ label }}</mat-label>
+
+    <mat-select [placeholder]="placeHolder" [id]="idSelect" [formControl]="formKey" [multiple]="multiple">
+        <mat-option>
+            <ngx-mat-select-search [formControl]="filterControl" 
+                placeholderLabel="{{ 'home.searchHere' | translate }}" 
+                noEntriesFoundLabel="{{ 'inspection.noResultsFound' | translate }}">
+            </ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let option of filteredOptions | async;" [value]="option.value"
+            [id]="'option-'+response.questionId +'-'+ option.value">
+            {{ commonOptionDescription? ('commons.' + option.description | translate) : option.description }}
+        </mat-option>
+    </mat-select>
+
+    <mat-error *ngIf="form.get(sectionArray).status==='INVALID'">You must enter a value.</mat-error>
+</mat-form-field>
+
+<mat-form-field *ngIf="controlName !== ''" [appearance]="appearance" [ngClass]="parentParentForm.get(sectionArray).status==='INVALID' ? 'error' : ''">
+
+    <mat-label *ngIf="label">{{ label }}</mat-label>
+
+    <mat-select [placeholder]="placeHolder" [id]="idSelect" [formControl]="formKey" [multiple]="multiple">
+        <mat-option>
+            <ngx-mat-select-search [formControl]="filterControl" 
+                placeholderLabel="{{ 'home.searchHere' | translate }}" 
+                noEntriesFoundLabel="{{ 'inspection.noResultsFound' | translate }}">
+            </ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let option of filteredOptions | async;" [value]="option.value">
+            {{ commonOptionDescription? ('commons.' + option.description | translate) : option.description }}
+        </mat-option>
+    </mat-select>
+
+    <mat-error *ngIf="parentParentForm.get(sectionArray).status==='INVALID'">You must enter a value.</mat-error>
+</mat-form-field>

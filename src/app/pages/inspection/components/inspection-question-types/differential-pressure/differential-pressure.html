@@ -1,0 +1,76 @@
+<div *ngIf="showControl" [formGroup]="form">
+    <div [formGroupName]="section">
+        <div [formGroup]="formGroup" *ngIf="formGroup && editable">
+            <div class="row">
+                <div class="col-sm-2 col-md-4 col-lg-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label stacked>
+                            {{ 'differentialPressure.ObservedPumpFlowRate' | translate}}
+                        </mat-label>
+                        <input matInput type="number" inputmode="decimal" formControlName="ObservedPumpFlowRate"
+                            clearInput>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 col-md-4 col-lg-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label stacked>
+                            {{ 'differentialPressure.RatedFlowRate' | translate}}
+                        </mat-label>
+                        <input type="number" matInput inputmode="decimal" formControlName="RatedFlowRate" clearInput>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 col-md-4 col-lg-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label stacked>
+                            {{ 'differentialPressure.ObservedDP' | translate}}
+                        </mat-label>
+                        <input matInput type="number" inputmode="decimal" formControlName="ObservedDP" clearInput>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 col-md-4">
+                    <mat-label class="item-label">
+                        <b>{{ 'differentialPressure.DifferentialPressure' | translate}}:</b>
+                        {{formGroup.get('DifferentialPressure').value}}
+                    </mat-label>
+                </div>
+                <div class="col-sm-2 col-md-4" *ngIf="formGroup.get('Result').value">
+                    <mat-label class="item-label danger">
+                        <b>{{formGroup.get('Result').value}}</b>
+                    </mat-label>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!editable" justify-content-center>
+            <div>
+              <table class="summary-responses">
+                <tr>
+                    <th>{{ 'differentialPressure.ObservedPumpFlowRate' | translate}}</th>
+                    <td>{{formGroup.get('ObservedPumpFlowRate').value}}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'differentialPressure.RatedFlowRate' | translate}}</th>
+                    <td>{{formGroup.get('RatedFlowRate').value}}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'differentialPressure.ObservedDP' | translate}}</th>
+                    <td>{{formGroup.get('ObservedDP').value}}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'differentialPressure.DifferentialPressure' | translate}}</th>
+                    <td>{{formGroup.get('DifferentialPressure').value}}</td>
+                </tr>
+                <tr *ngIf="formGroup.get('Result').value">
+                    <th>{{formGroup.get('Result').value}}</th>
+                    <td></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="controls">
+    <div [formGroup]="form" *ngIf="showControl">
+        <div [formGroupName]="section">
+            <div [formGroupName]="response.questionId">
+                <div *ngFor="let option of measurements; let i=index" [id]="'option-'+response['id'] +'-'+ i"
+                    [formGroupName]="i">
+                    <div *ngIf="editable" class="content">
+                        
+                        <mat-form-field appearance="outline"
+                            [ngClass]="form.get(sectionArray).status==='INVALID' ? 'error' : ''">
+                            <mat-label> {{ option['description'] }}</mat-label>
+                            <input matInput type="text" [id]="'input-'+response.questionId +'-'+ i"
+                                formControlName="Value"
+                            >
+                            <mat-error
+                                *ngIf="form.get([section,response.questionId,i]).status==='INVALID'">{{option['description']}}
+                                is required.</mat-error>
+                                <span matSuffix mat-icon-button class="textbox-suffix pr-3">
+                                    {{ response.units }}
+                                  </span>
+                        </mat-form-field>
+                        <button mat-icon-button (click)="clearInput(section,response.questionId,i)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                    <div *ngIf="!editable" class="label-control-form">
+                        <mat-label> {{ option.description }}:</mat-label>
+                        <span>{{ form.get([section, response.questionId, i]).value.Value}}</span>
+                        <span>
+                            {{ response.units }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="controls">
+    <div *ngIf="showControl" [formGroup]="form">
+        <div [formGroupName]="section">
+            <mat-form-field *ngIf="editable" appearance="outline" [ngClass]="isInValid ? 'error' : ''">
+                <!-- (keydown) - matInput isn't allowing spaces/enters to be added because the mat-tab is propagating the keyboard events to all the elements that are within it-->
+                <input (keydown)="$event.stopPropagation()" matInput type="text"
+                    [id]="'text-input-' + response.questionId" [formControlName]="response.questionId"
+                    (change)="onInputValueChange()">
+                <button matSuffix mat-icon-button (click)="clearInput()">
+                    <mat-icon>close</mat-icon>
+                </button>
+                <mat-error *ngIf="isInValid">{{ 'helper.inputRequired' | translate }}</mat-error>
+            </mat-form-field>
+
+            <div *ngIf="!editable" class="label-control-form">
+                <label [id]="'label-' + response.questionId"> {{response.answer}}</label>
+            </div>
+
+            <div class="remember-Row" *ngIf="this.section === 'General'">
+                <mat-label>{{ 'commons.remember' | translate }}</mat-label>
+                <mat-slide-toggle [checked]="this.isCacheable" (change)="onRememberToggleChange($event)">
+                </mat-slide-toggle>
+            </div>
+        </div>
+    </div>
+</div>

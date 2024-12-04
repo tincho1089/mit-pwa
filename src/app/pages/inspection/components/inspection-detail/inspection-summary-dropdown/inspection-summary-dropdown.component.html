@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Select an Option</h2>
+<mat-dialog-content>
+    <mat-list>
+        <mat-list-item *ngFor="let option of data.options" [ngClass]="{ 'selected': option === selectedOption }"
+            (click)="selectOption(option)">
+            {{ option }}
+        </mat-list-item>
+    </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+    <div class="spacer"></div>
+    <button mat-button (click)="closeDialog()">Cancel</button>
+    <button mat-button [disabled]="!selectedOption" (click)="confirmSelection()">OK</button>
+</mat-dialog-actions>

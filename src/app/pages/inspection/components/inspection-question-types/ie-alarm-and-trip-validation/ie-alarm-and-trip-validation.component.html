@@ -1,0 +1,353 @@
+<div class="controls" *ngIf="formGroup" [formGroup]="form">
+    <div [formGroupName]="section">
+        <div [formGroup]="formGroup">
+            <div formGroupName="details" *ngIf="formGroup && editable">
+                <div class="row" *ngIf="formGroup.get('details.HH Set Point').value">
+                    <div class="col-2">
+                        <mat-label>
+                            <b>
+                                {{'ie-alarm.HH Set Point' | translate}}:
+                            </b>
+                            {{ formGroup.get('details.HH Set Point').value }}
+                        </mat-label>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field *ngIf="editable" appearance="outline">
+                            <mat-label>
+                                {{'ie-alarm.As Found HH' | translate}}
+                            </mat-label>
+                            <input matInput title="As Found HH Input" type="string"
+                                [id]="'input-' + response.question + '-' + 'as-found-hh'"
+                                (change)="validatePassControl(formGroup.get('details.HH Set Point').value, 'As Found HH', 'As Left HH', true)"
+                                formControlName="As Found HH Input">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2 pb-3" *ngIf="formGroup.get('details.As Found HH').value">
+                        <mat-label [ngClass]="formGroup.get('details.As Found HH').value === 'Fail' ? 'fail':'pass'">
+                            {{ 'commons.' + formGroup.get('details.As Found HH').value | translate }}
+                        </mat-label>
+                    </div>
+                    <div class="col-3" *ngIf="this.formGroup.get('details.As Found HH').value != 'Pass'">
+                        <mat-form-field *ngIf="editable" appearance="outline">
+                            <mat-label>
+                                {{'ie-alarm.As Left HH' | translate}}
+                            </mat-label>
+                            <input matInput title="As Left HH Input" type="string"
+                                [id]="'input-' + response.question + '-' + 'as-left-hh'"
+                                (change)="validatePassControl(formGroup.get('details.HH Set Point').value, 'As Left HH', 'As Left HH', false)"
+                                formControlName="As Left HH Input">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2"
+                        *ngIf="formGroup.get('details.As Left HH').value && this.formGroup.get('details.As Found HH').value == 'Fail'">
+                        <mat-label [ngClass]="formGroup.get('details.As Left HH').value === 'Fail' ? 'fail':'pass'">
+                            {{ 'commons.' + formGroup.get('details.As Left HH').value |
+                            translate}}
+                        </mat-label>
+                    </div>
+                </div>
+                <div class="row" *ngIf="formGroup.get('details.H Set Point').value">
+                    <div class="col-2">
+                        <mat-label>
+                            <b>
+                                {{'ie-alarm.H Set Point' | translate}}:
+                            </b>
+                            {{ formGroup.get('details.H Set Point').value }}
+                        </mat-label>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field *ngIf="editable" appearance="outline">
+                            <mat-label>
+                                {{'ie-alarm.As Found H' | translate}}
+                            </mat-label>
+                            <input matInput title="As Found H Input" type="string"
+                                [id]="'input-' + response.question + '-' + 'as-found-h'"
+                                (change)="validatePassControl(formGroup.get('details.H Set Point').value, 'As Found H', 'As Left H', true)"
+                                formControlName="As Found H Input">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2 pb-3" *ngIf="formGroup.get('details.As Found H').value">
+                        <mat-label [ngClass]="formGroup.get('details.As Found H').value === 'Fail' ? 'fail':'pass'">
+                            {{ 'commons.' + formGroup.get('details.As Found H').value | translate }}
+                        </mat-label>
+                    </div>
+                    <div class="col-3" *ngIf="this.formGroup.get('details.As Found H').value != 'Pass'">
+                        <mat-form-field *ngIf="editable" appearance="outline">
+                            <mat-label>
+                                {{'ie-alarm.As Left H' | translate}}
+                            </mat-label>
+                            <input matInput title="As Left H Input" type="string"
+                                [id]="'input-' + response.question + '-' + 'as-left-h'"
+                                (change)="validatePassControl(formGroup.get('details.H Set Point').value, 'As Left H', 'As Left H', false)"
+                                formControlName="As Left H Input">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2"
+                        *ngIf="formGroup.get('details.As Left H').value && this.formGroup.get('details.As Found H').value == 'Fail'">
+                        <mat-label [ngClass]="formGroup.get('details.As Left H').value === 'Fail' ? 'fail':'pass'">
+                            {{ 'commons.' + formGroup.get('details.As Left H').value |
+                            translate}}
+                        </mat-label>
+                    </div>
+                </div>
+                <!-- L Set point-->
+                <div class="row" *ngIf="formGroup.get('details.L Set Point').value">
+                    <div class="col-2">
+                        <mat-label>
+                            <b>
+                                {{'ie-alarm.L Set Point' | translate}}:
+                            </b>
+                            {{ formGroup.get('details.L Set Point').value }}
+                        </mat-label>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field *ngIf="editable" appearance="outline">
+                            <mat-label>
+                                {{'ie-alarm.As Found L' | translate}}
+                            </mat-label>
+                            <input matInput title="As Found L Input" type="string"
+                                [id]="'input-' + response.question + '-' + 'as-found-l'"
+                                (change)="validatePassControl(formGroup.get('details.L Set Point').value, 'As Found L', 'As Left L', true)"
+                                formControlName="As Found L Input">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2 pb-3" *ngIf="formGroup.get('details.As Found L').value">
+                        <mat-label [ngClass]="formGroup.get('details.As Found L').value === 'Fail' ? 'fail':'pass'">
+                            {{ 'commons.' + formGroup.get('details.As Found L').value | translate }}
+                        </mat-label>
+                    </div>
+                    <div class="col-3" *ngIf="this.formGroup.get('details.As Found L').value != 'Pass'">
+                        <mat-form-field *ngIf="editable" appearance="outline">
+                            <mat-label>
+                                {{'ie-alarm.As Left L' | translate}}
+                            </mat-label>
+                            <input matInput title="As Left L Input" type="string"
+                                [id]="'input-' + response.question + '-' + 'as-left-l'"
+                                (change)="validatePassControl(formGroup.get('details.L Set Point').value, 'As Left L', 'As Left L', false)"
+                                formControlName="As Left L Input">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2"
+                        *ngIf="formGroup.get('details.As Left L').value && this.formGroup.get('details.As Found L').value == 'Fail'">
+                        <mat-label [ngClass]="formGroup.get('details.As Left L').value === 'Fail' ? 'fail':'pass'">
+                            {{ 'commons.' + formGroup.get('details.As Left L').value |
+                            translate}}
+                        </mat-label>
+                    </div>
+                </div>
+                <!-- LL Set point -->
+                <div class="row" *ngIf="formGroup.get('details.LL Set Point').value">
+                    <div class="col-2">
+                        <mat-label>
+                            <b>
+                                {{'ie-alarm.LL Set Point' | translate}}:
+                            </b>
+                            {{ formGroup.get('details.LL Set Point').value }}
+                        </mat-label>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field *ngIf="editable" appearance="outline">
+                            <mat-label>
+                                {{'ie-alarm.As Found LL' | translate}}
+                            </mat-label>
+                            <input matInput title="As Found LL Input" type="string"
+                                [id]="'input-' + response.question + '-' + 'as-found-ll'"
+                                (change)="validatePassControl(formGroup.get('details.LL Set Point').value, 'As Found LL', 'As Left LL', true)"
+                                formControlName="As Found LL Input">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2 pb-3" *ngIf="formGroup.get('details.As Found LL').value">
+                        <mat-label [ngClass]="formGroup.get('details.As Found LL').value === 'Fail' ? 'fail':'pass'">
+                            {{ 'commons.' + formGroup.get('details.As Found LL').value | translate }}
+                        </mat-label>
+                    </div>
+                    <div class="col-3" *ngIf="this.formGroup.get('details.As Found LL').value != 'Pass'">
+                        <mat-form-field *ngIf="editable" appearance="outline">
+                            <mat-label>
+                                {{'ie-alarm.As Left LL' | translate}}
+                            </mat-label>
+                            <input matInput title="As Left LL Input" type="string"
+                                [id]="'input-' + response.question + '-' + 'as-left-ll'"
+                                (change)="validatePassControl(formGroup.get('details.LL Set Point').value, 'As Left LL', 'As Left LL', false)"
+                                formControlName="As Left LL Input">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2"
+                        *ngIf="formGroup.get('details.As Left LL').value && this.formGroup.get('details.As Found LL').value == 'Fail'">
+                        <mat-label [ngClass]="formGroup.get('details.As Left LL').value === 'Fail' ? 'fail':'pass'">
+                            {{ 'commons.' + formGroup.get('details.As Left LL').value |
+                            translate}}
+                        </mat-label>
+                    </div>
+                </div>
+                <!-- Failure code -->
+                <div class="row" *ngIf="validateFailureCode()">
+                    <div class="col-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'commons.Failure Code' | translate}}</mat-label>
+                            <mat-select formControlName="FailureCode"
+                                [id]="'select-' + response.questionId + '-FailureCode'">
+                                <mat-option *ngFor="let o of options" [value]="o.value">
+                                    {{o.description}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div formGroupName="details" *ngIf="!editable">
+
+                <table class="summary-responses">
+                    <tr class="divider">
+                        <th class="summary-responses">
+                            {{'ie-alarm.HH Set Point' | translate}}
+                        </th>
+                        <td class="summary-responses">
+                            {{formGroup.get('details.HH Set Point').value}}
+                        </td>
+                    </tr>
+
+                    <tr class="divider">
+                      <td class="summary-responses">
+                        {{'ie-alarm.As Found HH' | translate}}
+                      </td>
+                      <td class="summary-responses">
+                        {{ formGroup.get('details.As Found HH Input').value }}
+                      </td>
+                      <td class="summary-responses" *ngIf="formGroup.get('details.As Found HH').value">
+                        {{ 'commons.' + formGroup.get('details.As Found HH').value | translate}}
+                      </td>
+                    </tr>
+
+                    <tr class="divider" [hidden]="!formGroup.get('details.As Left HH Input').value">
+                        <td class="summary-responses">
+                            {{'ie-alarm.As Left HH' | translate}}
+                        </td>
+                        <td class="summary-responses">
+                            {{ formGroup.get('details.As Left HH Input').value }}
+                        </td>
+                        <td class="summary-responses" *ngIf="formGroup.get('details.As Left HH Input').value">
+                            {{ 'commons.' + formGroup.get('details.As Left HH').value | translate }}
+                        </td>
+                    </tr>
+
+                    <!-- H Set Point -->
+                    <tr class="divider">
+                        <th class="summary-responses">
+                            {{'ie-alarm.H Set Point' | translate}}
+                        </th>
+                        <td class="summary-responses">
+                            {{formGroup.get('details.H Set Point').value}}
+                        </td>
+                    </tr>
+                    <!-- As Found -->
+                    <tr class="divider">
+                        <td class="summary-responses">
+                            {{'ie-alarm.As Found H' | translate}}
+                        </td>
+                        <td class="summary-responses">
+                            {{ formGroup.get('details.As Found H Input').value }}
+                        </td>
+                        <td class="summary-responses" *ngIf="formGroup.get('details.As Found HH').value">
+                          {{ 'commons.' + formGroup.get('details.As Found H').value | translate}}
+                        </td>
+                      </tr>
+
+                    <!-- As Left -->
+                      <tr class="divider" [hidden]="!formGroup.get('details.As Left H Input').value">
+                          <td class="summary-responses">
+                            {{'ie-alarm.As Left H' | translate}}
+                          </td>
+                          <td class="summary-responses">
+                            {{ formGroup.get('details.As Left H Input').value }}
+                          </td>
+                          <td class="summary-responses" *ngIf="formGroup.get('details.As Left H Input').value">
+                            {{ 'commons.' + formGroup.get('details.As Left H').value | translate}}
+                          </td>
+                      </tr>
+                      
+                      <!-- L Set Point -->
+                      <tr class="divider">
+                        <th class="summary-responses">
+                            {{'ie-alarm.L Set Point' | translate}}
+                        </th>
+                        <td class="summary-responses">
+                            {{formGroup.get('details.L Set Point').value}}
+                        </td>
+                    </tr>
+                    <!-- As Found -->
+                    <tr class="divider">
+                        <td class="summary-responses">
+                            {{'ie-alarm.As Found L' | translate}}
+                        </td>
+                        <td class="summary-responses">
+                            {{ formGroup.get('details.As Found L Input').value }}
+                        </td>
+                        <td class="summary-responses" *ngIf="formGroup.get('details.As Found L').value">
+                            {{ 'commons.' + formGroup.get('details.As Found L').value | translate }}
+                        </td>
+                      </tr>
+
+                    <!-- As Left -->
+                      <tr class="divider" [hidden]="!formGroup.get('details.As Left L Input').value">
+                          <td class="summary-responses">
+                            {{'ie-alarm.As Left L' | translate}}
+                          </td>
+                          <td class="summary-responses">
+                            {{ formGroup.get('details.As Left L Input').value }}
+                          </td>
+                          <td class="summary-responses" *ngIf="formGroup.get('details.As Left L Input').value">
+                            {{ 'commons.' + formGroup.get('details.As Left L').value | translate}}
+                          </td>
+                      </tr>
+
+                    <!-- LL Set Point -->
+                    <tr class="divider">
+                        <th class="summary-responses">
+                            {{'ie-alarm.LL Set Point' | translate}}
+                        </th>
+                        <td class="summary-responses">
+                            {{formGroup.get('details.LL Set Point').value}}
+                        </td>
+                    </tr>
+                    <!-- As Found -->
+                    <tr class="divider">
+                        <td class="summary-responses">
+                            {{'ie-alarm.As Found LL' | translate}}
+                        </td>
+                        <td class="summary-responses">
+                            {{ formGroup.get('details.As Found LL Input').value }}
+                        </td>
+                        <td class="summary-responses" *ngIf="formGroup.get('details.As Found LL').value">
+                            {{ 'commons.' + formGroup.get('details.As Found LL').value | translate}}
+                        </td>
+                        </tr>
+
+                    <!-- As Left -->
+                        <tr class="divider" [hidden]="!formGroup.get('details.As Left LL Input').value">
+                            <td class="summary-responses">
+                                {{'ie-alarm.As Left LL' | translate}}
+                            </td>
+                            <td class="summary-responses">
+                                {{ formGroup.get('details.As Left LL Input').value }}
+                            </td>
+                            <td class="summary-responses" *ngIf="formGroup.get('details.As Left LL Input').value">
+                            {{ 'commons.' + formGroup.get('details.As Left LL').value | translate}}
+                            </td>
+                        </tr>
+                </table>
+
+                <table>
+                    <tr class="divider" [hidden]="!formGroup.get('details.As Left LL Input').value">
+                        <th class="summary-responses">
+                            {{ 'commons.Failure Code' | translate}}
+                        </th>
+                        <td class="summary-responses">
+                            {{ formGroup.get('details.FailureCode').value }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

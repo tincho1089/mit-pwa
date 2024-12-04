@@ -1,0 +1,54 @@
+<div *ngIf="showControl" [formGroup]="form">
+  <div [formGroupName]="section">
+    <div [formGroup]="formGroup" *ngIf="formGroup && editable" class="table-container">
+      <div formArrayName="details">
+        <div class="body" *ngIf="formGroup && editable">
+          <div class="col-6" *ngFor="let option of options; let i = index" [formGroupName]="i">
+            <div class="table-item-cell">
+              <mat-label class="item-label">
+                <b>{{ option.Description }}</b>
+              </mat-label>
+            </div>
+            <div class="table-item-cell" *ngFor="let item of columns">
+              <mat-form-field appearance="outline" *ngIf="item === 'Average'">
+                <mat-label>{{ item }}</mat-label>
+                <input matInput type="number" [formControlName]="item"
+                  [id]="'input-' + response.questionId +'-'+ option.Description + '-' + item ">
+
+              </mat-form-field>
+              <mat-form-field appearance="outline" *ngIf="item !== 'Average'">
+                <mat-label>{{ item }}</mat-label>
+                <input matInput type="string" clearInput [formControlName]="item"
+                  [id]="'input-' + response.questionId +'-'+ option.description + '-' + item ">
+              </mat-form-field>
+              <br />
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!editable" justify-content-center>
+      <div class="table-container-summary">
+        <div class="table-row table-row-title">
+          <div class="table-item-cell-summary">&nbsp; </div>
+          <div class="table-item-cell-summary" *ngFor="let item of columns">
+            <b>{{ item }}</b>
+          </div>
+        </div>
+        <div class="table-row" *ngFor="let option of options; let i = index">
+          <div class="table-item-cell-summary">
+            <mat-label class="item-label">
+              <b>{{ option.Description }}</b>
+            </mat-label>
+          </div>
+          <div class="table-item-cell-summary" *ngFor="let item of columns">
+            {{ formGroup.get('details.' + i + '.' + item).value }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

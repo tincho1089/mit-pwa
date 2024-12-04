@@ -1,0 +1,23 @@
+  
+  mat-list-item {
+    cursor: pointer; 
+    
+  }
+
+   mat-list-item:hover {
+    background-color: #f0f0f0 !important;
+    cursor: pointer;
+  }
+  
+  .dialog-actions {
+    justify-content: flex-end; 
+  }
+  
+  .spacer {
+    flex: 1; 
+  }
+
+  mat-list-item.selected {
+    background-color: #f0f0f0; 
+  }
+  

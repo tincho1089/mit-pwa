@@ -1,0 +1,46 @@
+@import './../../../../../../styles/variables.scss';
+
+mat-label {
+    &.item-label {
+        display: block;
+        margin: 15px 0;
+        font-size: 1.2rem;
+    }
+}
+
+.range-input {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    mat-form-field {
+        flex-grow: 1;
+        width: inherit;
+    }
+
+    .result {
+        flex-grow: 1;
+
+        mat-label {
+            display: flex;
+            justify-content: center;
+            border-radius: 5px;
+            text-align: center;
+            padding: 5px 25px;
+            font-size: 1.25em;
+            line-height: 1em;
+            margin: 0 15px;
+
+            &[data-is-valid="true"] {
+                background-color: map-get($colors, light-green);
+                border: 1px solid map-get($colors, dark-green);
+            }
+
+            &[data-is-valid="false"] {
+                background-color: #e06666;
+                border: 1px solid #9f4e4e;
+                color: white;
+            }
+        }
+
+    }
+}

@@ -1,0 +1,91 @@
+<h3 mat-dialog-title *ngIf="!editMode">{{'tml.add' | translate}}</h3>
+<h3 mat-dialog-title *ngIf="editMode">{{'tml.edit' | translate}}</h3>
+
+<hr style="width: 100%;">
+
+<div mat-dialog-content>
+    <form     
+        *ngIf="tmlReadingForm"
+        [formGroup]="tmlReadingForm">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" 
+                *ngFor="let fieldName of fields; let i = index"
+                [ngSwitch]="fieldName">
+            
+                <mat-label *ngIf="fieldName != 'Coordinate X' || fieldName != 'Coordinate Y'">
+                    <b>{{fieldName}}:</b>
+                </mat-label>
+
+                <mat-form-field class="readonly-input" appearance="outline" *ngIf="
+                        fieldName == 'Equipment Number' ||
+                        fieldName == 'Equipment Type' ||
+                        fieldName == 'Plant Number' ||
+                        fieldName == 'Row Count' ||
+                        (editMode && fieldName == 'TML ID')">
+                        <input readonly matInput [formControlName]="fieldName">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="(!editMode && fieldName == 'TML ID') || fieldName == 'TML Description' || fieldName == 'Inspector'"> 
+                        <input matInput [formControlName]="fieldName">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="
+                                fieldName == 'TML Type' ||
+                                fieldName == 'TML Classification' ||
+                                fieldName == 'Activity Code' ||
+                                fieldName == 'Section ID' ||
+                                fieldName == 'OnOffFlag'
+                            ">
+                    <mat-select matInput [formControlName]="fieldName">
+                        <mat-option *ngFor="let opt of getOptions(fieldName)"
+                        [value]="opt.Value">
+                            {{opt.Name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="fieldName == 'Column Count'">
+                    <mat-select matInput [formControlName]="fieldName">
+                        <mat-option *ngFor="let opt of columnOptions" [value]="opt">
+                            {{opt}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="fieldName == 'Coordinate X' || fieldName == 'Coordinate Y' ">
+                    <input matInput             
+                        type="number"
+                        inputmode="decimal" 
+                        [formControlName]="fieldName">
+                </mat-form-field> 
+
+                <div *ngIf="submitted && f[fieldName].errors" class="error-feedback">
+                    <div class="text-danger">
+                        <b [innerHTML]="'tml.isRequired' | translate:{field: fieldName}"></b>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-12">
+                <a class="button btn btn-primary text-white" (click)="getGPS()">
+                    {{'gps.getCoordinates' | translate}}
+                </a>
+            </div>          
+
+        </div>
+    </form>
+</div>
+
+<hr style="width: 100%;">
+
+<div mat-dialog-actions class="row">
+    <div class="col-6">
+        <button mat-button class="button btn btn-primary text-white"
+        (click)="onSubmit()"><mat-icon class="hover">save</mat-icon>{{ 'commons.save' | translate }}</button>
+    </div>
+    <div class="col-6">
+        <button mat-button class="button btn btn-primary text-white"
+        [mat-dialog-close]="true" (click)="dialogRef.close({event:'close'})"><mat-icon class="hover">close</mat-icon>{{ 'commons.close' | translate }}</button>
+    </div>
+</div>

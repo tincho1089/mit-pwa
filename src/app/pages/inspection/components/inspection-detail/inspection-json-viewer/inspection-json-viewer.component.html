@@ -1,0 +1,25 @@
+<div class="inspection-json-viewer">
+    <div class="header text-dark-orange">
+        <span>{{title}} - {{activeMode}}</span>
+        <mat-icon (click)="reload()" *ngIf="activeMode == 'interactable'"> autorenew </mat-icon>
+        <mat-icon (click)="swapModes()" *ngIf="mode=='auto'"> swap_vert </mat-icon>
+    </div>
+    <div class="dynamic-scroll" *ngIf="visible" [style.height]="height">
+        <ngx-json-viewer 
+            class="json-viewer"
+            [json]="jsonInteractable" 
+            [expanded]="expanded"
+            *ngIf="activeMode == 'interactable'">
+        </ngx-json-viewer>
+        <ngx-json-viewer 
+            class="json-viewer"
+            [json]="getLiveJson()" 
+            [expanded]="expanded"
+            *ngIf="activeMode == 'live'"
+            (dblclick)="autoModeSwap()">
+        </ngx-json-viewer>
+    </div>
+</div>
+
+
+
